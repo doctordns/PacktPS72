@@ -1,0 +1,131 @@
+# 1.1 Install PowerShell 7.2     LOGG
+#
+# Run on SRV1
+# Run using an elevated Windows PowerShell 5.1 ISE
+
+
+
+
+
+# 1 Set Execution Policy for Windows PowerShell
+
+
+NO OUTPUT
+
+
+
+# 2 - Update the help files
+
+PS C:\WINDOWS\system32> # 2. Update help text for Windows PowerShell
+PS C:\WINDOWS\system32> Update-Help -Force |
+                          Out-Null
+Update-Help : Failed to update Help for the module(s) 'ConfigDefender, ConfigDefenderPerformance, Dism, Get-NetView,
+              Kds, Microsoft.ServerCore.SConfig, NetQos, PcsvDevice, PKI, PSReadline, RemoteDesktop, StorageBusCache, 
+              VMDirectStorage, Whea, WindowsUpdate' with UI culture(s) {en-US} : Unable to retrieve the HelpInfo XML 
+              file for UI culture en-US. 
+              Make sure the HelpInfoUri property in the module manifest is valid or check your network connection 
+              and then try the command again.
+At line:1 char:1
++ Update-Help -Force |
++ ~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (:) [Update-Help], Exception
+    + FullyQualifiedErrorId : UnableToRetrieveHelpInfoXml,Microsoft.PowerShell.Commands.UpdateHelpCommand
+ 
+ 
+
+
+# 3. Ensure the C:\Foo Folder exists
+
+
+
+NO OUTPUT
+
+
+
+# 4. Download PowerShell 7 installation script
+
+
+
+NO OUTPUT
+
+
+
+
+PS C:\Foo> # 5. Viewing Installation Script Help
+PS C:\Foo> Get-Help -Name C:\Foo\Install-PowerShell.ps1
+Install-PowerShell.ps1 [-Destination <string>] [-Daily] [-DoNotOverwrite] [-AddToPath] [-Preview] [<CommonParameters>]
+Install-PowerShell.ps1 [-UseMSI] [-Quiet] [-AddExplorerContextMenu] [-EnablePSRemoting] [-Preview] [<CommonParameters>]
+
+
+
+
+
+PS C:\Foo> # 6. Installing PowerShell 7.2
+PS C:\Foo> $EXTHT = @{
+             UseMSI                 = $true
+             Quiet                  = $true
+             AddExplorerContextMenu = $true
+             EnablePSRemoting       = $true
+           }
+PS C:\Foo> C:\Foo\Install-PowerShell.ps1 @EXTHT | Out-Null
+
+VERBOSE: About to download package from 'https://github.com/PowerShell/PowerShell/releases/download/v7.2.2/PowerShell-7.2.2-win-x64.msi'
+
+
+
+
+
+
+PS C:\Foo> # 7. Installing the preview and daily builds (for the adventurous)
+PS C:\Foo> C:\Foo\Install-PowerShell.ps1 -Preview -Destination C:\PSPreview |
+             Out-Null
+Destination: C:\PSPreview
+About to download package from 'https://github.com/PowerShell/PowerShell/releases/download/v7.3.0-preview.3/PowerShell-7.3.0-preview.3-win-x64.zip'
+PowerShell has been installed at C:\PSPreview
+PS C:\Foo> C:\Foo\Install-PowerShell.ps1 -Daily   -Destination C:\PSDailyBuild |
+             Out-Null
+Destination: C:\PSDailyBuild
+About to download package from 'https://pscoretestdata.blob.core.windows.net/v7-3-0-daily20220329-1/PowerShell-7.3.0-daily20220329.1-win-x64.zip'
+PowerShell has been installed at C:\PSDailyBuild
+
+
+
+
+# 8. Creating Windows PowerShell default profiles
+
+
+No output
+
+
+
+PS C:\Foo> # 9. Checking versions of PowerShell 7 loaded
+Get-ChildItem -Path C:\pwsh.exe -Recurse -ErrorAction SilentlyContinue
+
+
+
+    Directory: C:\Program Files\PowerShell\7
+
+
+Mode                 LastWriteTime         Length Name                                                                                                                                                                              
+----                 -------------         ------ ----                                                                                                                                                                              
+-a----        08/03/2022     23:21         287632 pwsh.exe                                                                                                                                                                          
+
+
+    Directory: C:\PSDailyBuild
+
+
+Mode                 LastWriteTime         Length Name                                                                                                                                                                              
+----                 -------------         ------ ----                                                                                                                                                                              
+-a----        29/03/2022     18:24         286104 pwsh.exe                                                                                                                                                                          
+
+
+    Directory: C:\PSPreview
+
+
+Mode                 LastWriteTime         Length Name                                                                                                                                                                              
+----                 -------------         ------ ----                                                                                                                                                                              
+-a----        18/03/2022     17:04         281512 pwsh.exe
+
+
+
+
