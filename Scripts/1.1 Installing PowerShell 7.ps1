@@ -3,21 +3,21 @@
 # Run on SRV1
 # Run using an elevated Windows PowerShell 5.1 ISE
 
-# 1. Set Execution Policy for Windows PowerShell
+# 1. Setting Execution Policy for Windows PowerShell
 Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force
 
 # 2. Update help text for Windows PowerShell
 Update-Help -Force |
   Out-Null
 
-# 3. Ensure the C:\Foo Folder exists
+# 3. Ensuring the C:\Foo Folder exists
 $LFHT = @{
   ItemType    = 'Directory'
   ErrorAction = 'SilentlyContinue' # should it already exist
 }
 New-Item -Path C:\Foo @LFHT | Out-Null
 
-# 4. Download PowerShell 7 installation script
+# 4. Download PowerShell 7 installation script from Github
 Set-Location -Path C:\Foo
 $URI = 'https://aka.ms/install-powershell.ps1'
 Invoke-RestMethod -Uri $URI |

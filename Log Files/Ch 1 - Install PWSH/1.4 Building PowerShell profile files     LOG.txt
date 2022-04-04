@@ -66,6 +66,8 @@ no output
 
 
 
+
+
 PS C:\foo> # 6. Restarting the PowerShell 7 console and viewing the profile output at startup
 PS C:\foo> Get-ChildItem -Path $PROFILE
 
@@ -74,3 +76,6 @@ PS C:\foo> Get-ChildItem -Path $PROFILE
 Mode                 LastWriteTime         Length Name
 ----                 -------------         ------ ----
 -a---          01/04/2022    12:01           1225 Microsoft.PowerShell_profile.ps1
+
+
+

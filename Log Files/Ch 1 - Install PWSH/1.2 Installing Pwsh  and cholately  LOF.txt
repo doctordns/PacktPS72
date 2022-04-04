@@ -1,4 +1,4 @@
-# 1.2 Install PowerShell 7 using chocolatey      LOG
+exit# 1.2 Install PowerShell 7 using chocolatey      LOG
 #
 # Run on SRV1
 # Run after running 1.1 to create C:\Foo.
@@ -14,9 +14,8 @@ No output
 
 
 
-PS C:\Foo> # 2. Viewing the installation help file
-
-PS C:\Foo> C:\foo\Install-Chocolatey.ps1 -?
+PS C:\WINDOWS\system32> # 2. Viewing the installation help file
+PS C:\WINDOWS\system32> C:\foo\Install-Chocolatey.ps1 -?
 
 NAME
     C:\foo\Install-Chocolatey.ps1
@@ -60,8 +59,8 @@ REMARKS
 
 
 
-PS C:\Foo> # 3. Install Chocolatey
-C:\foo\Install-Chocolatey.ps1
+PS C:\WINDOWS\system32> # 3. Install Chocolatey
+PS C:\WINDOWS\system32> C:\Foo\Install-Chocolatey.ps1
 
 Forcing web requests to allow TLS v1.2 (Required for requests to Chocolatey.org)
 Getting latest version of the Chocolatey package for download.
@@ -106,8 +105,8 @@ Ensuring chocolatey.nupkg is in the lib folder
 
 
 
-PS C:\Foo> # 4.Configure Chocolatey
-PS C:\Foo> choco feature enable -n allowGlobalConfirmation
+PS C:\WINDOWS\system32> # 4.Configure Chocolatey
+PS C:\WINDOWS\system32> choco feature enable -n allowGlobalConfirmation
 Chocolatey v1.1.0
 Enabled allowGlobalConfirmation
 
@@ -116,8 +115,8 @@ Enabled allowGlobalConfirmation
 
 
 
-PS C:\Foo> # 5. Find PowerShell (PWSH) on Chocolatey
-PS C:\Foo> choco find pwsh
+PS C:\WINDOWS\system32> # 5. Find PowerShell (PWSH) on Chocolatey
+PS C:\WINDOWS\system32> choco find pwsh
 Chocolatey v1.1.0
 pwsh 7.2.2 [Approved]
 powershell.portable 7.1.3 [Approved] Downloads cached for licensed users
@@ -128,89 +127,62 @@ powershell-preview 7.2.4.20210411 [Approved] Downloads cached for licensed users
 
 
 
-
-
-PS C:\Foo> choco install powershell-core
+PS C:\WINDOWS\system32# 6. Install PowerShell-7 using coco.exe
+PS C:\WINDOWS\system32> choco install powershell-core
 Chocolatey v1.1.0
 Installing the following packages:
 powershell-core
 By installing, you accept licenses for the packages.
 
-Progress: Downloading chocolatey-core.extension 1.3.5.1... 4%
-Progress: Downloading chocolatey-core.extension 1.3.5.1... 14%
-Progress: Downloading chocolatey-core.extension 1.3.5.1... 62%
-Progress: Downloading chocolatey-core.extension 1.3.5.1... 100%
-
 Progress: Downloading powershell-core 7.2.2... 4%
-Progress: Downloading powershell-core 7.2.2... 13%
-Progress: Downloading powershell-core 7.2.2... 95%
+Progress: Downloading powershell-core 7.2.2... 68%
 Progress: Downloading powershell-core 7.2.2... 100%
-
-Progress: Downloading KB3118401 1.0.5... 12%
-Progress: Downloading KB3118401 1.0.5... 100%
-
-Progress: Downloading chocolatey-windowsupdate.extension 1.0.4... 3%
-Progress: Downloading chocolatey-windowsupdate.extension 1.0.4... 50%
-Progress: Downloading chocolatey-windowsupdate.extension 1.0.4... 97%
-Progress: Downloading chocolatey-windowsupdate.extension 1.0.4... 100%
-
-Progress: Downloading KB2919355 1.0.20160915... 14%
-Progress: Downloading KB2919355 1.0.20160915... 100%
-
-Progress: Downloading KB2919442 1.0.20160915... 15%
-Progress: Downloading KB2919442 1.0.20160915... 76%
-Progress: Downloading KB2919442 1.0.20160915... 100%
-
-chocolatey-core.extension v1.3.5.1 [Approved]
-chocolatey-core.extension package files install completed. Performing other installation steps.
- Installed/updated chocolatey-core extensions.
- The install of chocolatey-core.extension was successful.
-  Software installed to 'C:\ProgramData\chocolatey\extensions\chocolatey-core'
-
-chocolatey-windowsupdate.extension v1.0.4 [Approved]
-chocolatey-windowsupdate.extension package files install completed. Performing other installation steps.
- Installed/updated chocolatey-windowsupdate extensions.
- The install of chocolatey-windowsupdate.extension was successful.
-  Software installed to 'C:\ProgramData\chocolatey\extensions\chocolatey-windowsupdate'
-
-KB2919442 v1.0.20160915 [Approved]
-kb2919442 package files install completed. Performing other installation steps.
-Skipping installation because this hotfix only applies to Windows 8.1 and Windows Server 2012 R2.
- The install of kb2919442 was successful.
-  Software install location not explicitly set, it could be in package or
-  default install location of installer.
-
-KB2919355 v1.0.20160915 [Approved]
-kb2919355 package files install completed. Performing other installation steps.
-Skipping installation because this hotfix only applies to Windows 8.1 and Windows Server 2012 R2.
- The install of kb2919355 was successful.
-  Software install location not explicitly set, it could be in package or
-  default install location of installer.
-
-KB3118401 v1.0.5 [Approved]
-kb3118401 package files install completed. Performing other installation steps.
-Skipping installation because update KB3118401 does not apply to this operating system (Microsoft Windows Server 2022 Datacenter).
- The install of kb3118401 was successful.
-  Software install location not explicitly set, it could be in package or
-  default install location of installer.
 
 powershell-core v7.2.2 [Approved]
 powershell-core package files install completed. Performing other installation steps.
 7.2.2
-The version of PowerShell in this package (7.2.2) is already installed by another means, marking package as installed
- The install of powershell-core was successful.
-  Software install location not explicitly set, it could be in package or
-  default install location of installer.
+WARNING: If you started this package under PowerShell core, replacing an in-use version may be unpredictable, require multiple attempts or produce errors.
+Downloading powershell-core 64 bit
+  from 'https://github.com/PowerShell/PowerShell/releases/download/v7.2.2/PowerShell-7.2.2-win-x64.msi'
 
-Chocolatey installed 6/6 packages. 
+Progress: 0% - Saving 13.39 KB of 101.8 MB
+Progress: 10% - Saving 11 MB of 101.8 MB
+Progress: 75% - Saving 77.28 MB of 101.8 MB
+Progress: 100% - Completed download of C:\Users\Administrator\AppData\Local\Temp\2\chocolatey\powershell-core\7.2.2\PowerShell-7.2.2-win-x64.msi (101.8 MB).
+Download of PowerShell-7.2.2-win-x64.msi (101.8 MB) completed.
+Hashes match.
+Installing powershell-core...
+powershell-core has been installed.
+************************************************************************************
+*  INSTRUCTIONS: Your system default WINDOWS PowerShell version has not been changed.
+*   PowerShell CORE 7.2.2, was installed to: "C:\Program Files\PowerShell\7"
+*   To start PowerShell Core 7.2.2, at a prompt or the start menu execute:
+*      "pwsh.exe"
+*   Or start it from the desktop or start menu shortcut installed by this package.
+*   This is your new default version of PowerShell CORE (pwsh.exe).
+************************************************************************************
+**************************************************************************************
+*  As of OpenSSH 0.0.22.0 Universal Installer, a script is distributed that allows   *
+*  setting the default shell for openssh. You could call it with code like this:     *
+*    If (Test-Path "C:\Program Files\openssh-win64\Set-SSHDefaultShell.ps1")         *
+*      {& "C:\Program Files\openssh-win64\Set-SSHDefaultShell.ps1" [PARAMETERS]}     *
+*  Learn more with this:                                                             *
+*    Get-Help "C:\Program Files\openssh-win64\Set-SSHDefaultShell.ps1"               *
+*  Or here:                                                                          *
+*    https://github.com/DarwinJS/ChocoPackages/blob/main/openssh/readme.md         *
+**************************************************************************************
+  powershell-core may be able to be automatically uninstalled.
+Environment Vars (like PATH) have changed. Close/reopen your shell to
+ see the changes (or in powershell/cmd.exe just type `refreshenv`).
+ The install of powershell-core was successful.
+  Software installed as 'msi', install location is likely default.
+
+Chocolatey installed 1/1 packages. 
  See the log for details (C:\ProgramData\chocolatey\logs\chocolatey.log).
 
-Installed:
- - kb2919355 v1.0.20160915
- - chocolatey-core.extension v1.3.5.1
- - kb3118401 v1.0.5
- - kb2919442 v1.0.20160915
- - powershell-core v7.2.2
- - chocolatey-windowsupdate.extension v1.0.4
+Enjoy using Chocolatey? Explore more amazing features to take your
+experience to the next level at
+ https://chocolatey.org/compare
+
 
 
