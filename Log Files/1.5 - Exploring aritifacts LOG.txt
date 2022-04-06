@@ -1,6 +1,0 @@
-# 1.3 - Exploring PWSH 7 Installation Artifacts   LOG
-#
-# Run in PWSH 7 Console
-
-
-PO
