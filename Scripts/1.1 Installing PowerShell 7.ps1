@@ -41,9 +41,9 @@ C:\Foo\Install-PowerShell.ps1 -Preview -Destination C:\PSPreview |
 C:\Foo\Install-PowerShell.ps1 -Daily   -Destination C:\PSDailyBuild |
   Out-Null
 
-# 8. Creating Windows PowerShell default profiles
-$URI = 'https://raw.githubusercontent.com/doctordns/PACKT-PS7/master/' +
-       '/scripts/goodies/Microsoft.PowerShell_Profile.ps1'
+# 8. Creating Windows PowerShell ISE and console default profiles
+$URI = 'https://raw.githubusercontent.com/doctordns/PacktPS72/master/' +
+       '/Scripts/Goodies/Microsoft.PowerShell_Profile.ps1'
 $ProfileFile    = $Profile.CurrentUserCurrentHost
 New-Item $ProfileFile -Force -WarningAction SilentlyContinue |
    Out-Null

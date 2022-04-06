@@ -2,24 +2,24 @@
 # Created 14 Aug 2020
 # tfl@psp.co.uk
 
-# For use with Thomas Lee's Packt Book on PSH 7
+# For use with PowerShell Console (and inside MS Terminal)
 
-# 1. Write details
-Write-Host "In Customisations for [$($Host.Name)]"
-Write-Host "On $(hostname)"
+# 1. Write host details
+Write-Host "On          [$(hostname)]"
+Write-Host "Customising [$($Host.Name)]"
 
 # 2. Set $Me
 $ME = whoami
 Write-Host "Logged on as $ME"
 
-# 3. Set Format enumeration olimit
+# 3. Set Format enumeration limit
 $FormatEnumerationLimit = 99
 
 # 4. Set some command defaults
 $PSDefaultParameterValues = @{
-  "*:autosize"       = $true
-  'Receive-Job:keep' = $true
-  '*:Wrap'           = $true
+  "Format-Table:autosize" = $true
+  'Receive-Job:keep'      = $true
+  'Format-*:Wrap'         = $true
 }
 
 # 5. Set home to C:\Foo for ~, then go there
