@@ -1,0 +1,28 @@
+# 1.7 Installing the Cascadia Code Font
+#
+# Run on SRV1 after you install PowerShell 7 and VS Code
+# RUn in VS code
+
+
+
+# 1. Getting download Locations
+
+
+no output
+
+
+# 2. Downloading Cascadia Code font file 
+
+
+no output
+
+# 3. Expanding the font archive file
+
+
+no output
+
+
+# 4. Installing Cascadia Code font
+
+
+no output
