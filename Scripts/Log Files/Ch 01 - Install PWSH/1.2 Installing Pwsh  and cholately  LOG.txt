@@ -1,0 +1,184 @@
+exit# 1.2 Install PowerShell 7 using Chocolatey      LOG
+#
+# Run on SRV1
+# Run after running 1.1 to create C:\Foo.
+# Run using an elevated Windows PowerShell 5.1 ISE
+
+
+
+# 1. Download Install script for Chocolatey
+
+
+No output
+
+
+
+
+PS C:\WINDOWS\system32> # 2. Viewing the installation help file
+PS C:\WINDOWS\system32> C:\Foo\Install-Chocolatey.ps1 -?
+
+NAME
+    C:\Foo\Install-Chocolatey.ps1
+    
+SYNOPSIS
+    Downloads and installs Chocolatey on the local machine.
+    
+    
+SYNTAX
+    C:\Foo\Install-Chocolatey.ps1 [-ChocolateyDownloadUrl <String>] 
+                                  [-ChocolateyVersion <String>] 
+                                  [-UseNativeUnzip] 
+                                  [-IgnoreProxy] 
+                                  [<CommonParameters>]
+    
+    C:\Foo\Install-Chocolatey.ps1 [-ChocolateyDownloadUrl <String>] 
+                                  [-ChocolateyVersion <String>] 
+                                  [-UseNativeUnzip] 
+                                  [-IgnoreProxy] 
+                                  [-ProxyUrl <String>] 
+                                  [-ProxyCredential <PSCredential>] 
+                                  [<CommonParameters>]
+    
+    
+DESCRIPTION
+    Retrieves the Chocolatey nupkg for the latest or a specified version, and
+    downloads and installs the application to the local machine.
+    
+
+RELATED LINKS
+    For organizational deployments of Chocolatey, please see 
+    https://docs.chocolatey.org/en-us/guides/organizations/organizational-deployment-guide 
+
+REMARKS
+    To see the examples, type: "get-help C:\Foo\Install-Chocolatey.ps1 -examples".
+    For more information, type: "get-help C:\Foo\Install-Chocolatey.ps1 -detailed".
+    For technical information, type: "get-help C:\Foo\Install-Chocolatey.ps1 -full".
+    For online help, type: "get-help C:\Foo\Install-Chocolatey.ps1 -online"
+
+
+
+
+
+
+PS C:\WINDOWS\system32> # 3. Installing Chocolatey
+PS C:\WINDOWS\system32> C:\Foo\Install-Chocolatey.ps1
+
+Forcing web requests to allow TLS v1.2 (Required for requests to Chocolatey.org)
+Getting latest version of the Chocolatey package for download.
+Not using proxy.
+Getting Chocolatey from https://community.chocolatey.org/api/v2/package/chocolatey/1.1.0.
+Downloading https://community.chocolatey.org/api/v2/package/chocolatey/1.1.0 to 
+  C:\Users\ADMINI~1\AppData\Local\Temp\2\chocolatey\chocoInstall\chocolatey.zip
+Not using proxy.
+Extracting C:\Users\ADMINI~1\AppData\Local\Temp\2\chocolatey\chocoInstall\chocolatey.zip to
+   C:\Users\ADMINI~1\AppData\Local\Temp\2\chocolatey\chocoInstall
+Installing Chocolatey on the local machine
+Creating ChocolateyInstall as an environment variable (targeting 'Machine') 
+  Setting ChocolateyInstall to 'C:\ProgramData\chocolatey'
+WARNING: It's very likely you will need to close and reopen your shell 
+  before you can use choco.
+Restricting write permissions to Administrators
+We are setting up the Chocolatey package repository.
+The packages themselves go to 'C:\ProgramData\chocolatey\lib'
+  (i.e. C:\ProgramData\chocolatey\lib\yourPackageName).
+A shim file for the command line goes to 'C:\ProgramData\chocolatey\bin'
+  and points to an executable in 'C:\ProgramData\chocolatey\lib\yourPackageName'.
+
+Creating Chocolatey folders if they do not already exist.
+
+WARNING: You can safely ignore errors related to missing log files when 
+  upgrading from a version of Chocolatey less than 0.9.9. 
+  'Batch file could not be found' is also safe to ignore. 
+  'The system cannot find the file specified' - also safe.
+chocolatey.nupkg file not installed in lib.
+ Attempting to locate it from bootstrapper.
+PATH environment variable does not have C:\ProgramData\chocolatey\bin in it. Adding...
+Adding Chocolatey to the profile. This will provide tab completion, refreshenv, etc.
+WARNING: Chocolatey profile installed. Reload your profile - type . $profile
+Chocolatey (choco.exe) is now ready.
+You can call choco from anywhere, command line or powershell by typing choco.
+Run choco /? for a list of functions.
+You may need to shut down and restart powershell and/or consoles
+ first prior to using choco.
+Ensuring Chocolatey commands are on the path
+Ensuring chocolatey.nupkg is in the lib folder
+
+
+
+
+PS C:\WINDOWS\system32> # 4.Configuring Chocolatey
+PS C:\WINDOWS\system32> choco feature enable -n allowGlobalConfirmation
+Chocolatey v1.1.0
+Enabled allowGlobalConfirmation
+
+
+
+
+
+
+PS C:\WINDOWS\system32> # 5. Finding PowerShell (PWSH) on Chocolatey
+PS C:\WINDOWS\system32> choco find pwsh
+Chocolatey v1.1.0
+pwsh 7.2.2 [Approved]
+powershell.portable 7.1.3 [Approved] Downloads cached for licensed users
+powershell-core 7.2.2 [Approved] Downloads cached for licensed users
+powershell-preview 7.2.4.20210411 [Approved] Downloads cached for licensed users
+4 packages found.
+
+
+
+
+PS C:\WINDOWS\system32> # 6. Installing PowerShell-7 using coco.exe
+PS C:\WINDOWS\system32> choco install powershell-core
+Chocolatey v1.1.0
+Installing the following packages:
+powershell-core
+By installing, you accept licenses for the packages.
+
+Progress: Downloading powershell-core 7.2.2... 4%
+Progress: Downloading powershell-core 7.2.2... 100%
+
+powershell-core v7.2.2 [Approved]
+powershell-core package files install completed. Performing other installation steps.
+7.2.2
+WARNING: If you started this package under PowerShell core, replacing an in-use version may be unpredictable, require multiple attempts or produce errors.
+Downloading powershell-core 64 bit
+  from 'https://github.com/PowerShell/PowerShell/releases/download/v7.2.2/PowerShell-7.2.2-win-x64.msi'
+
+Progress: 0% - Saving 13.39 KB of 101.8 MB
+Progress: 100% - Completed download of C:\Users\Administrator\AppData\Local\Temp\2\chocolatey\powershell-core\7.2.2\PowerShell-7.2.2-win-x64.msi (101.8 MB).
+Download of PowerShell-7.2.2-win-x64.msi (101.8 MB) completed.
+Hashes match.
+Installing powershell-core...
+powershell-core has been installed.
+************************************************************************************
+*  INSTRUCTIONS: Your system default WINDOWS PowerShell version has not been changed.
+*   PowerShell CORE 7.2.2, was installed to: "C:\Program Files\PowerShell\7"
+*   To start PowerShell Core 7.2.2, at a prompt or the start menu execute:
+*      "pwsh.exe"
+*   Or start it from the desktop or start menu shortcut installed by this package.
+*   This is your new default version of PowerShell CORE (pwsh.exe).
+************************************************************************************
+**************************************************************************************
+*  As of OpenSSH 0.0.22.0 Universal Installer, a script is distributed that allows   *
+*  setting the default shell for openssh. You could call it with code like this:     *
+*    If (Test-Path "C:\Program Files\openssh-win64\Set-SSHDefaultShell.ps1")         *
+*      {& "C:\Program Files\openssh-win64\Set-SSHDefaultShell.ps1" [PARAMETERS]}     *
+*  Learn more with this:                                                             *
+*    Get-Help "C:\Program Files\openssh-win64\Set-SSHDefaultShell.ps1"               *
+*  Or here:                                                                          *
+*    https://github.com/DarwinJS/ChocoPackages/blob/main/openssh/readme.md         *
+**************************************************************************************
+  powershell-core may be able to be automatically uninstalled.
+Environment Vars (like PATH) have changed. Close/reopen your shell to
+ see the changes (or in powershell/cmd.exe just type `refreshenv`).
+ The install of powershell-core was successful.
+  Software installed as 'msi', install location is likely default.
+
+Chocolatey installed 1/1 packages. 
+ See the log for details (C:\ProgramData\chocolatey\logs\chocolatey.log).
+
+Enjoy using Chocolatey? Explore more amazing features to take your
+experience to the next level at
+ https://chocolatey.org/compare
+

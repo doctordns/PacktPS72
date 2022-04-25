@@ -1,0 +1,106 @@
+# 2.1 - Using Windows PowerShell compatibility
+# Run on SRV1 with PowerShell/VSCode installed
+# Run in VS Code
+
+
+
+PS C:\Foo> # 1. Importing the ServerManager Module
+PS C:\Foo> Import-Module -Name ServerManager
+WARNING: Module ServerManager is loaded in Windows PowerShell using 
+WinPSCompatSession remoting session; please note that all input and 
+output of commands from this module will be deserialized objects. 
+If you want to load this module into PowerShell please use 
+'Import-Module -SkipEditionCheck' syntax.
+
+
+PS C:\Foo> # 2. Viewing module details      
+PS C:\Foo> Get-Module -Name ServerManager |
+             Format-List
+
+
+Name              : ServerManager
+Path              : C:\Users\Administrator\AppData\Local\Temp\2\remoteIpMoProxy_ServerManager_2.0.0.0_
+                    localhost_c7b5e52a-1429-4fcf-841f-d8800a63ff9f\remoteIpMoProxy_ServerManager_2.0.0.0_
+                    localhost_c7b5e52a-1429-4fcf-841f-d8800a63ff9f.psm1
+Description       : Implicit remoting for 
+ModuleType        : Script
+Version           : 1.0
+PreRelease        : 
+NestedModules     : {}
+ExportedFunctions : {Disable-ServerManagerStandardUserRemoting, Enable-ServerManagerStandardUserRemoting, 
+                     Get-WindowsFeature, Install-WindowsFeature, Uninstall-WindowsFeature}
+ExportedCmdlets   : 
+ExportedVariables : 
+ExportedAliases   : {Add-WindowsFeature, Remove-WindowsFeature}
+
+
+
+
+
+PS C:\Foo> # 3. Displaying a Windows Feature
+PS C:\Foo> Get-WindowsFeature -Name 'TFTP-Client'
+
+Display Name       Name        Install State
+------------       ----        -------------
+                   TFTP-Client     Available
+
+
+
+
+PS C:\Foo> # 4. Running the same command in a remoting session
+PS C:\Foo> $Session = Get-PSSession -Name WinPSCompatSession
+PS C:\Foo> Invoke-Command -Session $Session -ScriptBlock {
+             Get-WindowsFeature -Name 'TFTP-Client' |
+               Format-Table
+           }
+
+Display Name       Name          Install State
+------------       ----          -------------
+[ ] TFTP Client    TFTP-Client       Available
+
+
+
+
+
+
+PS C:\Foo> # 5. Getting the path to Windows PowerShell modules
+PS C:\Foo> $Paths = $env:PSModulePath -split ';'
+PS C:\Foo> $S32Path = $Paths |
+             Where-Object {$_.ToString() -match 'system32'}
+PS C:\Foo> "System32 path: [$S32Path]"
+System32 path: [C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules]
+
+
+
+
+PS C:\Foo> # 6. Displaying path to the format XML for Server Manager module
+PS C:\Foo> $FXML = "$S32path/ServerManager"
+PS C:\Foo> $FF = Get-ChildItem -Path $FXML\*.format.ps1xml
+PS C:\Foo> "     $($FF.Name)"
+PS C:\Foo> "Format XML files:"
+Format XML files:
+  Feature.format.ps1xml
+
+
+
+
+
+
+# 7. Updating format XML in PowerShell 7
+
+
+
+NO output
+
+
+
+
+
+
+PS C:\Foo> # 8. Using the command with improved output
+PS C:\Foo> Get-WindowsFeature -Name TFTP-Client
+
+Display Name       Name         Install State
+------------       ----         -------------
+[ ] TFTP Client    TFTP-Client      Available
+
