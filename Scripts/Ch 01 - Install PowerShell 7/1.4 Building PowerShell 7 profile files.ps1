@@ -33,7 +33,7 @@ New-Item $CUCHProfile -Force -WarningAction SilentlyContinue |
 (Invoke-WebRequest -Uri $URI).Content |
   Out-File -FilePath  $CUCHProfile
 
-# 5. Exiting from PowerShell 7 console 
+# 5. Exiting from PowerShell 7 console
 Exit
 
 # 6. Restarting the PowerShell 7 console and viewing the profile output at startup

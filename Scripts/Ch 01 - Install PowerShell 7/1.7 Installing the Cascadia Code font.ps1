@@ -10,14 +10,14 @@ $CascadiaRelease = Invoke-WebRequest -Uri $CascadiaRelURL # Get all
 $CascadiaPath    = 'https://github.com'+ ($CascadiaRelease.Links.href |
                       Where-Object { $_ -match '$CascadiaFont' } |
                         Select-Object -First 1)
-$CascadiaFile   = 'C:\Foo\$CascadiaFont.zip'
+$CascadiaFile   = "C:\Foo\$CascadiaFont.zip"
 
-# 2. Downloading the Cascadia Code font file archive 
+# 2. Downloading the Cascadia Code font file archive
 Invoke-WebRequest -Uri $CascadiaPath -OutFile $CascadiaFile
 
 # 3. Expanding the font archive file
 $CascadiaFontFolder = 'C:\Foo\CascadiaCode'
-Expand-Archive -Path $CascadiaFile -DestinationPath $CascadiafontFolder
+Expand-Archive -Path $CascadiaFile -DestinationPath $CascadiaFontFolder
 
 # 4. Installing the Cascadia Code font
 $FontFile = '\Foo\CascadiaCode\ttf\CascadiaCode.ttf'

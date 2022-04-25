@@ -27,7 +27,7 @@ $InstallHT = @{
 
 # 5. Restarting VS Code as an Administrator
 
-# 6. Opening a VS Code Terminal running 
+# 6. Opening a VS Code Terminal running
 #    PowerShell 7 as administrator
 
 # 7. Creating a profile file for VS Code
@@ -118,7 +118,7 @@ $URI2 = 'https://raw.githubusercontent.com/doctordns/PACKT-PS7/master/' +
 (Invoke-WebRequest -Uri $URI2).Content |
   Out-File -FilePath  $ConsoleProfile
 
-# 14. Logging off 
+# 14. Logging off
 logoff.exe
 
 # 15. Logging into Windows to observe the updated task bar

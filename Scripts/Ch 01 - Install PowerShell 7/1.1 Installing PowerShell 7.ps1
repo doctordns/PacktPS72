@@ -38,7 +38,7 @@ C:\Foo\Install-PowerShell.ps1 @EXTHT | Out-Null
 # 7. Installing the preview and daily builds (for the adventurous)
 C:\Foo\Install-PowerShell.ps1 -Preview -Destination C:\PSPreview |
   Out-Null
-C:\Foo\Install-PowerShell.ps1 -Daily   -Destination C:\PSDailyBuild | l'7 uy6tbgrvfctrg bfvdcx
+C:\Foo\Install-PowerShell.ps1 -Daily   -Destination C:\PSDailyBuild |
   Out-Null
 
 # 8. Creating Windows PowerShell ISE and console default profiles
