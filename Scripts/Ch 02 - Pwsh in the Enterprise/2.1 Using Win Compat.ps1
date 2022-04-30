@@ -20,20 +20,20 @@ Invoke-Command -Session $Session -ScriptBlock {
 }
 
 # 5. Getting the path to Windows PowerShell modules
-$Paths = $env:PSModulePath -split ';' 
-$S32Path = $Paths | 
+$Paths = $env:PSModulePath -split ';'
+$S32Path = $Paths |
   Where-Object {$_.ToString() -match 'system32'}
 "System32 path: [$S32Path]"
 
 # 6. Displaying path to the format XML for Server Manager module
 $FXML = "$S32path/ServerManager"
-$FF = Get-ChildItem -Path $FXML\*.format.ps1xml 
+$FF = Get-ChildItem -Path $FXML\*.format.ps1xml
 "Format XML files:"
 "     $($FF.Name)"
 
 # 7. Updating format XML in PowerShell 7
 Foreach ($F in $FF) {
-    Update-FormatData -PrependPath $F.FullName} 
-  
+    Update-FormatData -PrependPath $F.FullName}
+
 # 8. Using the command with improved output
-Get-WindowsFeature -Name TFTP-Client  
+Get-WindowsFeature -Name TFTP-Client

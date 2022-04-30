@@ -200,30 +200,7 @@ C:\Foo\DownloadedModules\PSLogging\2.5.2\PSLogging.psm1
 
 
 
-PS C:\Foo> # 12. Importing the PSLogging module
-PS C:\Foo> $ModuleFolder = Join-Path -Path $DLFLDR -ChildPath 'PSLogging'
-PS C:\Foo> Get-ChildItem -Path $ModuleFolder -Filter *.psm1 -Recurse |
-              Select-Object -ExpandProperty FullName -First 1 |
-                  Import-Module -Verbose
-VERBOSE: Loading module from path 'C:\Foo\DownloadedModules\PSLogging\2.5.2\PSLogging.psm1'.
-VERBOSE: Exporting function 'Start-Log'.
-VERBOSE: Exporting function 'Write-LogInfo'.
-VERBOSE: Exporting function 'Write-LogWarning'.
-VERBOSE: Exporting function 'Write-LogError'.
-VERBOSE: Exporting function 'Stop-Log'.
-VERBOSE: Exporting function 'Send-Log'.
-VERBOSE: Importing function 'Send-Log'.
-VERBOSE: Importing function 'Start-Log'.
-VERBOSE: Importing function 'Stop-Log'.
-VERBOSE: Importing function 'Write-LogError'.
-VERBOSE: Importing function 'Write-LogInfo'.
-VERBOSE: Importing function 'Write-LogWarning'.
-
-
-
-
-
-PS C:\Foo> # 13. Checking commands in the module
+PS C:\Foo> # 12. Checking commands in the module
 PS C:\Foo> Get-Command -Module PSLogging
 
 CommandType Name              Version  Source
@@ -234,3 +211,7 @@ Function    Stop-Log          0.0      PSLogging
 Function    Write-LogError    0.0      PSLogging
 Function    Write-LogInfo     0.0      PSLogging
 Function    Write-LogWarning  0.0      PSLogging
+
+
+
+

@@ -4,7 +4,7 @@
 
 
 # 1. Displaying counts of available PowerShell commands
-$CommandsBeforeRSAT = Get-Command 
+$CommandsBeforeRSAT = Get-Command
 $CmdletsBeforeRSAT = $CommandsBeforeRSAT  |
     Where-Object CommandType -eq 'Cmdlet'
 $CommandCountBeforeRSAT = $CommandsBeforeRSAT.Count
@@ -14,17 +14,17 @@ $CmdletCountBeforeRSAT  = $CmdletsBeforeRSAT.Count
 "Cmdlets available before RSAT installed  [$CmdletCountBeforeRSAT]"
 
 # 2. Getting command types returned by Get-Command
-$CommandsBeforeRSAT | 
+$CommandsBeforeRSAT |
   Group-Object -Property CommandType
 
 # 3. Checking the object type details
-$CommandsBeforeRSAT | 
+$CommandsBeforeRSAT |
   Get-Member |
     Select-Object -ExpandProperty TypeName -Unique
 
-# 4. Getting the collection of PowerShell modules and a count of 
+# 4. Getting the collection of PowerShell modules and a count of
 #    modules before adding the RSAT tools
-$ModulesBefore = Get-Module -ListAvailable 
+$ModulesBefore = Get-Module -ListAvailable
 
 # 5. Displaying a count of modules available
 #    before adding the RSAT tools
@@ -33,12 +33,12 @@ $CountOfModulesBeforeRSAT = $ModulesBefore.Count
 
 # 6. Getting a count of features actually available on SRV1
 Import-Module -Name ServerManager -WarningAction SilentlyContinue
-$Features  = Get-WindowsFeature 
-$FeaturesI = $Features | Where-Object Installed 
+$Features  = Get-WindowsFeature
+$FeaturesI = $Features | Where-Object Installed
 $RsatF     = $Features |
                Where-Object Name -Match 'RSAT'
-$RSATFI    = $RSATF | 
-              Where-Object Installed 
+$RSATFI    = $RSATF |
+              Where-Object Installed
 
 # 7. Displaying counts of features installed
 "On Host [$(hostname)]"
@@ -48,13 +48,13 @@ $RSATFI    = $RSATF |
 "Total RSAT features installed [{0}]"  -f $RSATFI.count
 
 # 8. Adding ALL RSAT tools to SRV1
-Get-WindowsFeature -Name *RSAT* | 
+Get-WindowsFeature -Name *RSAT* |
   Install-WindowsFeature
 
 # 9. Getting Details of RSAT tools now installed on SRV1
 $FSRV1A   = Get-WindowsFeature
 $IFSRV1A  = $FSRV1A | Where-Object Installed
-$RSFSRV1A = $FSRV1A | Where-Object Installed | 
+$RSFSRV1A = $FSRV1A | Where-Object Installed |
               Where-Object Name -Match 'RSAT'
 
 # 10. Displaying counts of commands after installing the RSAT tools

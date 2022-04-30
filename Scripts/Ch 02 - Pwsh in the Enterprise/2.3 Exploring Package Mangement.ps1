@@ -1,14 +1,14 @@
 ﻿# Recipe 2.3 - Exploring Package Management
 #
-# Run from SRV1 
+# Run from SRV1
 
 # 1. Reviewing the cmdlets in the PackageManagement module
 Get-Command -Module PackageManagement
 
 # 2. Reviewing installed providers with Get-PackageProvider
-Get-PackageProvider | 
-  Format-Table -Property Name, 
-                         Version, 
+Get-PackageProvider |
+  Format-Table -Property Name,
+                         Version,
                          SupportedFileExtensions,
                          FromTrustedSource
 
