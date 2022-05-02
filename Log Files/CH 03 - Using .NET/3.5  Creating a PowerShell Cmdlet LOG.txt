@@ -1,0 +1,201 @@
+# 5.5 Creating a PowerShell cmdlet
+
+# Run on SRV1 after loading PowerShell
+
+
+# 1. Installing the .NET SDK
+
+1.a  Navigate to the Download page
+
+1.b click on download to download - then open file
+
+1.c from Install click on install to install the SDK
+
+1.d Once you are all done, see all done and click close.
+
+1.e Restart PowerShell...
+
+
+
+
+PS C:\Foo> # 2. Creating the cmdlet folder
+PS C:\Foo> New-Item -Path C:\Foo\Cmdlet -ItemType Directory -Force
+
+    Directory: C:\Foo
+
+Mode          LastWriteTime  Length Name
+----          -------------  ------ ----
+d----   02/05/2022    16:59         Cmdlet
+
+
+
+PS C:\Foo> # 3. Creating a new class library project
+PS C:\Foo> Set-Location C:\Foo\Cmdlet
+PS C:\Foo\Cmdlet> dotnet new classlib --name SendGreeting
+
+Welcome to .NET 6.0!
+---------------------
+SDK Version: 6.0.202
+
+Telemetry
+---------
+The .NET tools collect usage data in order to help us improve your experience. It is collected 
+by Microsoft and shared with the community. You can opt-out of telemetry by setting the 
+DOTNET_CLI_TELEMETRY_OPTOUT environment variable to '1' or 'true' using your favorite shell.
+
+Read more about .NET CLI Tools telemetry: https://aka.ms/dotnet-cli-telemetry
+
+----------------
+Installed an ASP.NET Core HTTPS development certificate.
+To trust the certificate run 'dotnet dev-certs https --trust' (Windows and macOS only).
+Learn about HTTPS: https://aka.ms/dotnet-https
+----------------
+Write your first app: https://aka.ms/dotnet-hello-world
+Find out what's new: https://aka.ms/dotnet-whats-new
+Explore documentation: https://aka.ms/dotnet-docs
+Report issues and find source on GitHub: https://github.com/dotnet/core
+Use 'dotnet --help' to see available commands or visit: https://aka.ms/dotnet-cli
+--------------------------------------------------------------------------------------
+The template "Class Library" was created successfully.
+
+Processing post-creation actions...
+Running 'dotnet restore' on C:\Foo\Cmdlet\SendGreeting\SendGreeting.csproj...
+  Determining projects to restore...
+  Restored C:\Foo\Cmdlet\SendGreeting\SendGreeting.csproj (in 95 ms).
+Restore succeeded.
+
+
+
+
+
+
+
+PS C:\Foo\Cmdlet> # 4. Viewing contents of new folder
+PS C:\Foo\Cmdlet> Set-Location -Path .\SendGreeting
+PS C:\Foo\Cmdlet\SendGreeting> Get-ChildItem
+
+    Directory: C:\Foo\Cmdlet\SendGreeting
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d----          02/05/2022    16:20                obj
+-a---          02/05/2022    16:20             57 Class1.cs
+-a---          02/05/2022    16:20            215 SendGreeting.csproj
+
+
+
+
+
+PS C:\Foo\Cmdlet\SendGreeting> # 5. Creating and displaying global.json
+PS C:\Foo\Cmdlet\SendGreeting> dotnet new globaljson
+The template "global.json file" was created successfully.
+PS C:\Foo\Cmdlet\SendGreeting> Get-Content -Path .\global.json
+{
+  "sdk": {
+    "version": "6.0.202"
+  }
+}
+
+
+
+
+
+PS C:\Foo\Cmdlet\SendGreeting> # 6. Adding PowerShell package
+PS C:\Foo\Cmdlet\SendGreeting> dotnet add package PowerShellStandard.Library
+  Determining projects to restore...
+  Writing C:\Users\Administrator\AppData\Local\Temp\2\tmpCD91.tmp
+info : Adding PackageReference for package 'PowerShellStandard.Library' into 
+       project 'C:\Foo\Cmdlet\SendGreeting\SendGreeting.csproj'.
+info :   GET https://api.nuget.org/v3/registration5-gz-semver2/powershellstandard.library/index.json
+info :   OK https://api.nuget.org/v3/registration5-gz-semver2/powershellstandard.library/index.json 133ms
+info : Restoring packages for C:\Foo\Cmdlet\SendGreeting\SendGreeting.csproj...
+info :   GET https://api.nuget.org/v3-flatcontainer/powershellstandard.library/index.json
+info :   OK https://api.nuget.org/v3-flatcontainer/powershellstandard.library/index.json 133ms
+info :   GET https://api.nuget.org/v3-flatcontainer/powershellstandard.library/5.1.1/
+           powershellstandard.library.5.1.1.nupkg
+info :   OK https://api.nuget.org/v3-flatcontainer/powershellstandard.library/5.1.1/
+           powershellstandard.library.5.1.1.nupkg 54ms
+info : Installed PowerShellStandard.Library 5.1.1 from https://api.nuget.org/v3/index.json with content hash 
+       e31xJjG+Kjbv6YF3Yq6D4Dl3or8v7LrNF41k3CXrWozW6hR1zcOe5KYuZJaGSiAgLnwP8wcW+I3+IWEzMPZKXQ==.
+info : Package 'PowerShellStandard.Library' is compatible with all the specified frameworks in 
+       project 'C:\Foo\Cmdlet\SendGreeting\SendGreeting.csproj'.
+info : PackageReference for package 'PowerShellStandard.Library' version '5.1.1' added to 
+       file 'C:\Foo\Cmdlet\SendGreeting\SendGreeting.csproj'.
+info : Writing assets file to disk. Path: C:\Foo\Cmdlet\SendGreeting\obj\project.assets.json
+log  : Restored C:\Foo\Cmdlet\SendGreeting\SendGreeting.csproj (in 820 ms).
+
+
+
+
+
+
+
+# 7. Create the cmdlet source file
+
+
+
+NO OUTPUT
+
+
+
+
+# 8. Removing the unused class file
+
+
+
+
+
+NO OUTPUT
+
+
+
+
+
+PS C:\Foo\Cmdlet\SendGreeting> # 9. Building the cmdlet
+PS C:\Foo\Cmdlet\SendGreeting> dotnet build
+Microsoft (R) Build Engine version 17.1.1+a02f73656 for .NET
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  SendGreeting -> C:\Foo\Cmdlet\SendGreeting\bin\Debug\net6.0\SendGreeting.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:03.79
+
+
+
+
+
+# 10. Importing the DLL holding the cmdlet
+
+
+NO OUTPUT
+
+
+
+
+
+PS C:\Foo\Cmdlet\SendGreeting> # 11. Examining the module's details
+PS C:\Foo\Cmdlet\SendGreeting> Get-Module SendGreeting
+
+ModuleType Version    PreRelease Name           ExportedCommands
+---------- -------    ---------- ----           ----------------
+Binary     1.0.0.0               SendGreeting   Send-Greeting
+
+
+
+
+
+
+PS C:\Foo\Cmdlet\SendGreeting> # 12. Using the cmdlet
+PS C:\Foo\Cmdlet\SendGreeting> Send-Greeting -Name 'Jerry Garcia'
+Hello Jerry Garcia - have a nice day!
+
+ 
+
+
+
