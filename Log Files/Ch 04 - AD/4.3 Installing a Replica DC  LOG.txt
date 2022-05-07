@@ -1,0 +1,114 @@
+# 4.3 - Installing a Replica DC
+
+# Run this recipe on DC2 once DC1 has been promoted to be a DC
+# Needs new DC2 VM as domain joined host in Reskit domain
+# Login as Reskit\Administrator
+# DC1 is online and is the forest root DC
+
+
+
+PS C:\Foo> # 1. Importing the Server Manager module
+
+
+no output
+
+
+
+PS C:\Foo> # 2. Checking DC1 can be resolved
+PS C:\Foo> Resolve-DnsName -Name DC1.Reskit.Org -Type A
+
+Name            Type  TTL   Section  IPAddress
+----            ----  ---   -------  ---------
+DC1.Reskit.Org  A     3600  Answer   10.10.10.10
+
+
+
+
+
+
+PS C:\Foo> # 3. Testing the network connection to DC1
+PS C:\Foo> Test-NetConnection -ComputerName DC1.Reskit.Org -Port 445
+
+ComputerName     : DC1.Reskit.Org                                                                                       
+RemoteAddress    : 10.10.10.10                                                                                          
+RemotePort       : 445                                                                                                  
+InterfaceAlias   : Ethernet                                                                                             
+SourceAddress    : 10.10.10.11
+TcpTestSucceeded : True                                                                                                 
+                                                                                                                        
+                                                                                                                        
+PS C:\Foo> Test-NetConnection -ComputerName DC1.Reskit.Org -Port 389
+
+ComputerName     : DC1.Reskit.Org                                                                                       
+RemoteAddress    : 10.10.10.10                                                                                          
+RemotePort       : 389                                                                                                  
+InterfaceAlias   : Ethernet                                                                                             
+SourceAddress    : 10.10.10.11                                                                                          
+TcpTestSucceeded : True
+
+
+
+
+
+PS C:\Foo> # 4. Adding the AD DS features on DC2
+PS C:\Foo> Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
+
+Success Restart Needed Exit Code  Feature Result
+------- -------------- ---------  --------------
+True    No             Success    {Active Directory Domain Services, Group Pol…
+
+
+
+
+# 5. Promoting DC2 to be a DC
+
+
+
+no console output
+
+
+
+PS C:\Foo> # 6. Checking the computer objects in AD
+PS C:\Foo> Get-ADComputer -Filter *  |
+             Format-Table DNSHostName, DistinguishedName
+
+DNSHostName    DistinguishedName
+-----------    -----------------
+DC1.Reskit.Org CN=DC1,OU=Domain Controllers,DC=Reskit,DC=Org
+DC2.Reskit.Org CN=DC2,OU=Domain Controllers,DC=Reskit,DC=Org
+
+
+
+
+
+# 7. Rebooting DC2 manuall
+
+
+no output
+
+
+
+PS C:\Foo> # 8. Checking DCs in Reskit.Org
+PS C:\Foo> $SB = 'OU=Domain Controllers,DC=Reskit,DC=Org'
+PS C:\Foo> Get-ADComputer -Filter * -SearchBase $SB  -Properties * |
+             Format-Table -Property DNSHostName, Enabled
+
+DNSHostName    Enabled
+-----------    -------
+DC1.Reskit.Org    True
+DC2.Reskit.Org    True
+
+
+
+
+PS C:\Foo> # 9. Viewing Reskit.Org domain DCs
+PS C:\Foo> Get-ADDomain |
+             Format-Table -Property Forest, Name,
+                                    ReplicaDirectoryServers
+
+Forest     Name   ReplicaDirectoryServers
+------     ----   -----------------------
+Reskit.Org Reskit {DC1.Reskit.Org, DC2.Reskit.Org}
+
+
+

@@ -15,19 +15,21 @@ if ($Role) {
 }
 
 # 1. Install Cascadia Code
-Write-Host "Installing Cascadia Code font"
-$CascadiaFont    = 'Cascadia.ttf'    # font file name
+Write-Host 'Installing Cascadia Code font'
+$CascadiaFont    = 'CascadiaCode'    # font file name
 $CascadiaRelURL  = 'https://github.com/microsoft/cascadia-code/releases'
-$CascadiaRelease = Invoke-WebRequest -Uri $CascadiaRelURL # Get all of them
-$CascadiaPath    = "https://github.com" + ($CascadiaRelease.Links.href | 
-                      Where-Object { $_ -match "($CascadiaFont)" } | 
+$CascadiaRelease = Invoke-WebRequest -Uri $CascadiaRelURL # Get all
+$CascadiaPath    = 'https://github.com'+ ($CascadiaRelease.Links.href |
+                      Where-Object { $_ -match "$CascadiaFont" } |
                         Select-Object -First 1)
-$CascadiaFile   = "C:\Foo\$CascadiaFont"
+$CascadiaFile   = "C:\Foo\$CascadiaFont.zip"
 Invoke-WebRequest -Uri $CascadiaPath -OutFile $CascadiaFile
+$CascadiaFontFolder = 'C:\Foo\CascadiaCode'
+Expand-Archive -Path $CascadiaFile -DestinationPath $CascadiaFontFolder
+$FontFile = '\Foo\CascadiaCode\ttf\CascadiaCode.ttf'
 $FontShellApp = New-Object -Com Shell.Application
 $FontShellNamespace = $FontShellApp.Namespace(0x14)
-$FontShellNamespace.CopyHere($CascadiaFile, 0x10)
-
+$FontShellNamespace.CopyHere($FontFile, 0x10)
 
 # 2. Using VS Code, create a Sample Profile File for VS Code
 Write-Host "Creating VS Code Default profile"
