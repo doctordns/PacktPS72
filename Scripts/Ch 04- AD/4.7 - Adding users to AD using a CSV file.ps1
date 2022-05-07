@@ -4,11 +4,11 @@
 
 # 1. Creating a CSV file
 $CSVDATA = @'
-Firstname,Initials,Lastname,UserPrincipalName,Alias,Description,Password
+FirstName,Initials,LastName,UserPrincipalName,Alias,Description,Password
 P, D, Rowley, PDR, Peter, Data Team, Christmas42
 C, F, Smith, CFS, Claire, Receptionist, Christmas42
 Billy, Bob, JoeBob, BBJB, BillyBob, One of the Bobs, Christmas42
-Malcolm, D, Duewrong, Malcolm, Malcolm, Mr Danger, Christmas42
+Malcolm, D, Duewrong, Malcolm, Malcolm, Mr. Danger, Christmas42
 '@
 $CSVDATA | Out-File -FilePath C:\Foo\Users.Csv
 
@@ -24,9 +24,9 @@ $Users |
     #  Create a hash table of properties to set on created user
     $Prop = @{}
     #  Fill in values
-    $Prop.GivenName         = $User.Firstname
+    $Prop.GivenName         = $User.FirstName
     $Prop.Initials          = $User.Initials
-    $Prop.Surname           = $User.Lastname
+    $Prop.Surname           = $User.LastName
     $Prop.UserPrincipalName = $User.UserPrincipalName + "@Reskit.Org"
     $Prop.Displayname       = $User.FirstName.Trim() + " " +
                               $User.LastName.Trim()
