@@ -14,7 +14,7 @@ Import-Module -Name ADDSDeployment
 # 3. Examining the commands in the ADDSDeployment module
 Get-Command -Module ADDSDeployment
 
-# 4.	Creating a secure password for Administrator
+# 4.	Creating a secure password for the Administrator
 $PSSHT = @{
   String      = 'Pa$$w0rd'
   AsPlainText = $true

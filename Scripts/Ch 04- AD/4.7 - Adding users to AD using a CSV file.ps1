@@ -14,7 +14,7 @@ $CSVDATA | Out-File -FilePath C:\Foo\Users.Csv
 
 # 2. Importing and displaying the CSV
 $Users = Import-CSV -Path C:\Foo\Users.Csv | 
-  Sort-Object  -Property Alias
+  Sort-Object -Property Alias
 $Users | Format-Table
 
 # 3. Adding the users using the CSV
@@ -44,8 +44,8 @@ $Users |
 }
 
 # 4. Showing all users in AD (Reskit.Org)
-Get-ADUser -Filter * | 
-  Format-Table -Property Name, UserPrincipalName
+Get-ADUser -Filter * -Property Description | 
+  Format-Table -Property Name, UserPrincipalName, Description
 
 
 

@@ -1,4 +1,4 @@
-﻿# Recipe 6.10 - Reporting on AD Computers
+﻿# Recipe 4.10 - Reporting on AD Computers
 
 # Run on DC1 after creating the domain and adding computers.
 
@@ -71,7 +71,7 @@ $RKReport += Foreach($Computer in $Computers) {
 }
 
 # 7. Reporting on computers who have not logged on in over 6 months
-$RKReport += "`nComputers that havent logged in over 6 months`n"
+$RKReport += "`nComputers that have not logged in over 6 months`n"
 $RkReport += "Name                    LastLogonDate`n"
 $RkReport += "----                    -------------`n"
 $RKReport +=
@@ -83,7 +83,7 @@ foreach($Computer in $Computers) {
 }
 
 # 8. Reporting on computer accounts that have not logged in 1-6 months ago
-$RKReport += "`n`nComputers that havent logged in 1-6 months`n"
+$RKReport += "`n`nComputers that have not logged in 1-6 months`n"
 $RkReport += "Name                    LastLogonDate`n"
 $RkReport += "----                    -------------"
 $RKReport +=
@@ -111,5 +111,5 @@ foreach($Computer in $Computers) {
 }
 
 
-#10. Displaying the report
+# 10. Displaying the report
 $RKReport

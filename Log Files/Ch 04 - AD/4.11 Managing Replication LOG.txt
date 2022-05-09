@@ -1,0 +1,174 @@
+# 4.11 Reporting on Managing AD Replication
+
+# run on DC1, with DC2, UKDC1 up and running
+
+
+PS C:\Foo> # 1. Checking replication partners for DC1
+PS C:\Foo> Get-ADReplicationPartnerMetadata -Target DC1.Reskit.Org   |
+             Format-List -Property Server, PartnerType, Partner,
+                                   Partition, LastRep*
+
+Server                 : DC1.Reskit.Org
+PartnerType            : Inbound
+Partner                : CN=NTDS
+                         Settings,CN=DC2,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=Reskit,DC=Org
+Partition              : DC=Reskit,DC=Org
+LastReplicationAttempt : 08/05/2022 23:47:46
+LastReplicationResult  : 0
+LastReplicationSuccess : 08/05/2022 23:47:46
+
+
+
+
+
+PS C:\Foo> # 2. Checking AD replication partner metadata in the domain
+PS C:\Foo> Get-ADReplicationPartnerMetadata -Target Reskit.Org -Scope Domain |
+             Format-Table -Property Server, P*Type, Last*
+
+Server         PartnerType LastChangeUsn LastReplicationAttempt LastReplicationResult LastReplicationSuccess
+------         ----------- ------------- ---------------------- --------------------- ----------------------
+DC1.Reskit.Org     Inbound         29228 08/05/2022 23:47:46                        0 08/05/2022 23:47:46
+DC2.Reskit.Org     Inbound         20987 08/05/2022 23:48:24                     1722 08/05/2022 20:25:4
+
+
+
+
+
+PS C:\Foo> # 3. Investigating group membership metadata
+PS C:\Foo> $REPLHT = @{
+             Object              = (Get-ADGroup -Identity 'IT Team')
+             Attribute           = 'Member'
+             ShowAllLinkedValues = $true
+             Server              = (Get-ADDomainController)
+           }
+PS C:\Foo> Get-ADReplicationAttributeMetadata @REPLHT |
+             Format-Table -Property A*NAME, A*VALUE, *TIME
+         
+AttributeName AttributeValue                           FirstOriginatingCreateTime LastOriginatingChangeTime LastOriginatingDeleteTime
+------------- --------------                           -------------------------- ------------------------- -------------------------
+member        CN=Jerry Garcia,OU=IT,DC=Reskit,DC=Org   06/05/2022 17:28:42        06/05/2022 17:28:42       01/01/1601 00:00:00
+member        CN=Rebecca Tanner,OU=IT,DC=Reskit,DC=Org 06/05/2022 17:28:42        06/05/2022 17:28:42       01/01/1601 00:00:00
+member        CN=ThomasL,OU=IT,DC=Reskit,DC=Org        06/05/2022 17:28:42        06/05/2022 17:28:42       01/01/1601 00:00:00
+
+
+
+
+# 4. Adding two users to the group and removing one
+
+
+no output
+
+
+
+
+PS C:\Foo> # 5 Checking updated metadata
+PS C:\Foo> Get-ADReplicationAttributeMetadata @REPLHT |
+             Format-Table -Property A*NAME,A*VALUE, *TIME
+
+
+AttributeName AttributeValue                           FirstOriginatingCreateTime LastOriginatingChangeTime LastOriginatingDeleteTime
+------------- --------------                           -------------------------- ------------------------- -------------------------
+member        CN=Claire,OU=IT,DC=Reskit,DC=Org         08/05/2022 23:52:38        09/05/2022 00:25:01       09/05/2022 00:25:01
+member        CN=Malcolm,OU=IT,DC=Reskit,DC=Org        08/05/2022 23:52:38        09/05/2022 00:25:01       01/01/1601 00:00:00
+member        CN=Jerry Garcia,OU=IT,DC=Reskit,DC=Org   06/05/2022 17:28:42        06/05/2022 17:28:42       01/01/1601 00:00:00
+member        CN=Rebecca Tanner,OU=IT,DC=Reskit,DC=Org 06/05/2022 17:28:42        06/05/2022 17:28:42       01/01/1601 00:00:00
+member        CN=ThomasL,OU=IT,DC=Reskit,DC=Org        06/05/2022 17:28:42        06/05/2022 17:28:42       01/01/1601 00:00:00
+
+
+
+# 6. Make a change to a user 
+
+
+no output
+
+
+
+PS C:\Foo> # 7. Checking updated metadata
+PS C:\Foo> $O = Get-ADUser -Identity $User
+PS C:\Foo> # From DC1 
+PS C:\Foo> Get-ADReplicationAttributeMetadata -Object $O -Server DC1 |
+             Where-Object AttributeName -match 'Office'
+
+AttributeName                                    : physicalDeliveryOfficeName
+AttributeValue                                   : Marin Office
+FirstOriginatingCreateTime                       : 
+IsLinkValue                                      : False
+LastOriginatingChangeDirectoryServerIdentity     : CN=NTDS Settings,CN=DC1,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configur
+                                                   ation,DC=Reskit,DC=Org
+LastOriginatingChangeDirectoryServerInvocationId : d5f95fc9-5fad-4290-a08f-4dff5b62bfbf
+LastOriginatingChangeTime                        : 09/05/2022 11:39:48
+LastOriginatingChangeUsn                         : 23224
+LastOriginatingDeleteTime                        : 
+LocalChangeUsn                                   : 23224
+Object                                           : CN=Malcolm,OU=IT,DC=Reskit,DC=Org
+Server                                           : DC1.Reskit.Org
+Version                                          : 3
+
+
+PS C:\Foo> # From DC2 
+PS C:\Foo> Get-ADReplicationAttributeMetadata -Object $O -Server DC2 |
+             Where-Object AttributeName -match 'Office'
+
+AttributeName                                    : physicalDeliveryOfficeName
+AttributeValue                                   : Marin Office
+FirstOriginatingCreateTime                       : 
+IsLinkValue                                      : False
+LastOriginatingChangeDirectoryServerIdentity     : CN=NTDS Settings,CN=DC1,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configur
+                                                   ation,DC=Reskit,DC=Org
+LastOriginatingChangeDirectoryServerInvocationId : d5f95fc9-5fad-4290-a08f-4dff5b62bfbf
+LastOriginatingChangeTime                        : 09/05/2022 11:39:48
+LastOriginatingChangeUsn                         : 23224
+LastOriginatingDeleteTime                        : 
+LocalChangeUsn                                   : 34015
+Object                                           : CN=Malcolm,OU=IT,DC=Reskit,DC=Org
+Server                                           : DC2.Reskit.Org
+Version                                          : 3
+
+
+
+
+PS C:\Foo> # 8. Examine Replication partners for both DC1, UKDC1
+PS C:\Foo> Get-ADReplicationConnection |
+             Format-List -Property Name,ReplicateFromDirectoryServer 
+
+Name                         : bae320e1-f2af-4530-aac5-647ced3129a4
+ReplicateFromDirectoryServer : CN=NTDS 
+                               Settings,CN=DC2,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=Reskit,DC=Org
+
+Name                         : c70c8749-56db-4990-93f6-db482e6be3b9
+ReplicateFromDirectoryServer : CN=NTDS 
+                               Settings,CN=UKDC1,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=Reskit,DC=Org
+
+
+PS C:\Foo> Get-ADReplicationConnection -Server UKDC1 |
+>>   Format-List -Property Name,ReplicateFromDirectoryServer
+
+Name                         : 9c16d02c-8297-4b8a-89e9-fc63b7bccde1
+ReplicateFromDirectoryServer : CN=NTDS 
+                               Settings,CN=DC1,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=Reskit,DC=Org
+
+Name                         : 05c0c646-9b40-4bcf-bb59-f3a2418333f4
+ReplicateFromDirectoryServer : CN=NTDS 
+                               Settings,CN=DC2,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=Reskit,DC=Org
+
+
+
+PS C:\Foo> # 9. Use repadmin to check replication summary
+PS C:\Foo> repadmin /replsummary
+Replication Summary Start Time: 2022-05-09 13:28:14
+
+Beginning data collection for replication summary, this may take awhile:
+  ......
+
+Source DSA          largest delta    fails/total %%   error
+ DC1                       34m:16s    0 /   7    0
+ DC2                       43m:02s    0 /   7    0
+ UKDC1                     43m:02s    0 /   6    0
+
+Destination DSA     largest delta    fails/total %%   error
+ DC1                       43m:02s    0 /   7    0
+ DC2                       34m:16s    0 /   7    0
+ UKDC1                     31m:24s    0 /   6    0
+
+
+

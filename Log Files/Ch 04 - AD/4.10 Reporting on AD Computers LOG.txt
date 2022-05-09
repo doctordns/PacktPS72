@@ -1,0 +1,99 @@
+# Recipe 4.10 - Reporting on AD Computers
+
+# Run on DC1 after creating the domain and adding computers.
+
+
+
+# 1. Creating example computer accounts in the AD
+
+
+
+No console output
+
+
+
+# 2. Creating some constants for later comparison
+
+
+
+No console output
+
+
+
+# 3. Defining a function to create sample data
+
+
+No console output
+
+
+# 4. Building the report header
+
+
+
+No console output
+
+
+# 5. Getting Computers in RK AD using Get-RKComputers
+
+
+No console output
+
+
+# 6. Getting computers that have never logged on
+
+
+No console output
+
+
+
+# 7. Reporting on computers who have not logged on in over 6 months
+
+No console output
+
+
+
+
+
+# 8. Reporting on computer accounts that have not logged in 1-6 months ago
+
+No console output
+
+
+
+# 9. Reporting on computer accounts that have not logged in
+
+
+No console output
+
+# 9. Reporting on computer accounts that have not logged in
+
+
+PS C:\Foo> # 10. Displaying the report
+PS C:\Foo> $RKReport
+*** Reskit.Org AD Daily AD Computer Report
+*** Generated [05/08/2022 21:31:52]
+***********************************
+
+Computers that have never logged on
+Name                    LastLogonDate
+----                    -------------
+Wolf                    Never
+
+Computers that have not logged in over 6 months
+Name                    LastLogonDate
+----                    -------------
+
+NLIComputer3_6month      08/11/2021 21:00:04
+
+
+Computers that have not logged in 1-6 months
+Name                    LastLogonDate
+----                    -------------
+NLIComputer2_1month     08/04/2022 21:00:04
+
+Computers that have between one week and one month ago
+Name                    LastLogonDate
+----                    -------------
+NLIComputer1_1week      01/05/2022 21:00:04
+
+

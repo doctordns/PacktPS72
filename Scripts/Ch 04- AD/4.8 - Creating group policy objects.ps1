@@ -1,8 +1,8 @@
-﻿# Recipe 6.8 - Creating group policy objects
+﻿# Recipe 4.8 - Creating group policy objects
 
 # Run on DC1, after creaating IT Organizational Unit
 
-# 1. Creating a Group Policy object
+# 1. Creating a new Group Policy object
 $Pol = New-GPO -Name ITPolicy -Comment "IT GPO" -Domain Reskit.Org
 
 # 2. Ensuring just computer settings are enabled
@@ -69,7 +69,7 @@ $RPath2 = 'C:\Foo\GPOReport2.XML'
 Get-GPOReport -All -ReportType XML -Path $RPath2
 $XML = [xml] (Get-Content -Path $RPath2)
 
-# 10. Creating simple GPO report
+# 10. Creating a simple GPO report
 $RPath2 = 'C:\Foo\GPOReport2.XML'
 $FMTS = "{0,-33}  {1,-30} {2,-10} {3}"
 $FMTS -f 'Name','Linked To', 'Enabled', 'No Override'
