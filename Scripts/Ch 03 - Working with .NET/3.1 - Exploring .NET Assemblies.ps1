@@ -1,6 +1,6 @@
 # 3.1 Exploring Assemblies
 
-# Run on SRV1 with
+# Run on SRV1 with PowerShell 7 installed
 
 # 1. Counting loaded assemblies
 $Assemblies = [System.AppDomain]::CurrentDomain.GetAssemblies() 

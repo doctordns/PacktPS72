@@ -11,7 +11,7 @@ $ProfileFiles | Format-Table -Property Name, Definition
 Foreach ($ProfileFile in $ProfileFiles){
   "Testing $($ProfileFile.Name)"
   $ProfilePath = $ProfileFile.Definition.split('=')[1]
-  If (Test-Path $ProfilePath){
+  if (Test-Path -Path $ProfilePath){
     "$($ProfileFile.Name) DOES EXIST"
     "At $ProfilePath"
   }

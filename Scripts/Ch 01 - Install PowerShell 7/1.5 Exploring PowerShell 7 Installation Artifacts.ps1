@@ -27,14 +27,15 @@ $ModPath |
 # 6. Checking the modules
 $TotalCommands = 0
 Foreach ($Path in $ModPath){
-  Try { $Modules = Get-ChildItem -Path $Path -Directory -ErrorAction Stop
-        "Checking Module Path:  [$Path]"
+  Try { 
+    $Modules = Get-ChildItem -Path $Path -Directory -ErrorAction Stop
+    "Checking Module Path:  [$Path]"
   }
-  Catch [System.Management.Automation.ItemNotFoundException] {
+  catch [System.Management.Automation.ItemNotFoundException] {
     "Module path [$path] DOES NOT EXIST ON $(hostname)"
   }
   $TotalCommands = 0
-  Foreach ($Module in $Modules) {
+  foreach ($Module in $Modules) {
     $Cmds = Get-Command -Module ($Module.name)
     $TotalCommands += $Cmds.Count
   }

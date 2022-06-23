@@ -1,6 +1,6 @@
 # 3.4 - Creating a C# PowerShell Extension
 
-# Run on SRV1 after installing PS 7.
+# Run on SRV1 after installing PowerShell 7.
 
 # 1. Examining overloaded method definition
 ("a string").Trim

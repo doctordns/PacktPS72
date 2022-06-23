@@ -1,15 +1,16 @@
-﻿# 4.7 Configuring DNS Zones and Resource Records 
+﻿# 5.9 -  Configuring DNS Zones and Resource Records 
 
-# Run on DC1 after building the domain
+# Run on DC1 after building the domain and configuring DNS (and DHCP)
+# Run as Administrator
 
 # 1. Creating a new primary forward DNS zone for Cookham.Net
 $ZHT1 = @{
   Name              = 'Cookham.Net'
   ResponsiblePerson = 'dnsadmin.cookham.net.' 
-  ReplicationScope  = 'Forest'
+  ReplicationScope  = 'Domain'
   ComputerName      = 'DC1.Reskit.Org'
 }
-Add-DnsServerPrimaryZone @ZHT1
+Add-DnsServerPrimaryZone @ZHT1 -Verbose
 
 # 2. Creating a reverse lookup zone
 $ZHT2 = @{

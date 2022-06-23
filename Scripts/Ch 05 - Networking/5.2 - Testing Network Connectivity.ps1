@@ -1,7 +1,7 @@
-# 2.2 - Testing Network Connectivity
+# 5.2 - Testing Network Connectivity
 
 # Run this on SRV2, after setting a static IP address
-# Static IP address was set in 7.1
+# Static IP address was set in 5.1
 
 # 1. Verifying SRV2 itself is up, and that loopback is working
 Test-Connection -ComputerName SRV2 -Count 1 -IPv4

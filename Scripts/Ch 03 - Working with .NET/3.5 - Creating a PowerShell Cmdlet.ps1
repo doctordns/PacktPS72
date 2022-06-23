@@ -9,7 +9,7 @@
 New-Item -Path C:\Foo\Cmdlet -ItemType Directory -Force
 
 # 3. Creating a new class library project
-Set-Location C:\Foo\Cmdlet
+Set-Location -Path C:\Foo\Cmdlet
 dotnet new classlib --name SendGreeting
 
 # 4. Viewing contents of new folder

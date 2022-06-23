@@ -69,6 +69,6 @@ Update-FormatData -PrependPath "$SMMOD\*.format.ps1xml"
 Get-WindowsFeature |
   Where-Object Name -Match 'RSAT'
 
-# 12. Rebooting  SRV1
+# 12. Rebooting SRV1
 Restart-Computer -Force
 

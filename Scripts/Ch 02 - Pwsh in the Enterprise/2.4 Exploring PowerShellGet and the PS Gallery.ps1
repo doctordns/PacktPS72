@@ -52,4 +52,5 @@ Get-ChildItem -Path $DLFLDR -Recurse -Depth 2|
   Format-Table -Property FullName
 
 # 12.Checking commands in the module
+Import-Module -name $DLFLDR\PSLogging
 Get-Command -Module PSLogging

@@ -1,0 +1,6 @@
+# 5.9 -  Configuring DNS Zones and Resource Records 
+
+# Run on DC1 after building the domain and configuring DNS (and DHCP)
+
+
+

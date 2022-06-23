@@ -42,13 +42,13 @@ C:\Foo\Install-PowerShell.ps1 -Daily   -Destination C:\PSDailyBuild |
   Out-Null
 
 # 8. Creating Windows PowerShell ISE and console default profiles
-#    First the ISE
-$URI = 'https://raw.githubusercontent.com/doctordns/PacktPS72/master/' +
-       '/Scripts/Goodies/Microsoft.PowerShell_Profile.ps1'
+# First create the  ISE
+$Uri = 'https://raw.githubusercontent.com/doctordns/PacktPS72/master/' +
+       'Scripts/Goodies/Microsoft.PowerShell_Profile.ps1'
 $ProfileFile    = $Profile.CurrentUserCurrentHost
-New-Item $ProfileFile -Force -WarningAction SilentlyContinue |
+New-Item -Path $ProfileFile -Force -WarningAction SilentlyContinue |
    Out-Null
-(Invoke-WebRequest -Uri $URI -UseBasicParsing).Content |
+(Invoke-WebRequest -Uri $Uri -UseBasicParsing).Content |
   Out-File -FilePath  $ProfileFile
 # Now profile for ConsoleHost
 $ProfilePath    = Split-Path -Path $ProfileFile

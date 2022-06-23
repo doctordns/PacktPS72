@@ -1,4 +1,4 @@
-﻿# 7.4 Configuring a DHCP Scope and DHCP Options
+﻿# 5.4 Configuring a DHCP Scope and DHCP Options
 
 # Run on DC1, after DHCP Server service added
 

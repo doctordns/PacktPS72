@@ -1,0 +1,183 @@
+# 5.8 - Configuring DNS in the Enterprise
+
+# Run this on DC2 after promoting to DC
+# Have DC1, DC2, SRV2 online
+
+
+
+
+
+PS C:\Foo> # 1. Installing the DNS feature on DC2
+PS C:\Foo> Import-Module -Name ServerManager -WarningAction SilentlyContinue
+PS C:\Foo> Install-WindowsFeature -Name DNS -IncludeManagementTools  
+
+Success Restart Needed Exit Code  Feature Result
+------- -------------- ---------  --------------
+True    No             Success    {DNS Server, DNS Server Tools}
+
+
+
+
+
+
+
+# 2. Creating a script block to set DNS Server Options
+
+
+
+
+no output
+
+
+
+
+
+
+# 3. Reconfiguring DNS on DC2, DC1
+
+
+
+
+
+no output
+
+
+
+
+
+
+# 4. Creating script block to configure DC2 to have TWO DNS servers
+
+
+
+
+no output
+
+
+
+
+# 5. Configuring DC2 to have two DNS servers
+
+
+
+
+no output
+
+
+
+
+
+
+# 6. Creating a script block to configure DC1 to have two DNS servers
+
+
+
+
+
+no output
+
+
+
+
+
+# 7. Configuring DC1 to have two DNS servers
+
+
+
+
+
+
+no output
+
+
+
+
+# 8. Update DHCP scope to add 2 DNS entries
+
+
+
+
+
+
+no output
+
+
+
+
+
+
+# 9. Getting DNS service details
+
+
+
+
+
+no output
+
+
+
+
+
+PS C:\Foo> # 10. Viewing recursion settings
+PS C:\Foo> $DNSRV |
+             Select-Object -ExpandProperty ServerRecursion
+
+Enable               : True
+AdditionalTimeout(s) : 4
+RetryInterval(s)     : 3
+Timeout(s)           : 8
+SecureResponse       : True
+
+
+
+
+
+
+PS C:\Foo> # 11. Viewing server cache settings
+PS C:\Foo> $DNSRV | 
+             Select-Object -ExpandProperty ServerCache
+
+MaxTTL                           : 1.00:00:00
+MaxNegativeTTL                   : 00:15:00
+MaxKBSize                        : 20480
+EnablePollutionProtection        : True
+LockingPercent                   : 100
+StoreEmptyAuthenticationResponse : True
+IgnorePolicies                   : False
+
+
+
+
+
+PS C:\Foo> # 12. Viewing ENDS Settings
+PS C:\Foo> $DNSRV |
+             Select-Object -ExpandProperty ServerEdns
+
+CacheTimeout EnableProbes EnableReception
+------------ ------------ ---------------
+00:15:00     True         True
+
+
+
+
+
+
+
+# 13. Setting Reskit.Org zone to be secure only
+
+
+no output
+
+
+
+PS C:\Foo> # 14. Resolving SRV2.Reskit.Org on DC2
+PS C:\Foo> Resolve-DnsName -Name SRV2.Reskit.Org -Type A -Server DC2
+
+Name             Type  TTL   Section  IPAddress
+----             ----  ---   -------  ---------
+SRV2.Reskit.Org  A     1200  Answer   10.10.10.199
+
+
+
+
+

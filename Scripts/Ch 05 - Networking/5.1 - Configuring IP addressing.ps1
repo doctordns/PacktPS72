@@ -1,6 +1,7 @@
-# 7.1 - Configuring IP asddressing
+# 5.1 - Configuring IP Addressing
 
-# Run this code on SRV2 after creation
+# Run this code on SRV2 after you create the VJM
+# SRV2 is a workgroup host with PS7.2 and VS Code installed. 
 
 # 1. Discovering the adapter, adapter interface and adapter interface index
 $IPType    = 'IPv4'
@@ -14,7 +15,7 @@ Get-NetIPAddress -InterfaceIndex $Index -AddressFamily $IPType |
 $IPHT = @{
   InterfaceIndex = $Index
   PrefixLength   = 24
-  IPAddress      = '10.10.10.52'
+  IPAddress      = '10.10.10.51'
   DefaultGateway = '10.10.10.254'
   AddressFamily  = $IPType
 }
@@ -78,4 +79,11 @@ Invoke-Command -ComputerName DC1 -ScriptBlock $SB
 
 # 13. Testing the DNS server on DC1.Reskit.Org correctly resolves SRV2
 Resolve-DnsName -Name SRV2.Reskit.Org -Type 'A' -Server DC1.Reskit.Org
-  
+
+# 14. Checking the computer account in the AD
+Invoke-Command -ComputerName DC1 -ScriptBlock {
+                   Get-ADComputer -Identity SRV2}
+
+# 15. Adding SRV2 to the domain and restarting
+Add-Computer -DomainName Reskit.Org -Credential $Cred   
+Restart-Computer

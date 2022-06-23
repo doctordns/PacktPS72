@@ -4,13 +4,15 @@
 # Run initially in PowerShell 7 console, then in VS Code
 
 # 1. Downloading the VS Code installation script from PS Gallery
-$VSCPATH = 'C:\Foo'
-Save-Script -Name Install-VSCode -Path $VSCPATH
-Set-Location -Path $VSCPATH
+$VscPath = 'C:\Foo'
+$RV      = "2.8.5.208"
+Install-PackageProvider -Name 'nuget' -RequiredVersion $RV -Force |
+  Out-Null
+Save-Script -Name Install-VSCode -Path $VscPath
+Set-Location -Path $VscPath
 
 # 2. Reviewing the installation help details
 Get-Help -Name C:\Foo\Install-VSCode.ps1
-
 
 # 3. Running the installation script and adding in some popular extensions
 $Extensions =  'Streetsidesoftware.code-spell-checker',
@@ -108,13 +110,16 @@ $XML | Out-File -FilePath C:\Foo\Layout.Xml
 Import-StartLayout -LayoutPath C:\Foo\Layout.Xml -MountPath C:\
 
 # 13. Creating a profile file for PWSH 7 Consoles
-$ProfileFolder = Join-Path ($Env:homeDrive+ $env:HOMEPATH) 'Documents\PowerShell'
+$ProfileFolder = 
+  Join-Path ($Env:homeDrive+ $env:HOMEPATH) 'Documents\PowerShell'
 $ProfileFile2   = 'Microsoft.PowerShell_Profile.ps1'
-$ConsoleProfile = Join-Path -Path $ProfileFolder -ChildPath $ProfileFile2
+$ConsoleProfile = 
+  Join-Path -Path $ProfileFolder -ChildPath $ProfileFile2
 New-Item $ConsoleProfile -Force -WarningAction SilentlyContinue |
    Out-Null
-$URI2 = 'https://raw.githubusercontent.com/doctordns/PACKT-PS7/master/' +
-        "scripts/goodies/$ProfileFile2"
+$URI2 = 
+  'https://raw.githubusercontent.com/doctordns/PACKT-PS7/master/' +
+  "scripts/goodies/$ProfileFile2"
 (Invoke-WebRequest -Uri $URI2).Content |
   Out-File -FilePath  $ConsoleProfile
 

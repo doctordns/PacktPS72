@@ -1,6 +1,6 @@
 # 3.2 Exploring .NET Classes
 
-# Run on SRV1
+# Run on SRV1 after installing PowerShell 7
 
 # 1. Creating a Fileinfo object
 $FILE = Get-ChildItem -Path $PSHOME\pwsh.exe
@@ -10,8 +10,8 @@ $FILE
 $TYPE = $FILE.GetType().FullName
 ".NET Class name: $TYPE"
 
-# 3. Getting member types of Fileinfo object
-$File | 
+# 3. Getting member types of FileInfo object
+$FILE | 
   Get-Member | 
     Group-Object -Property MemberType |
       Sort-Object -Property Count -Descending

@@ -6,8 +6,8 @@
 
 # 1. Downloading the installation script for Chocolatey
 $ChocoIns = 'C:\Foo\Install-Chocolatey.ps1'
-$DL       = New-Object System.Net.WebClient
-$DL.DownloadString('https://community.chocolatey.org/install.ps1') |
+$DI       = New-Object System.Net.WebClient
+$DI.DownloadString('https://community.chocolatey.org/install.ps1') |
   Out-File -FilePath $ChocoIns
 
 # 2. Viewing the installation help file

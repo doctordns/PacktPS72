@@ -90,7 +90,9 @@ $XML.report.GPO |
 # to undo for testing
 # these steps remove the GPOs created above
 
-Remove-GPLink -Name 'Screen Saver Time Out'  -Target 'OU=IT,DC=Reskit,DC=Org'
+$Target = 'OU=IT,DC=Reskit,DC=Org'
+
+Remove-GPLink -Name 'Screen Saver Time Out'  -Target $Target
 Remove-GPLink -Name 'ITPolicy'  -Target 'OU=IT,DC=Reskit,DC=Org'
 Get-GPO 'ITPolicy' | Remove-GPO
 Get-GPO 'Screen Saver Time Out' | remove-GPO
