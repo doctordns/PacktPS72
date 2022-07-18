@@ -1,0 +1,173 @@
+ # 6.2 - Examining Event Logs
+#
+# Run on SRV1, with DC1 online
+
+
+# 1. Registering PowerShell event log provider
+
+
+
+no output
+
+
+
+
+PS C:\Foo> # 2. Discovering classic event logs on SRV1
+PS C:\Foo> Get-EventLog -LogName *
+
+  Max(K) Retain OverflowAction        Entries Log
+  ------ ------ --------------        ------- ---
+  20,480      0 OverwriteAsNeeded       1,241 Application
+  20,480      0 OverwriteAsNeeded           0 HardwareEvents
+     512      7 OverwriteOlder              0 Internet Explorer
+  20,480      0 OverwriteAsNeeded           0 Key Management Service
+  20,480      0 OverwriteAsNeeded      10,334 Security
+  20,480      0 OverwriteAsNeeded       7,692 System
+  15,360      0 OverwriteAsNeeded         475 Windows PowerShell
+
+
+
+
+
+
+PS C:\Foo> # 3. Discovering and measuring all event logs on this host
+PS C:\Foo> $Logs = Get-WinEvent -ListLog *
+PS C:\Foo> "There are $($Logs.Count) total event logs on SRV1"
+There are 423 total event logs on SRV1
+
+
+
+
+
+PS C:\Foo> # 4. Discovering and measuring all event logs on DC1
+PS C:\Foo> $SB1     = {Get-WinEvent -ListLog *}
+PS C:\Foo> $LogsDC1 = Invoke-Command -ComputerName DC1 -ScriptBlock $SB1
+PS C:\Foo> "There are $($LogsDC1.Count) total event logs on DC1"
+There are 415 total event logs on DC1
+
+
+
+
+
+
+PS C:\Foo> # 5. Discovering SRV1 log member details
+PS C:\Foo> $Logs | Get-Member
+
+   TypeName: System.Diagnostics.Eventing.Reader.EventLogConfiguration
+
+Name                           MemberType   Definition
+----                           ----------   ----------
+Dispose                        Method       void Dispose(), void IDisposable.Dispose()
+Equals                         Method       bool Equals(System.Object obj)
+GetHashCode                    Method       int GetHashCode()
+GetType                        Method       type GetType()
+SaveChanges                    Method       void SaveChanges()
+ToString                       Method       string ToString()
+FileSize                       NoteProperty long FileSize=1118208
+IsLogFull                      NoteProperty bool IsLogFull=False
+LastAccessTime                 NoteProperty datetime LastAccessTime=30/06/2022 12:45:34
+LastWriteTime                  NoteProperty datetime LastWriteTime=30/06/2022 12:45:34
+OldestRecordNumber             NoteProperty long OldestRecordNumber=1
+RecordCount                    NoteProperty long RecordCount=475
+IsClassicLog                   Property     bool IsClassicLog {get;}
+IsEnabled                      Property     bool IsEnabled {get;set;}
+LogFilePath                    Property     string LogFilePath {get;set;}
+LogIsolation                   Property     System.Diagnostics.Eventing.Reader.EventLogIsolation LogIsolation {get;}
+LogMode                        Property     System.Diagnostics.Eventing.Reader.EventLogMode LogMode {get;set;}
+LogName                        Property     string LogName {get;}
+LogType                        Property     System.Diagnostics.Eventing.Reader.EventLogType LogType {get;}
+MaximumSizeInBytes             Property     long MaximumSizeInBytes {get;set;}
+OwningProviderName             Property     string OwningProviderName {get;}
+ProviderBufferSize             Property     System.Nullable[int] ProviderBufferSize {get;}
+ProviderControlGuid            Property     System.Nullable[guid] ProviderControlGuid {get;}
+ProviderKeywords               Property     System.Nullable[long] ProviderKeywords {get;set;}
+ProviderLatency                Property     System.Nullable[int] ProviderLatency {get;}
+ProviderLevel                  Property     System.Nullable[int] ProviderLevel {get;set;}
+ProviderMaximumNumberOfBuffers Property     System.Nullable[int] ProviderMaximumNumberOfBuffers {get;}
+ProviderMinimumNumberOfBuffers Property     System.Nullable[int] ProviderMinimumNumberOfBuffers {get;}
+ProviderNames                  Property     System.Collections.Generic.IEnumerable[string] ProviderNames {get;}
+SecurityDescriptor             Property     string SecurityDescriptor {get;set;}
+
+
+
+
+
+PS C:\Foo> # 6. Measuring enabled logs on SRV1
+PS C:\Foo> $Logs |
+             Where-Object IsEnabled |
+               Measure-Object |
+                 Select-Object -Property Count
+
+Count
+-----
+  343
+
+
+
+
+PS C:\Foo> # 7. Measuring enabled logs on DC1
+PS C:\Foo> $LogsDC1 |
+             Where-Object IsEnabled |
+               Measure-Object |
+                 Select-Object -Property Count
+
+Count
+-----
+  340
+
+
+
+PS C:\Foo> # 8. Measuring enabled logs that have records on SRV1
+PS C:\Foo> $Logs | 
+             Where-Object IsEnabled |
+               Where-Object RecordCount -gt 0 |
+                 Measure-Object |
+                   Select-Object -Property Count
+
+Count
+-----
+  107
+
+
+
+
+
+
+PS C:\Foo> # 9. Discovering PowerShell-related logs
+PS C:\Foo> $Logs |
+             Where-Object LogName -match 'Powershell'
+
+LogMode   MaximumSizeInBytes RecordCount LogName
+-------   ------------------ ----------- -------
+Circular            15728640         475 Windows PowerShell
+Circular            15728640        2630 PowerShellCore/Operational
+Circular            15728640         401 Microsoft-Windows-PowerShell/Operational
+Retain            1048985600           0 Microsoft-Windows-PowerShell/Admin
+Circular             1052672           0 Microsoft-Windows-PowerShell-DesiredStateConfiguration-FileDownloadManager/Operational
+
+
+
+
+
+PS C:\Foo> # 10. Examining PowerShellCore event log
+PS C:\Foo> Get-WinEvent -LogName 'PowerShellCore/Operational' |
+             Select-Object -First 10
+
+   ProviderName: PowerShellCore
+
+TimeCreated                     Id LevelDisplayName Message
+-----------                     -- ---------------- -------
+30/06/2022 12:50:31          12039 Information      Modifying activity Id and correlating
+30/06/2022 12:50:31           8196 Information      Modifying activity Id and correlating
+30/06/2022 12:50:30          12039 Information      Modifying activity Id and correlating
+30/06/2022 12:50:30           8196 Information      Modifying activity Id and correlating
+30/06/2022 12:50:30          12039 Information      Modifying activity Id and correlating
+30/06/2022 12:50:30           8196 Information      Modifying activity Id and correlating
+30/06/2022 12:50:30          12039 Information      Modifying activity Id and correlating
+30/06/2022 12:50:30           8196 Information      Modifying activity Id and correlating
+30/06/2022 12:50:30          12039 Information      Modifying activity Id and correlating
+30/06/2022 12:50:30           8196 Information      Modifying activity Id and correlating
+
+
+
+

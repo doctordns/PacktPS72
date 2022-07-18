@@ -19,7 +19,7 @@ no output
 PS C:\Foo> # 2. Sharing the folder
 PS C:\Foo> $SMBHT = @{
              Name        = 'RKRepo'
-             Path        = $LPATH
+             Path        = $PATH
              Description = 'Reskit Repository'
              FullAccess  = 'Everyone'
            }

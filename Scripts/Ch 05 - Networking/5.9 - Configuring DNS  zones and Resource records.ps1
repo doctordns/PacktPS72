@@ -26,7 +26,7 @@ Register-DnsClient
 Invoke-Command -ComputerName DC2 -ScriptBlock {Register-DnsClient}
 
 # 4. Checking the DNS zones on DC1
-Get-DNSServerZone -ComputerName DC1
+Get-DNSServerZone -ComputerName DC1 | ft -AutoSize
 
 # 5. Adding Resource Records to Cookham.Net zone
 # Adding an A record
@@ -61,7 +61,7 @@ $SB = {Restart-Service -Name DNS}
 Invoke-Command -ComputerName DC2 -ScriptBlock $SB
 
 # 7. Checking results of RRs in Cookham.Net zone
-Get-DnsServerResourceRecord -ZoneName 'Cookham.Net'
+Get-DnsServerResourceRecord -ZoneName 'Cookham.Net' | ft -auto
 
 # 8. Testing DNS resolution on DC2, DC1
 # Testing The CNAME from DC1

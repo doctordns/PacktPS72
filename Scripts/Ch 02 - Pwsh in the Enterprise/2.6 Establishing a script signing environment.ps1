@@ -35,7 +35,7 @@ Set-AuthenticodeSignature @SHT
 Get-ChildItem -Path C:\Foo\Signed.ps1
 
 # 6. Viewing the signed script
-Get-Content -Path C:\Foo\Signed.ps1.
+Get-Content -Path C:\Foo\Signed.ps1
 
 # 7. Testing the signature
 Get-AuthenticodeSignature -FilePath C:\Foo\Signed.ps1 |

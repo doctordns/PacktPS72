@@ -66,10 +66,10 @@ no console output
 
 PS C:\Foo> # 4. Reporting on results
 PS C:\Foo> "On Host [$(hostname)]"
-PS C:\Foo> "Commands found:          [{0:N0}]"  -f $COM.count
-PS C:\Foo> "Modules found:           [{0:N0}]"  -f $MOD.count
-PS C:\Foo> "DSC Resources found:     [{0:N0}]"  -f $DSC.count
-PS C:\Foo> "Scripts found:           [{0:N0}]"  -f $SCR.count
+PS C:\Foo> "Commands found:          [{0:N0}]"  -f $Commands.Count
+PS C:\Foo> "Modules found:           [{0:N0}]"  -f $Modules.Count
+PS C:\Foo> "DSC Resources found:     [{0:N0}]"  -f $DSCResources.Count
+PS C:\Foo> "Scripts found:           [{0:N0}]"  -f $Sripts.Count
 
 On Host [SRV1]
 Commands found:          [146,638]
@@ -80,7 +80,7 @@ Scripts found:           [1,545]
 
 
 PS C:\Foo> # 5. Discovering NTFS-related modules
-PS C:\Foo> $MOD |
+PS C:\Foo> $Modules |
              Where-Object Name -match NTFS
 
 Version    Name                     Repository  Description
@@ -185,11 +185,9 @@ no output
 
 
 PS C:\Foo> # 11. Viewing the contents of the download folder
-PS C:\Foo> Get-ChildItem -Path $DLFLDR -Recurse |
+PS C:\Foo> Get-ChildItem -Path $DownloadFolder -Recurse |
              Format-Table -Property FullName
 
-FullName
---------
 FullName
 --------
 C:\Foo\DownloadedModules\PSLogging

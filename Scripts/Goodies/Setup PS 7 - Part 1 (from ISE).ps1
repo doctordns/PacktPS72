@@ -23,15 +23,15 @@ $LFHT = @{
 }
 New-Item -Path C:\Foo @LFHT | Out-Null
 
-# 4. Download PowerShell 7.1 installation script
-Write-Host "Downloading Pwsh 7.1 installation script"
+# 4. Download PowerShell 7.2 installation script
+Write-Host "Downloading Pwsh 7.2 installation script"
 Set-Location C:\Foo
 $URI = 'https://aka.ms/install-powershell.ps1'
 Invoke-RestMethod -Uri $URI | 
   Out-File -FilePath C:\Foo\Install-PowerShell.ps1
 
 # 5. Install PowerShell 7
-Write-Host "Installing Pwsh 7.1"
+Write-Host "Installing Pwsh 7.2"
 $EXTHT = @{
   UseMSI                 = $true
   Quiet                  = $true 
@@ -41,10 +41,10 @@ $EXTHT = @{
 C:\Foo\Install-PowerShell.ps1 @EXTHT | Out-Null
 
 # 6. For the Adventurous - install the preview and daily builds as well
-Write-Host "Installing Pwsh 7.2 preview"
+Write-Host "Installing Pwsh 7.3 preview"
 C:\Foo\Install-PowerShell.ps1 -Preview -Destination C:\PSPreview |
   Out-Null
-Write-Host "Installing Pwsh 7.2 Daily Build"
+Write-Host "Installing Pwsh 7.3 Daily Build"
 C:\Foo\Install-PowerShell.ps1 -Daily   -Destination C:\PSDailyBuild |
   Out-Null
 
@@ -64,13 +64,14 @@ $ConsoleProfile = Join-Path -Path $ProfilePath -ChildPath 'Microsoft.PowerShell_
   Out-File -FilePath  $ConsoleProfile
 
 # 8. Download the VS Code installation script from PS Gallery
-Write-Host "Download VS Code Installation Script"
+Write-Host 'Download VS Code Installation Script'
 $VSCPATH = 'C:\Foo'
 Save-Script -Name Install-VSCode -Path $VSCPATH
 Set-Location -Path $VSCPATH
 
 # 9. Run the installation script and add in some popular extensions
-#   NB: sometimes this flakes out and does NOT actually install VS Code -= just rerun this stwp
+#   NB: sometimes this flakes out and does NOT actually install VS Code.
+#   If VScode dosn'tinatll - just rerun this step
 Write-Host "Installing VS Code"
 $Extensions =  'Streetsidesoftware.code-spell-checker',
                'yzhang.markdown-all-in-one',
@@ -83,7 +84,7 @@ $InstallHT = @{
 .\Install-VSCode.ps1 @InstallHT -ea 0 | Out-Null
 
 # 10. Define registry path for autologon, then set admin logon
-Write-Verbose -Message 'Setting Autologon'
+Write-Host 'Setting Autologon'
 $RegPath  = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon'
 $User     = 'Administrator'
 $Password = 'Pa$$w0rd'
@@ -94,7 +95,7 @@ Set-ItemProperty -Path $RegPath -Name DefaultDomainName -Value $Dom      -EA 0
 Set-ItemProperty -Path $RegPath -Name AutoAdminLogon    -Value 1         -EA 0  
 
 # 11. Set the PowerConfig to not turn off the virtual monitor
-Write-Verbose -Message 'Setting Monitor poweroff to zero'
+Write-Host 'Setting Monitor poweroff to zero'
 powercfg /change monitor-timeout-ac 0
 
 # 12. All done with Windows PowerShell

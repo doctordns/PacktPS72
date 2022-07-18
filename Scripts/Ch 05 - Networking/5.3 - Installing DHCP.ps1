@@ -20,8 +20,6 @@ $DHCPHT = @{
 }
 Set-ItemProperty @DHCPHT
 
-
-
 # 4. Restarting DHCP server 
 Restart-Service -Name DHCPServer -Force 
 

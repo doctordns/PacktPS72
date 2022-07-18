@@ -21,6 +21,7 @@ dotnet new globaljson
 Get-Content -Path .\global.json
 
 # 6. Adding PowerShell package
+dotnet nuget add source --name nuget.org https://api.nuget.org/v3/index.json
 dotnet add package PowerShellStandard.Library
 
 # 7. Create the cmdlet source file

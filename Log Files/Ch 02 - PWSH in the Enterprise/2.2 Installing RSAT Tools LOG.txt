@@ -77,9 +77,9 @@ no output
 PS C:\Foo> # 7. Displaying counts of features installed
 PS C:\Foo> "On Host [$(hostname)]"
 PS C:\Foo> "Total features available      [{0}]"  -f $Features.count
-PS C:\Foo> "Total features installed      [{0}]"  -f $FeaturesI.count
-PS C:\Foo> "Total RSAT features available [{0}]"  -f $RSATF.count
-PS C:\Foo> "Total RSAT features installed [{0}]"  -f $RSATFI.count
+PS C:\Foo> "Total features installed      [{0}]"  -f $FeaturesInstalled.count
+PS C:\Foo> "Total RSAT features available [{0}]"  -f $RSATFeatures.count
+PS C:\Foo> "Total RSAT features installed [{0}]"  -f $RSATFeaturesInstalled.count
 On Host [SRV1]
 Total features available      [266]
 Total features installed      [12]
@@ -117,8 +117,9 @@ No output
 
 PS C:\Foo> # 10. Displaying counts of commands after installing the RSAT tools
 PS C:\Foo> "After Installation of RSAT tools on SRV1"
-PS C:\Foo> "$($IFSRV1A.count) features installed on SRV1"
-PS C:\Foo> "$($RSFSRV1A.count) RSAT features installed on SRV1"
+PS C:\Foo> $INS = 'Features installed on SRV1'
+PS C:\Foo> "$($InstalledOnSRV1.Count) $INS"
+PS C:\Foo> "$($RsatInstalledOnSRV1.Count) $INS"
 After Installation of RSAT tools on SRV1
 76 features installed on SRV1
 50 RSAT features installed on SRV1
@@ -128,12 +129,12 @@ After Installation of RSAT tools on SRV1
 
 
 PS C:\Foo> # 11. Displaying RSAT tools on SRV1
-PS C:\Foo> $MODS = "$env:windir\system32\windowspowerShell\v1.0\modules"
-PS C:\Foo> $SMMOD = "$MODS\ServerManager"
-PS C:\Foo> Update-FormatData -PrependPath "$SMMOD\*.format.ps1xml"
+PS C:\Foo> $Modules = "$env:windir\system32\windowspowerShell\v1.0\modules"
+PS C:\Foo> $ServerManagerModules = "$Modules\ServerManager"
+PS C:\Foo> Update-FormatData -PrependPath "$ServerManagerModules\*.format.ps1xml"
 PS C:\Foo> Get-WindowsFeature |
-             Where-Object Name -Match 'RSAT'
-                                                                                                    
+  PS C:\Foo> Where-Object Name -Match 'RSAT'
+                                                                                       
 Display Name                                            Name                       Install State
 ------------                                            ----                       -------------    
 [X] Remote Server Administration Tools                  RSAT                           Installed    

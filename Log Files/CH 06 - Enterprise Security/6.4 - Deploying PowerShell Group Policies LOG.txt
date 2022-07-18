@@ -1,0 +1,144 @@
+# 6.4 Deploying PowerShell Group Policies
+#
+# Run on DC1 - Login as domain administrator
+
+
+
+PS C:\Foo> # 1. Discovering the GPO-related files
+PS C:\Foo> Get-ChildItem -Path $PSHOME -Filter *Core*Policy*
+
+    Directory: C:\Program Files\PowerShell\7
+
+Mode        LastWriteTime Length Name
+----        ------------- ------ ----
+-a--- 15/06/2022    17:24  17386 InstallPSCorePolicyDefinitions.ps1
+-a--- 15/06/2022    17:08   9675 PowerShellCoreExecutionPolicy.adml
+-a--- 15/06/2022    17:08   6198 PowerShellCoreExecutionPolicy.admx
+
+
+
+
+PS C:\Foo> # 2. Installing the PowerShell 7 group policy files
+PS C:\Foo> $LOC = $PSHOME + '\InstallPSCorePolicyDefinitions.ps1'
+PS C:\Foo> & $LOC -VERBOSE
+VERBOSE: Copying C:\Program Files\PowerShell\7\PowerShellCoreExecutionPolicy.admx
+  to C:\WINDOWS\PolicyDefinitions
+VERBOSE: PowerShellCoreExecutionPolicy.admx was installed successfully
+VERBOSE: Copying C:\Program Files\PowerShell\7\PowerShellCoreExecutionPolicy.adml
+  to C:\WINDOWS\PolicyDefinitions\en-US
+VERBOSE: PowerShellCoreExecutionPolicy.adml was installed successfully
+
+
+
+
+
+
+
+# 3. Creating a new GPO for the IT group
+
+
+PS C:\Foo> # 3. Creating and displaying a new GPO for the IT group
+PS C:\Foo> $GPOName = 'PowerShell GPO for IT'
+PS C:\Foo> $PshGPO = New-GPO -Name $GPOName
+PS C:\Foo> Get-GPO -Name $GPOName
+
+DisplayName      : PowerShell GPO for IT
+DomainName       : Reskit.Org
+Owner            : RESKIT\Domain Admins
+Id               : 694960eb-41a8-43de-95e1-1a12ffe4006e
+GpoStatus        : AllSettingsEnabled
+Description      : 
+CreationTime     : 01/07/2022 13:59:47
+ModificationTime : 01/07/2022 14:03:30
+UserVersion      : 
+ComputerVersion  : 
+WmiFilter        : 
+
+
+
+
+
+
+# 4. Enabling module logging
+
+
+
+
+no output
+
+
+
+
+# 5. Configuring module names to log
+
+
+
+no output
+
+
+
+
+
+# 6. Enabling script block logging
+
+
+
+
+no output
+
+
+
+
+
+
+PS C:\Foo> # 7. Enabling Unrestricted Execution Policy
+PS C:\Foo> $GPOKey4 = 
+         >   'HKCU\Software\Policies\Microsoft\PowerShellCore'
+PS C:\Foo> # create the key value to enable
+PS C:\Foo> $GPOHT4 =  @{
+              DisplayName    = $PshGPO.DisplayName
+              Key            = $GPOKEY4
+              Type           = [Microsoft.Win32.RegistryValueKind]::DWord
+              ValueName      = 'EnableScripts'
+              Value          = 1
+            }
+PS C:\Foo>   Set-GPRegistryValue @GPOHT4 | Out-Null
+PS C:\Foo> # Set the default   
+PS C:\Foo> $GPOHT4 = @{
+             DisplayName    = $PshGPO.DisplayName
+             Key            = "$GPOKEY4"
+             Type           = [Microsoft.Win32.RegistryValueKind]::String
+             ValueName      = 'ExecutionPolicy'
+             Value          = 'Unrestricted'
+           }
+PS C:\Foo> Set-GPRegistryValue @GPOHT4
+
+DisplayName      : PowerShell GPO for IT
+DomainName       : Reskit.Org
+Owner            : RESKIT\Domain Admins
+Id               : 694960eb-41a8-43de-95e1-1a12ffe4006e
+GpoStatus        : AllSettingsEnabled
+Description      :
+CreationTime     : 01/07/2022 13:59:47
+ModificationTime : 01/07/2022 14:03:30
+UserVersion      :
+ComputerVersion  :
+WmiFilter        :
+
+
+
+
+# 8. Assigning GPO to IT OU
+
+
+no output
+
+
+
+# 9.  Creating an RSOP report
+
+no console output but look at browser
+
+
+
+

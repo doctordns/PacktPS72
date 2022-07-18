@@ -78,7 +78,7 @@ Mode                 LastWriteTime         Length Name
 
 
 PS C:\Foo> # 6. Viewing the signed script
-PS C:\Foo> Get-Content -Path C:\Foo\Signed.ps1.
+PS C:\Foo> Get-Content -Path C:\Foo\Signed.ps1
 
   # Sample Script
   'Hello World from PowerShell 7!'

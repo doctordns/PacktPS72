@@ -9,8 +9,11 @@
 
 PS C:\Foo> # 1. Discovering the adapter, adapter interface and adapter interface index
 PS C:\Foo> $IPType    = 'IPv4'
-PS C:\Foo> $Adapter   = Get-NetAdapter |  Where-Object Status -eq 'Up'     
-PS C:\Foo> $Interface = $Adapter | Get-NetIPInterface -AddressFamily $IPType
+PS C:\Foo> $Adapter   = Get-NetAdapter -Name Ethernet |
+               Where-Object Status -eq 'Up'     
+PS C:\Foo> $Interface = $Adapter |
+               Select-Object -First 1
+                 Get-NetIPInterface -AddressFamily $IPType
 PS C:\Foo> $Index     = $Interface.IfIndex
 PS C:\Foo> Get-NetIPAddress -InterfaceIndex $Index -AddressFamily $IPType |
              Format-Table -Property Interface*, IPAddress, PrefixLength

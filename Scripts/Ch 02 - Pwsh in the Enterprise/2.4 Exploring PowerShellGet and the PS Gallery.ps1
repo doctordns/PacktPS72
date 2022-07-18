@@ -10,20 +10,20 @@ Get-Command -Module PowerShellGet
 Get-Command -Module PowerShellGet -Verb Find
 
 # 3. Getting all commands, modules, DSC resources and scripts
-$COM = Find-Command
-$MOD = Find-Module
-$DSC = Find-DscResource
-$SCR = Find-Script
+$Commands     = Find-Command
+$Modules      = Find-Module
+$DSCResources = Find-DscResource
+$Scripts      = Find-Script
 
 # 4. Reporting on results
 "On Host [$(hostname)]"
-"Commands found:          [{0:N0}]"  -f $COM.count
-"Modules found:           [{0:N0}]"  -f $MOD.count
-"DSC Resources found:     [{0:N0}]"  -f $DSC.count
-"Scripts found:           [{0:N0}]"  -f $SCR.count
+"Commands found:          [{0:N0}]"  -f $Commands.Count
+"Modules found:           [{0:N0}]"  -f $Modules.Count
+"DSC Resources found:     [{0:N0}]"  -f $DSCResources.Count
+"Scripts found:           [{0:N0}]"  -f $Scripts.Count
 
 # 5. Discovering NTFS-related modules
-$MOD |
+$Modules |
   Where-Object Name -match NTFS
 
 # 6. Installing the NTFSSecurity module
@@ -36,21 +36,21 @@ Get-Command -Module NTFSSecurity
 Get-NTFSAccess -Path C:\Foo
 
 # 9. Creating a download folder
-$DLFLDR = 'C:\Foo\DownloadedModules'
+$DownloadFolder = 'C:\Foo\DownloadedModules'
 $NIHT = @{
   ItemType = 'Directory'
-  Path     = $DLFLDR
+  Path     = $DownloadFolder
   ErrorAction = 'SilentlyContinue'
 }
 New-Item @NIHT | Out-Null
 
 # 10. Downloading the PSLogging module
-Save-Module -Name PSLogging -Path $DLFLDR
+Save-Module -Name PSLogging -Path $DownloadFolder
 
 # 11. Viewing the contents of the download folder
-Get-ChildItem -Path $DLFLDR -Recurse -Depth 2|
+Get-ChildItem -Path $DownloadFolder -Recurse -Depth 2 |
   Format-Table -Property FullName
 
 # 12.Checking commands in the module
-Import-Module -name $DLFLDR\PSLogging
+Import-Module -name $DownloadFolder\PSLogging
 Get-Command -Module PSLogging

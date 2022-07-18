@@ -3,14 +3,14 @@
 # Run on SRV1 after installing PowerShell 7
 
 # 1. Creating a new repository folder
-$LPATH = 'C:\RKRepo'
-New-Item -Path $LPATH -ItemType Directory |
+$PATH = 'C:\RKRepo'
+New-Item -Path $PATH -ItemType Directory |
   Out-Null
 
 # 2. Sharing the folder
 $SMBHT = @{
   Name        = 'RKRepo'
-  Path        = $LPATH
+  Path        = $PATH
   Description = 'Reskit Repository'
   FullAccess  = 'Everyone'
 }
@@ -37,7 +37,7 @@ New-Item -Path $HWDIR -ItemType Directory | Out-Null
 # 6. Creating a very simple module
 $HS = @"
 Function Get-HelloWorld {'Hello World'}
-Set-Alias GHW Get-HelloWorld
+Set-Alias -Name GHW -Value Get-HelloWorld
 "@
 $HS | Out-File $HWDIR\HW.psm1
 

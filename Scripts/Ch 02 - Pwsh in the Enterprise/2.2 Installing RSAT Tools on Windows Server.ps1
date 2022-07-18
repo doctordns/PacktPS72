@@ -33,39 +33,42 @@ $CountOfModulesBeforeRSAT = $ModulesBefore.Count
 
 # 6. Getting a count of features actually available on SRV1
 Import-Module -Name ServerManager -WarningAction SilentlyContinue
-$Features  = Get-WindowsFeature
-$FeaturesI = $Features | Where-Object Installed
-$RsatF     = $Features |
-               Where-Object Name -Match 'RSAT'
-$RSATFI    = $RSATF |
-              Where-Object Installed
+$Features = Get-WindowsFeature 
+$FeaturesInstalled = $Features | 
+                       Where-Object Installed 
+$Rsatfeatures = $Features |
+                  Where-Object Name -Match 'RSAT'
+$RsatFeaturesInstalled = $Rsatfeatures | 
+                  Where-Object Installed 
 
-# 7. Displaying counts of features installed
+# 7. Displaying counts of features 
 "On Host [$(hostname)]"
-"Total features available      [{0}]"  -f $Features.count
-"Total features installed      [{0}]"  -f $FeaturesI.count
-"Total RSAT features available [{0}]"  -f $RSATF.count
-"Total RSAT features installed [{0}]"  -f $RSATFI.count
+"Total features available      [{0}]" -f $Features.Count
+"Total features installed      [{0}]" -f $FeaturesInstalled.Count
+"Total RSAT features available [{0}]" -f $RsatFeatures.Count
+"Total RSAT features installed [{0}]" -f $RsatFeaturesInstalled.Count
+
 
 # 8. Adding ALL RSAT tools to SRV1
 Get-WindowsFeature -Name *RSAT* |
   Install-WindowsFeature
 
 # 9. Getting Details of RSAT tools now installed on SRV1
-$FSRV1A   = Get-WindowsFeature
-$IFSRV1A  = $FSRV1A | Where-Object Installed
-$RSFSRV1A = $FSRV1A | Where-Object Installed |
-              Where-Object Name -Match 'RSAT'
+$FeaturesSRV1        = Get-WindowsFeature
+$InstalledOnSRV1     = $FeaturesSRV1 | Where-Object Installed
+$RsatInstalledOnSRV1 = $InstalledOnSRV1 | Where-Object Installed |
+                         Where-Object Name -Match 'RSAT'
 
 # 10. Displaying counts of commands after installing the RSAT tools
 "After Installation of RSAT tools on SRV1"
-"$($IFSRV1A.count) features installed on SRV1"
-"$($RSFSRV1A.count) RSAT features installed on SRV1"
+$INS = 'Features installed on SRV1'
+"$($InstalledOnSRV1.Count) $INS"
+"$($RsatInstalledOnSRV1.Count) $INS"
 
 # 11. Displaying RSAT tools on SRV1
-$MODS = "$env:windir\system32\windowspowerShell\v1.0\modules"
-$SMMOD = "$MODS\ServerManager"
-Update-FormatData -PrependPath "$SMMOD\*.format.ps1xml"
+$Modules = "$env:windir\system32\windowspowerShell\v1.0\modules"
+$ServerManagerModules = "$Modules\ServerManager"
+Update-FormatData -PrependPath "$ServerManagerModules\*.format.ps1xml"
 Get-WindowsFeature |
   Where-Object Name -Match 'RSAT'
 

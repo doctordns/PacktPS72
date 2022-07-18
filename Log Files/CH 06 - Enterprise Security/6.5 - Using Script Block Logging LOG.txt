@@ -1,0 +1,71 @@
+# 6.5 - Using Script Block Logging
+#
+# Run on SRV1, login as domain administrator
+
+
+
+# 1. Clearing PowerShell Core operational log
+
+
+no console  output
+
+
+# 2. Enabling script block logging for the current user
+
+
+
+no console  output
+
+
+
+PS C:\Foo> # 3. Examining the PowerShell Core event log for 4104 events
+PS C:\Foo> Get-Winevent -LogName 'PowerShellCore/Operational' |
+             Where-Object Id -eq 4104
+
+   ProviderName: PowerShellCore
+
+TimeCreated            Id  LevelDisplayName  Message
+-----------            --  ----------------  -------
+10/07/2022 15:39:03  4104  Warning           Creating Scriptblock text (1 of 1):…
+10/07/2022 15:39:03  4104  Warning           Creating Scriptblock text (1 of 1):…
+10/07/2022 15:37:21  4104  Warning           Creating Scriptblock text (1 of 1):…
+10/07/2022 15:37:21  4104  Warning           Creating Scriptblock text (1 of 1):…
+
+
+PS C:\Foo> # 4. Examining logged event details  
+PS C:\Foo> Get-Winevent -LogName 'PowerShellCore/Operational' |
+             Where-Object Id -eq 4104  |
+               Select-Object -First 1 |
+                 Format-List -Property ID, Logname, Message
+
+Id      : 4104
+LogName : PowerShellCore/Operational
+Message : Creating Scriptblock text (1 of 1):
+          Set-ItemProperty $SBLPath -Name EnableScriptBlockLogging -Value '1'
+
+          ScriptBlock ID: 0ea65eb3-e6b5-4b36-9ceb-d8076b9e80a4
+          Path:
+
+
+
+# 5. Creating another script block that Powershell does not log
+
+
+
+
+no output
+
+
+PS C:\Foo> # 6. Comparing the events before and after you invoke the command
+PS C:\Foo> "Before:  $($Before.Count) events"
+Before:  4 events
+PS C:\Foo> "After :  $($After.Count) events"
+After :  4 events
+
+
+
+
+# 7. Removing registry policy entry
+
+
+no console output
