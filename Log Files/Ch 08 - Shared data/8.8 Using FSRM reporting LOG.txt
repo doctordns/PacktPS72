@@ -1,0 +1,148 @@
+# Recipe 8.8 - Using FSRM Reporting   LOG
+#
+# Run on FS1 after you run Recipe 8.7 to install FSRM
+
+
+
+PS C:\Foo> # 1. Creating a new FSRM storage report for large files on C:\ on FS1
+PS C:\Foo> $NewReportHT = @{
+             Name             = 'Large Files on FS1'
+             NameSpace        = 'C:\'
+             ReportType       = 'LargeFiles'
+             LargeFileMinimum = 10MB
+             Interactive      = $true
+           }
+PS C:\Foo> New-FsrmStorageReport @NewReportHT
+
+FileGroupIncluded        : 
+FileOwnerFilePattern     : 
+FileOwnerUser            : 
+FileScreenAuditDaysSince : 0
+FileScreenAuditUser      : 
+FolderPropertyName       : 
+Interactive              : True
+LargeFileMinimum         : 10485760
+LargeFilePattern         :
+LastError                :
+LastReportPath           :
+LastRun                  :
+LeastAccessedFilePattern :
+LeastAccessedMinimum     : 0
+MailTo                   :
+MostAccessedFilePattern  :
+MostAccessedMaximum      : 0
+Name                     : Large Files on FS1
+Namespace                : {C:\}
+PropertyFilePattern      :
+PropertyName             :
+QuotaMinimumUsage        : 0
+ReportFormat             : {DHtml, XML}
+ReportType               : LargeFiles
+Schedule                 :
+Status                   : Queued
+PSComputerName           :
+
+
+
+
+PS C:\Foo> # 2. Getting existing FSRM reports
+PS C:\Foo> Get-FsrmStorageReport -Name * | 
+             Format-Table -Property Name, NameSpace,
+                                    ReportType, ReportFormat
+
+Name               NameSpace ReportType ReportFormat
+----               --------- ---------- ------------
+Large Files on FS1 {C:\}     LargeFiles {DHtml, XML}
+
+
+
+PS C:\Foo> # 3. Viewing Interactive reports available on FS1
+PS C:\Foo> $Path = 'C:\StorageReports\Interactive'
+PS C:\Foo> Get-ChildItem -Path $Path
+
+    Directory: C:\StorageReports\Interactive
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d----          28/08/2022    13:04                LargeFiles2_2022-08-28_13-03-47_files
+-a---          28/08/2022    13:04         235866 LargeFiles2_2022-08-28_13-03-47.html
+-a---          28/08/2022    13:04         430926 LargeFiles2_2022-08-28_13-03-47.xml
+
+
+
+
+
+# 4. Viewing the report
+
+
+see html
+
+
+
+PS C:\Foo> # 5. Extracting key information from the FSRM XML output
+PS C:\Foo> $Files | Where-Object Path -NotMatch '^Windows|^Program|^Users'|
+             Format-Table -Property name, path,
+               @{ Name ='Sizemb'
+                  Expression = {(([int]$_.size)/1mb).tostring('N2')}},
+                  DaysSinceLastAccessed -AutoSize
+
+Name                                    Path                      Sizemb   DaysSinceLastAccessed
+----                                    ----                      ------   ---------------------
+2{3808876b-c176-4e48-b7ae-04046e6cc752} System Volume Information          0
+pagefile.sys                                                      1,536.00 2
+winre.wim                               Recovery\WindowsRE        439.15   2
+CascadiaCode.zip                        Foo                       23.75    18
+PresentationFramework.dll               PSPreview                 15.49    18
+PresentationFramework.dll               PSDailyBuild              15.48    18
+System.Windows.Forms.dll                PSPreview                 12.70    18
+System.Windows.Forms.dll                PSDailyBuild              12.67    18
+System.Private.CoreLib.dll              PSDailyBuild              11.13    18
+System.Private.CoreLib.dll              PSPreview                 10.92    18
+
+
+
+
+
+# 6. Creating a monthly task in task scheduler
+
+
+
+no output
+
+
+
+
+PS C:\Foo> # 7. Getting details of the task
+PS C:\Foo> Get-ScheduledTask | 
+             Where-Object TaskName -Match 'Monthly' |
+               Format-Table -AutoSize
+
+TaskPath                                         TaskName                                          State
+--------                                         --------                                          -----
+\Microsoft\Windows\File Server Resource Manager\ StorageReport-Monthly Files by files group report Ready
+
+
+
+
+PS C:\Foo> # 8. Running the task now
+PS C:\Foo> Get-ScheduledTask -TaskName '*Monthly*' | 
+             Start-ScheduledTask
+PS C:\Foo> Get-ScheduledTask -TaskName '*Monthly*'
+
+TaskPath                                       TaskName                          State
+--------                                       --------                          -----
+\Microsoft\Windows\File Server Resource Manag… StorageReport-Monthly Files by f… Running
+
+
+PS C:\Foo> # 9. Viewing the report in the StorageReports folder
+PS C:\Foo> $Path   = 'C:\StorageReports\Scheduled'
+PS C:\Foo> $Report = Get-ChildItem -Path $Path\*.html
+PS C:\Foo> $Report
+
+    Directory: C:\StorageReports\Scheduled
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a---          28/08/2022    16:13          94620 FilesByType4_2022-08-28_16-12-40.html
+
+

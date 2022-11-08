@@ -19,9 +19,9 @@ Test-NetConnection -ComputerName DC1.Reskit.Org -CommonTCPPort SMB
 Test-NetConnection -ComputerName DC1.Reskit.Org -Port 389
 
 # 6. Examining the path to a remote server on the Internet
-$NCHT = @{
+$NetConnectionHT = @{
   ComputerName     = 'WWW.Packt.Com'
   TraceRoute       = $true
   InformationLevel = 'Detailed'
 }
-Test-NetConnection @NCHT    # Check our wonderful publisher
+Test-NetConnection @NetConnectionHT  # Check our wonderful publisher

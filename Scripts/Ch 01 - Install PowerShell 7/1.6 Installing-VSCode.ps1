@@ -33,9 +33,11 @@ $InstallHT = @{
 #    PowerShell 7 as administrator
 
 # 7. Creating a profile file for VS Code
+
+
 $SAMPLE =
-  'https://raw.githubusercontent.com/doctordns/PACKT-PS7/master/' +
-  'scripts/goodies/Microsoft.VSCode_profile.ps1'
+  'https://raw.githubusercontent.com/doctordns/PacktPS72/main/' +
+  'Scripts/Goodies/Microsoft.VSCode_profile.ps1'
 (Invoke-WebRequest -Uri $Sample).Content |
   Out-File $Profile
 
@@ -118,8 +120,8 @@ $ConsoleProfile =
 New-Item $ConsoleProfile -Force -WarningAction SilentlyContinue |
    Out-Null
 $URI2 = 
-  'https://raw.githubusercontent.com/doctordns/PACKT-PS7/master/' +
-  "scripts/goodies/$ProfileFile2"
+  'https://raw.githubusercontent.com/doctordns/PacktPS72/main/' +
+  "Scripts/Goodies//$ProfileFile2"
 (Invoke-WebRequest -Uri $URI2).Content |
   Out-File -FilePath  $ConsoleProfile
 

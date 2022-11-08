@@ -1,0 +1,114 @@
+# 11.1 - Installing Hyper-V inside Windows Server
+
+# Run on HV1
+
+
+
+PS C:\Foo> # 1. Installing the Hyper-V feature on HV1, HV2
+PS C:\Foo> $InstallSB = {
+             Install-WindowsFeature -Name Hyper-V -IncludeManagementTools
+           }
+PS C:\Foo> Invoke-Command -ComputerName HV1, HV2 -ScriptBlock $InstallSB
+
+PSComputerName : HV2
+RunspaceId     : 628a05c7-b80b-40e4-8feb-d5bdb93c694d
+Success        : True
+RestartNeeded  : Yes
+FeatureResult  : {Hyper-V, Hyper-V Module for Windows PowerShell, 
+                  Hyper-V GUI Management Tools, Remote Server Administration Tools, 
+                  Hyper-V Management Tools, Role Administration Tools}
+ExitCode       : SuccessRestartRequired
+
+WARNING: You must restart this server to finish the installation process
+
+PSComputerName : HV1
+RunspaceId     : 3f0df3e9-33bd-4cbb-9b5e-63454533d361
+Success        : True
+RestartNeeded  : Yes
+FeatureResult  : {Hyper-V, Hyper-V Module for Windows PowerShell, 
+                  Hyper-V GUI Management Tools, Remote Server Administration Tools, 
+                  Hyper-V Management Tools, Role Administration Tools}
+ExitCode       : SuccessRestartRequired
+
+
+
+# 2. Rebooting the servers to complete the installation
+  no output as such
+
+
+# 3. Creating a PSSession with both HV Servers (after reboot)
+
+
+no outpput
+
+  
+
+
+
+
+
+# 4. Creating and setting the location for VMs and VHDs on HV1 and HV2
+
+
+
+no output
+
+
+
+
+# 5. Setting default paths for Hyper-V VM disk/config information
+
+
+
+
+no output
+
+
+
+
+# 6. Setting NUMA spanning
+
+
+
+
+no output
+
+
+
+
+# 7. Setting EnhancedSessionMode
+
+
+
+
+
+
+no output
+
+
+
+
+# 8. Setting host resource metering on HV1, HV2
+
+
+
+zip
+
+
+
+
+PS C:\Foo> # 9. Reviewing key VM host settings
+PS C:\Foo> $CheckVMHostSB = {
+             Get-VMHost 
+           }
+PS C:\Foo> $Properties = 'Name', 'V*Path','Numasp*', 'Ena*','RES*'
+PS C:\Foo> Invoke-Command -Scriptblock $CheckVMHostSB -Session $Sessions |
+             Format-Table -Property $Properties
+
+Name VirtualHardDiskPath VirtualMachinePath NumaSpanningEnabled EnableEnhancedSessionMode ResourceMeteringSaveInterval
+---- ------------------- ------------------ ------------------- ------------------------- ----------------------------
+HV2  C:\VM\VHDS          C:\VM\VMS                         True                      True 01:00:00
+HV1  C:\VM\VHDS          C:\VM\VMS                         True                      True 01:00:00
+
+
+

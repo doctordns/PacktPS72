@@ -20,10 +20,10 @@ Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
 
 # 5. Promoting DC2 to be a DC
 Import-Module -Name ADDSDeployment -WarningAction SilentlyContinue
-$URK    = "Administrator@Reskit.Org" 
-$PW     = 'Pa$$w0rd'
-$PSS    = ConvertTo-SecureString -String $PW -AsPlainText -Force
-$CredRK = [PSCredential]::New($URK,$PSS)
+$User       = "Administrator@Reskit.Org" 
+$Password   = 'Pa$$w0rd'
+$PWSString  = ConvertTo-SecureString -String $Password -AsPlainText -Force
+$CredRK = [PSCredential]::New($User,$PWSString)
 $INSTALLHT = @{
   DomainName                    = 'Reskit.Org'
   SafeModeAdministratorPassword = $PSS
@@ -46,8 +46,8 @@ Restart-Computer -Force
 ### Relogon as Reskit\Adminstrator
 
 # 8. Checking DCs in Reskit.Org
-$SB = 'OU=Domain Controllers,DC=Reskit,DC=Org'
-Get-ADComputer -Filter * -SearchBase $SB  -Properties * |
+$SearchBase = 'OU=Domain Controllers,DC=Reskit,DC=Org'
+Get-ADComputer -Filter * -SearchBase $SearchBase  -Properties * |
   Format-Table -Property DNSHostName, Enabled
 
 # 9. Viewing Reskit.Org domain DCs

@@ -2,16 +2,16 @@
 
 # Run on SRV1 after installing PowerShell 7
 
-# 1. Creating a Fileinfo object
-$FILE = Get-ChildItem -Path $PSHOME\pwsh.exe
-$FILE
+# 1. Creating a FileInfo object
+$File = Get-ChildItem -Path $PSHOME\pwsh.exe
+$File
 
 # 2. Discovering the underlying class
-$TYPE = $FILE.GetType().FullName
-".NET Class name: $TYPE"
+$Type = $File.GetType().FullName
+".NET Class name: $Type"
 
 # 3. Getting member types of FileInfo object
-$FILE | 
+$File | 
   Get-Member | 
     Group-Object -Property MemberType |
       Sort-Object -Property Count -Descending
@@ -29,9 +29,9 @@ $BaseType = $IntType.BaseType.Name
 ".NET Class base type : $BaseType"
 
 # 6. Looking at Process objects
-$PWSH = Get-Process -Name pwsh |
+$Pwsh = Get-Process -Name pwsh |
   Select-Object -First 1
-$PWSH |
+$Pwsh |
   Get-Member | 
     Group-Object -Property MemberType |
       Sort-Object -Property Count -Descending

@@ -32,11 +32,11 @@ False  v4.0.30319     C:\Program Files\PowerShell\7\System.Text.RegularExpressio
 
 
 PS C:\Foo> # 3. Checking assemblies in Windows PowerShell
-PS C:\Foo> $SB = {
+PS C:\Foo> $ScriptBlock = {
              [System.AppDomain]::CurrentDomain.GetAssemblies() 
            } 
 PS C:\Foo> $PS51 = New-PSSession -UseWindowsPowerShell
-PS C:\Foo> $Assin51 = Invoke-Command -Session $PS51 -ScriptBlock $SB
+PS C:\Foo> $Assin51 = Invoke-Command -Session $PS51 -ScriptBlock $ScriptBlock
 PS C:\Foo> "Assemblies loaded in Windows PowerShell: {0:n0}" -f $Assin51.Count
 
 Assemblies loaded in Windows PowerShell: 16
@@ -58,9 +58,9 @@ True   v4.0.30319     C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\Microsoft.Power
 
 
 PS C:\Foo> # 5. Exploring the Microsoft.PowerShell.Management module
-PS C:\Foo> $Mod = 
+PS C:\Foo> $AllTheModulesOnThisSystem = 
              Get-Module -Name Microsoft.PowerShell.Management -ListAvailable
-PS C:\Foo> $Mod  | Format-List
+PS C:\Foo> $AllTheModulesOnThisSystem | Format-List
 
 Name              : Microsoft.PowerShell.Management
 Path              : C:\program files\powershell\7\Modules\Microsoft.PowerShell.Management\Microsoft.PowerShell.Management.psd1
@@ -120,7 +120,7 @@ CmdletsToExport=@("Add-Content",
 PS C:\Foo> # 7. Discovering the module's assembly
 PS C:\Foo> Import-Module -Name Microsoft.PowerShell.Management
 PS C:\Foo> $Match = $Manifest | Select-String Modules
-PS C:\Foo> $LINE = $Match.Line
+PS C:\Foo> $Line = $Match.Line
 PS C:\Foo> $DLL = ($Line -Split '"')[1]
 PS C:\Foo> Get-Item -Path $PSHOME\$DLL
 
@@ -149,7 +149,7 @@ False v4.0.30319  C:\Program Files\PowerShell\7\Microsoft.PowerShell.Commands.Ma
 
 
 PS C:\Foo> # 9. Getting details of a PowerShell command inside a module DLL
-PS C:\Foo> $Commands  = $Assemblies |
+PS C:\Foo> $Commands = $Assemblies |
              Where-Object Location -match Commands.Management\.dll  
 PS C:\Foo> $Commands.GetTypes() | 
              Where-Object Name -match "Addcontentcommand$" 

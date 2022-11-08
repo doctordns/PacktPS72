@@ -8,8 +8,8 @@ New-Item -Path C:\JEATranscripts -ItemType Directory |
   Out-Null
 
 # 2. Creating a role capabilities folder
-$JEACF = "C:\JEACapabilities"
-New-Item -Path $JEACF -ItemType Directory | 
+$Capabilities = "C:\JEACapabilities"
+New-Item -Path $Capabilities -ItemType Directory | 
   Out-Null
 
 # 3. Creating a JEA session configuration folder
@@ -36,7 +36,7 @@ $ADGHT = @{
 Add-ADGroupMember @ADGHT  
 
 # 6. Creating a JEA role capabilities file
-$RCF = Join-Path -Path $JEACF -ChildPath "DnsAdmins.psrc"
+$RCF = Join-Path -Path $Capabilities -ChildPath "DnsAdmins.psrc"
 $RCHT = @{
   Path            = $RCF
   Author          = 'Reskit Administration'

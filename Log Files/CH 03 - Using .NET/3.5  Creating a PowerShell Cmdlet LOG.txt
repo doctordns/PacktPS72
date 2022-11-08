@@ -101,6 +101,9 @@ PS C:\Foo\Cmdlet\SendGreeting> Get-Content -Path .\global.json
 
 
 PS C:\Foo\Cmdlet\SendGreeting> # 6. Adding PowerShell package
+PS C:\Foo\Cmdlet\SendGreeting> $Sourcename = 'Nuget.org https://api.nuget.org/v3/index.json'
+PS C:\Foo\Cmdlet\SendGreeting> dotnet nuget add source --name $SourceName
+Package source with Name: nuget.org added successfully.
 PS C:\Foo\Cmdlet\SendGreeting> dotnet add package PowerShellStandard.Library
   Determining projects to restore...
   Writing C:\Users\Administrator\AppData\Local\Temp\2\tmpCD91.tmp

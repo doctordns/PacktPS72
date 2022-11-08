@@ -71,7 +71,6 @@ Get-AuthenticodeSignature -FilePath C:\Foo\Signed.ps1 |
 # 13. Running the signed script
 C:\Foo\Signed.ps1 
  
-
 # 14. Copying cert to Trusted Publisher store
 $DestStoreName  = 'TrustedPublisher'
 $DestStoreScope = 'CurrentUser'

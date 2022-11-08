@@ -1,16 +1,16 @@
-﻿# 6.6 - Adding Users to Active Directory using a CSV File
+﻿# 4.7 - Adding Users to Active Directory using a CSV File
 
 # Run On DC1
 
 # 1. Creating a CSV file
-$CSVDATA = @'
+$CSVData = @'
 FirstName,Initials,LastName,UserPrincipalName,Alias,Description,Password
 P, D, Rowley, PDR, Peter, Data Team, Christmas42
 C, F, Smith, CFS, Claire, Receptionist, Christmas42
 Billy, Bob, JoeBob, BBJB, BillyBob, One of the Bobs, Christmas42
 Malcolm, D, Duewrong, Malcolm, Malcolm, Mr. Danger, Christmas42
 '@
-$CSVDATA | Out-File -FilePath C:\Foo\Users.Csv
+$CSVData | Out-File -FilePath C:\Foo\Users.Csv
 
 # 2. Importing and displaying the CSV
 $Users = Import-CSV -Path C:\Foo\Users.Csv | 

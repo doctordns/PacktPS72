@@ -4,7 +4,7 @@
 
 
 
-PS C:\Foo> # 1. Creating a Fileinfo object
+PS C:\Foo> # 1. Creating a FileInfo object
 PS C:\Foo> $FILE = Get-ChildItem -Path $PSHOME\pwsh.exe
 PS C:\Foo> $FILE
 
@@ -18,8 +18,8 @@ Mode                 LastWriteTime         Length Name
 
 
 PS C:\Foo> # 2. Discovering the underlying class
-PS C:\Foo> $TYPE = $FILE.GetType().FullName
-PS C:\Foo> ".NET Class name: $TYPE"
+PS C:\Foo> $Type = $FILE.GetType().FullName
+PS C:\Foo> ".NET Class name: $Type"
 .NET Class name: System.IO.FileInfo
 
 
@@ -91,9 +91,9 @@ PS C:\Foo> ".NET Class base type : $BaseType"
 
 
 PS C:\Foo> # 6. Looking at Process objects
-PS C:\Foo> $PWSH = Get-Process -Name pwsh |
+PS C:\Foo> $Pwsh = Get-Process -Name pwsh |
              Select-Object -First 1
-PS C:\Foo> $PWSH |
+PS C:\Foo> $Pwsh |
               Get-Member | 
                 Group-Object -Property MemberType |
                   Sort-Object -Property Count -Descending

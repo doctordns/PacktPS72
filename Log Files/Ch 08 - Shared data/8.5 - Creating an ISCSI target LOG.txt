@@ -1,0 +1,118 @@
+# 10.5 - Creating an iSCSI Target   LOG
+
+# Run from SS1 as Reskit\Administrator
+
+
+
+
+PS C:\Foo> # 1. Installing the iSCSI target feature on SS1
+PS C:\Foo> Import-Module -Name ServerManager -WarningAction SilentlyContinue
+PS C:\Foo> Install-WindowsFeature FS-iSCSITarget-Server
+
+Success Restart Needed Exit Code      Feature Result
+------- -------------- ---------      --------------
+True    Yes            SuccessRestar… {File and iSCSI Services, File Server, iSCSI…
+WARNING: You must restart this server to finish the installation process.
+
+
+
+# 2. Restart the computer
+
+no output as such!"
+
+
+
+
+PS C:\Foo> # 3. Exploring iSCSI target server settings
+PS C:\Foo> Get-IscsiTargetServerSetting
+
+RunspaceId              : dcd86396-786d-435e-a056-6f3b7b1d94b8
+ComputerName            : SS1.Reskit.Org
+IsClustered             : False
+Version                 : 10.0
+DisableRemoteManagement : False
+Portals                 : {+10.10.1.17:3260, -[fe80::5817:e84:6e63:f824%6]:3260}
+
+
+
+
+# 4. Creating a folder on SS1 to hold the iSCSI virtual disk
+
+
+
+no output
+
+
+
+
+PS C:\Foo> # 5. Creating an iSCSI virtual disk (aka a LUN)
+PS C:\Foo> $VDiskPath = 'C:\iSCSI\ITData.Vhdx'
+PS C:\Foo> $VDHT = @{
+             Path        = $VDiskPath
+             Description = 'LUN For IT Group'
+             SizeBytes   = 500MB
+           }
+PS C:\Foo> New-IscsiVirtualDisk @VDHT
+
+RunspaceId         : dcd86396-786d-435e-a056-6f3b7b1d94b8
+ClusterGroupName   : 
+ComputerName       : SS1.Reskit.Org
+Description        : LUN For IT Group
+DiskType           : Dynamic
+HostVolumeId       : {BF124141-EFEA-11EC-BE5E-E454E88CB586}
+LocalMountDeviceId : 
+OriginalPath       : 
+ParentPath         : 
+Path               : C:\iSCSI\ITData.Vhdx
+SerialNumber       : C8C701D3-E94C-40FF-B195-72B091357B4C
+Size               : 524288000
+SnapshotIds        : 
+Status             : NotConnected
+VirtualDiskIndex   : 1694099853
+
+
+
+
+
+
+PS C:\Foo> # 6. Setting the iSCSI target, specifying who can initiate an iSCSI connection
+PS C:\Foo> $TargetName = 'ITTarget'
+PS C:\Foo> $NewTargetHT = @{
+             TargetName   = $TargetName
+             InitiatorIds = 'IQN:*'
+           }
+PS C:\Foo> New-IscsiServerTarget @NewTargetHT
+
+RunspaceId                  : dcd86396-786d-435e-a056-6f3b7b1d94b8
+ChapUserName                :
+ClusterGroupName            :
+ComputerName                : SS1.Reskit.Org
+Description                 :
+EnableChap                  : False
+EnableReverseChap           : False
+EnforceIdleTimeoutDetection : True
+FirstBurstLength            : 65536
+IdleDuration                : 00:00:00
+InitiatorIds                : {Iqn:*}
+LastLogin                   :
+LunMappings                 : {}
+MaxBurstLength              : 262144
+MaxReceiveDataSegmentLength : 65536
+ReceiveBufferCount          : 10
+ReverseChapUserName         :
+Sessions                    : {}
+Status                      : NotConnected
+TargetIqn                   : iqn.1991-05.com.microsoft:ss1-ittarget-target
+TargetName                  : ITTarget
+
+
+
+
+
+# 7. Creating iSCSI disk target mapping LUN name to a local path
+
+
+
+
+no output
+

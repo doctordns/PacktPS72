@@ -13,12 +13,13 @@ $MAC = $Nic.MacAddress
 $MAC
 
 # 3. Creating a DHCP Reservation for SRV2
-$NRHT = @{
-  ScopeId   = '10.10.10.0'
-  IPAddress = '10.10.10.199'
+$NewResHT = @{
+  ScopeId      = '10.10.10.0'
+  IPAddress    = '10.10.10.199'
+  ComputerName = 'DC1'
   ClientId  = $Mac
 }
-Add-DhcpServerv4Reservation @NRHT
+Add-DhcpServerv4Reservation @NewResHT
 
 # 4. Renewing IP address in SRV2
 Invoke-Command -ComputerName SRV2 -ScriptBlock {

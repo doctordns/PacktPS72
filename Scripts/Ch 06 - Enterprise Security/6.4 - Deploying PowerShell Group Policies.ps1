@@ -77,7 +77,7 @@ New-GPLink -DisplayName $PshGPO.Displayname -Target $Target |
    Out-Null
 
 
-# 9. Creating and viewing an RSOP report
+# 9. Creating and viewing an RSOP report (after logging in as JerryG!")
 $RSOPHT = @{
   ReportType = 'HTML'
   Path       = 'C:\Foo\GPOReport.Html'

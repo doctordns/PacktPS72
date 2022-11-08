@@ -1,0 +1,221 @@
+# Recipe 10.1 - Managing NTFS Permissions
+# 
+# Run on FS1 - After creating a new Disk 1.
+
+
+
+# 0. Create a new disk 
+
+
+no console output
+
+
+
+# 1. Getting and initializing the new disk and creating an F: volume
+
+
+
+no console output
+
+
+
+
+# 2. Downloading the NTFSSecurity module from PSGallery
+
+
+
+
+
+no console output
+
+
+
+
+
+PS C:\Foo> # 3. Getting commands in the module
+PS C:\Foo> Get-Command -Module NTFSSecurity
+
+CommandType Name                          Version Source
+----------- ----                          ------- ------
+Cmdlet      Add-NTFSAccess                4.2.6   NTFSSecurity
+Cmdlet      Add-NTFSAudit                 4.2.6   NTFSSecurity
+Cmdlet      Clear-NTFSAccess              4.2.6   NTFSSecurity
+Cmdlet      Clear-NTFSAudit               4.2.6   NTFSSecurity
+Cmdlet      Copy-Item2                    4.2.6   NTFSSecurity
+Cmdlet      Disable-NTFSAccessInheritance 4.2.6   NTFSSecurity
+Cmdlet      Disable-NTFSAuditInheritance  4.2.6   NTFSSecurity
+Cmdlet      Disable-Privileges            4.2.6   NTFSSecurity
+Cmdlet      Enable-NTFSAccessInheritance  4.2.6   NTFSSecurity
+Cmdlet      Enable-NTFSAuditInheritance   4.2.6   NTFSSecurity
+Cmdlet      Enable-Privileges             4.2.6   NTFSSecurity
+Cmdlet      Get-ChildItem2                4.2.6   NTFSSecurity
+Cmdlet      Get-DiskSpace                 4.2.6   NTFSSecurity
+Cmdlet      Get-FileHash2                 4.2.6   NTFSSecurity
+Cmdlet      Get-Item2                     4.2.6   NTFSSecurity
+Cmdlet      Get-NTFSAccess                4.2.6   NTFSSecurity
+Cmdlet      Get-NTFSAudit                 4.2.6   NTFSSecurity
+Cmdlet      Get-NTFSEffectiveAccess       4.2.6   NTFSSecurity
+Cmdlet      Get-NTFSHardLink              4.2.6   NTFSSecurity
+Cmdlet      Get-NTFSInheritance           4.2.6   NTFSSecurity
+Cmdlet      Get-NTFSOrphanedAccess        4.2.6   NTFSSecurity
+Cmdlet      Get-NTFSOrphanedAudit         4.2.6   NTFSSecurity
+Cmdlet      Get-NTFSOwner                 4.2.6   NTFSSecurity
+Cmdlet      Get-NTFSSecurityDescriptor    4.2.6   NTFSSecurity
+Cmdlet      Get-NTFSSimpleAccess          4.2.6   NTFSSecurity
+Cmdlet      Get-Privileges                4.2.6   NTFSSecurity
+Cmdlet      Move-Item2                    4.2.6   NTFSSecurity
+Cmdlet      New-NTFSHardLink              4.2.6   NTFSSecurity
+Cmdlet      New-NTFSSymbolicLink          4.2.6   NTFSSecurity
+Cmdlet      Remove-Item2                  4.2.6   NTFSSecurity
+Cmdlet      Remove-NTFSAccess             4.2.6   NTFSSecurity
+Cmdlet      Remove-NTFSAudit              4.2.6   NTFSSecurity
+Cmdlet      Set-NTFSInheritance           4.2.6   NTFSSecurity
+Cmdlet      Set-NTFSOwner                 4.2.6   NTFSSecurity
+Cmdlet      Set-NTFSSecurityDescriptor    4.2.6   NTFSSecurity
+Cmdlet      Test-Path2                    4.2.6   NTFSSecurity
+
+
+
+
+PS C:\Foo> # 4. Creating a new folder and a file in the folder
+PS C:\Foo> New-Item -Path F:\Secure1 -ItemType Directory |
+             Out-Null
+PS C:\Foo> "Secure" | Out-File -FilePath F:\Secure1\Secure.Txt
+PS C:\Foo> Get-ChildItem -Path F:\Secure1
+
+    Directory: F:\Secure1
+
+Mode         LastWriteTime  Length Name
+----         -------------  ------ ----
+-a---  10/08/2022    13:55       8 Secure.Txt
+ 
+
+
+
+PS C:\Foo> # 5. Viewing ACL of the folder
+PS C:\Foo> Get-NTFSAccess -Path F:\Secure1 |
+             Format-Table -AutoSize
+
+    Path: F:\Secure1 (Inheritance enabled)
+
+Account                Access Rights               Applies to                   Type  IsInherited InheritedFrom
+-------                -------------               ----------                   ----  ----------- -------------
+BUILTIN\Administrators FullControl                 ThisFolderOnly               Allow False
+BUILTIN\Administrators FullControl                 ThisFolderSubfoldersAndFiles Allow True        F:
+NT AUTHORITY\SYSTEM    FullControl                 ThisFolderSubfoldersAndFiles Allow True        F:
+CREATOR OWNER          GenericAll                  SubfoldersAndFilesOnly       Allow True        F:
+BUILTIN\Users          ReadAndExecute, Synchronize ThisFolderSubfoldersAndFiles Allow True        F:
+BUILTIN\Users          CreateDirectories           ThisFolderAndSubfolders      Allow True        F:
+BUILTIN\Users          CreateFiles                 ThisFolderAndSubfolders      Allow True        F:
+
+
+
+
+PS C:\Foo> # 6. Viewing ACL of the file
+PS C:\Foo> Get-NTFSAccess F:\Secure1\Secure.Txt |
+             Format-Table -AutoSize
+
+    Path: F:\Secure1\Secure.Txt (Inheritance enabled)
+
+
+Account                Access Rights               Applies to     Type  IsInherited InheritedFrom
+-------                -------------               ----------     ----  ----------- -------------
+BUILTIN\Administrators FullControl                 ThisFolderOnly Allow True        F:
+NT AUTHORITY\SYSTEM    FullControl                 ThisFolderOnly Allow True        F:
+BUILTIN\Users          ReadAndExecute, Synchronize ThisFolderOnly Allow True        F:
+
+
+
+
+
+
+
+# 7. Creating the Sales group in AD if it does not exist
+
+
+
+no output
+
+
+
+PS C:\Foo> # 8. Displaying Sales AD Group
+PS C:\Foo> Invoke-Command -ComputerName DC1 -ScriptBlock {
+                                   Get-ADGroup -Identity Sales}
+
+PSComputerName    : DC1
+RunspaceId        : 50ee7037-cd9f-4270-b663-96cca880c708
+DistinguishedName : CN=Sales,CN=Users,DC=Reskit,DC=Org
+GroupCategory     : Security
+GroupScope        : Global
+Name              : Sales
+ObjectClass       : group
+ObjectGUID        : 7f426f57-c616-4555-8e75-d1c8a6d60a33
+SamAccountName    : Sales
+SID               : S-1-5-21-140053678-4069492383-922506915-3602
+
+
+
+
+
+# 9. Adding explicit full control for DomainAdmins
+
+
+no console output
+
+
+# 10. Removing Builtin\Users access from secure.txt file
+
+
+
+no console output
+
+
+
+# 11. Removing inherited rights for the folder:
+
+
+no console output
+
+
+
+
+# 12. Adding Sales group access to the folder
+
+
+
+
+no console output
+
+
+
+
+
+PS C:\Foo> # 13. Getting ACL of the Secure1 folder
+PS C:\Foo> Get-NTFSAccess -Path F:\Secure1 |
+             Format-Table -AutoSize
+
+    Path: F:\Secure1 (Inheritance disabled)
+
+Account                Access Rights Applies to                   Type  IsInherited InheritedFrom
+-------                ------------- ----------                   ----  ----------- -------------
+BUILTIN\Administrators FullControl   ThisFolderOnly               Allow False
+RESKIT\Domain Admins   FullControl   ThisFolderSubfoldersAndFiles Allow False
+RESKIT\Sales           FullControl   ThisFolderSubfoldersAndFiles Allow False
+
+
+
+
+PS C:\Foo> # 14. Getting resulting ACL on the Secure1.Txt file
+PS C:\Foo> Get-NTFSAccess -Path F:\Secure1\Secure.Txt |
+             Format-Table -AutoSize
+
+    Path: F:\Secure1\Secure.Txt (Inheritance enabled)
+
+
+Account              Access Rights Applies to     Type  IsInherited InheritedFrom
+-------              ------------- ----------     ----  ----------- -------------
+RESKIT\Domain Admins FullControl   ThisFolderOnly Allow True        F:\Secure1
+RESKIT\Sales         FullControl   ThisFolderOnly Allow True        F:\Secure1
+
+
+

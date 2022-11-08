@@ -7,5 +7,7 @@
 			"path": "..\\..\\ReskitBuildScripts"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"powershell.cwd": "\\\\cookham216\\d$\\Dropbox\\Packt - Psh 7.2 + Srv 2022\\PacktPS72"
+	}
 }

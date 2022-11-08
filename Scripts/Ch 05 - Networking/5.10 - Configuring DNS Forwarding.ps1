@@ -2,16 +2,16 @@
 
 # Run On DC1
 
-# 1.Obtaining the IP addresses of DNS servers for packt.com
-$NS = Resolve-DnsName -Name packt.Com -Type NS | 
-  Where-Object Name -eq 'packt.com'
-$NS
+# 1. Obtaining the IP addresses of DNS servers for Packt.Com
+$NameServers = Resolve-DnsName -Name Packt.Com -Type NS | 
+  Where-Object Name -eq 'Packt.Com'
+$NameServers
 
-# 2.Obtaining the IPV4 addresses for these hosts
-$NSIPS = foreach ($Server in $NS) {
+# 2. Obtaining the IPV4 addresses for these hosts
+$NameServerIPs = foreach ($Server in $NS) {
   (Resolve-DnsName -Name $Server.NameHost -Type A).IPAddress
 }
-$NSIPS
+$NameServerIPs
 
 # 3. Adding conditional forwarder on DC1
 $CFHT = @{

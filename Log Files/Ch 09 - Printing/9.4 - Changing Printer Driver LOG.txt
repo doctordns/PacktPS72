@@ -1,0 +1,59 @@
+# Recipe 9.4 -  Changing Printer Drivers
+#
+# Run on Psrv - domain joined host in reskit.org domain
+# Run the other recipes to create the printer.
+
+
+
+# 1. Adding the print driver for the new printing device
+
+
+no output
+
+
+PS C:\Foo> # 2. Viewing loaded printer drivers:
+PS C:\Foo> Get-PrinterDriver
+
+Name                                PrinterEnvironment MajorVersion    Manufacturer
+----                                ------------------ ------------    ------------
+Microsoft XPS Document Writer v4    Windows x64        4               Microsoft
+Microsoft Software Printer Driver   Windows x64        4               Microsoft
+Microsoft Print To PDF              Windows x64        4               Microsoft
+Xerox WorkCentre 6515 PCL6          Windows x64        3               Xerox
+Xerox Phaser 6510 PCL6              Windows x64        3               Xerox
+Remote Desktop Easy Print           Windows x64        3               Microsoft
+Microsoft Shared Fax Driver         Windows x64        3               Microsoft
+Microsoft enhanced Point and Print… Windows x64        3               Microsoft
+Microsoft enhanced Point and Print… Windows NT x86     3               Microsoft
+
+
+
+
+# 3. Getting the Sales group printer object and store it in $Printer
+
+
+
+no output
+
+
+
+# 4. Updating the driver using the Set-Printer cmdlet
+
+
+no output
+
+
+
+
+
+PS C:\Foo> Get-Printer -Name $PrinterName | 
+                 Format-Table -Property Name, DriverName, PortName,
+                                        Published, Shared
+
+Name          DriverName                 PortName Published Shared
+----          ----------                 -------- --------- ------
+SalesPrinter1 Xerox WorkCentre 6515 PCL6 SalesPP       True   True
+
+
+
+

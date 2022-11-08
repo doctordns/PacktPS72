@@ -171,7 +171,7 @@ krbtgt        CN=krbtgt,CN=Users,DC=Reskit,DC=Org
 
 PS C:\Foo> # 6. Getting initial AD groups
 PS C:\Foo> Get-ADGroup -Filter *  |
-             Sort-Object -Property Groupscope,Name |
+             Sort-Object -Property GroupScope,Name |
                Format-Table -Property Name, GroupScope
 
 Name                                     GroupScope

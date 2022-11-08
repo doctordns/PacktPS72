@@ -1,0 +1,117 @@
+# Recipe 11.7 - Implementing nested virtualization
+#
+# Run on HV1
+
+
+#  1. Stopping the PSDirect VM
+
+no output
+
+
+
+PS C:\Foo> # 2. Setting the VM's processor to support virtualization
+PS C:\Foo> $VMHT = @{
+             VMName                         = 'PSDirect' 
+             ExposeVirtualizationExtensions = $true
+           }
+PS C:\Foo> Set-VMProcessor @VMHT
+PS C:\Foo> Get-VMProcessor -VMName PSDirect |
+             Format-Table -Property Name, Count,
+                                    ExposeVirtualizationExtensions
+
+Name      Count ExposeVirtualizationExtensions
+----      ----- ------------------------------
+Processor     2                           True
+
+
+
+PS C:\Foo> # 3. Starting the PSDirect VM
+PS C:\Foo> Start-VM -VMName PSDirect
+PS C:\Foo> Wait-VM  -VMName PSDirect -For Heartbeat
+PS C:\Foo> Get-VM   -VMName PSDirect
+
+Name     State   CPUUsage(%) MemoryAssigned(M) Uptime           Status             Version
+----     -----   ----------- ----------------- ------           ------             -------
+PSDirect Running 23          1024              00:00:35.7060000 Operating normally 10.0
+
+
+
+
+
+# 4. Creating credentials for PSDirect
+
+
+
+no output
+
+
+
+
+
+# 5. Creating a script block for remote execution
+
+
+
+
+
+
+# 6. Creating a remoting session to PSDirect
+
+
+
+no output
+
+
+
+PS C:\Foo> # 7. Installing Hyper-V inside PSDirect
+PS C:\Foo> $InstallHT = @{
+             Session     = $Session
+             ScriptBlock = $ScriptBlock
+           }
+PS C:\Foo> Invoke-Command @InstallHT
+
+PSComputerName : PSDirect
+RunspaceId     : 2449adca-f238-4333-a0c2-425f4e7e2f2a
+Success        : True
+RestartNeeded  : Yes
+FeatureResult  : {Hyper-V, Hyper-V Module for Windows PowerShell, 
+                  Hyper-V GUI Management Tools, Remote Server Administration Tools, 
+                  Hyper-V Management Tools, Role Administration Tools} 
+ExitCode       : SuccessRestartRequired
+
+WARNING: You must restart this server to finish the installation process.
+
+
+
+PS C:\Foo> # 8. Restarting the VM to finish adding Hyper-V to PSDirect
+PS C:\Foo> Stop-VM  -VMName PSDirect
+PS C:\Foo> Start-VM -VMName PSDirect
+PS C:\Foo> Wait-VM  -VMName PSDirect -For IPAddress
+PS C:\Foo> Get-VM   -VMName PSDirect
+
+Name     State   CPUUsage(%) MemoryAssigned(M) Uptime           Status             Version
+----     -----   ----------- ----------------- ------           ------             -------
+PSDirect Running 29          1024              00:00:41.8930000 Operating normally 10.0
+
+
+
+
+PS C:\Foo> # 9. Creating a nested VM inside the PSDirect VM
+PS C:\Foo> $ScriptBlock2 = {
+             $VMName = 'NestedVM'
+             New-VM -Name $VMName -MemoryStartupBytes 1GB | Out-Null
+             Get-VM
+           }
+PS C:\Foo> $InstallHT2 = @{
+             VMName = 'PSDirect'
+             ScriptBlock = $ScriptBlock2 
+           }
+PS C:\Foo> Invoke-Command @InstallHT2 -Credential $Cred
+
+Name     State CPUUsage(%) MemoryAssigned(M) Uptime   Status             Version PSComputerName
+----     ----- ----------- ----------------- ------   ------             ------- --------------
+NestedVM Off   0           0                 00:00:00 Operating normally 10.0    PSDirect
+
+
+
+

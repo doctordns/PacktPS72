@@ -15,26 +15,26 @@ Import-Module -Name ADDSDeployment
 Get-Command -Module ADDSDeployment
 
 # 4.	Creating a secure password for the Administrator
-$PSSHT = @{
+$PasswordHT = @{
   String      = 'Pa$$w0rd'
   AsPlainText = $true
   Force       = $true
 }
-$PSS = ConvertTo-SecureString @PSSHT
+$SecurePW = ConvertTo-SecureString @$PasswordHT
 
 # 5. Testing DC Forest installation starting on DC1
-$FOTHT = @{
+$ForestHT = @{
   DomainName           = 'Reskit.Org'
   InstallDNS           = $true 
   NoRebootOnCompletion = $true
-  SafeModeAdministratorPassword = $PSS
+  SafeModeAdministratorPassword = $SecurePW
   ForestMode           = 'WinThreshold'
   DomainMOde           = 'WinThreshold'
 }
-Test-ADDSForestInstallation @FOTHT -WarningAction SilentlyContinue
+Test-ADDSForestInstallation @ForestHT -WarningAction SilentlyContinue
 
 # 6. Creating Forest Root DC on DC1
-$ADHT = @{
+$NewActiveDirectoryParameterHashTable = @{
   DomainName                    = 'Reskit.Org'
   SafeModeAdministratorPassword = $PSS
   InstallDNS                    = $true
@@ -44,7 +44,7 @@ $ADHT = @{
   NoRebootOnCompletion          = $true
   WarningAction                 = 'SilentlyContinue'
 }
-Install-ADDSForest @ADHT
+Install-ADDSForest @$NewActiveDirectoryParameterHashTable
 
 # 7. Checking key AD and related services
 Get-Service -Name DNS, Netlogon

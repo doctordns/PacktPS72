@@ -37,7 +37,7 @@ ScopeId     Free   InUse  PercentageInUse  Reserved   Pending  SuperscopeName
 
 
 
-
+PS C:\Foo> # 5. Discovering a free IP address
 PS C:\Foo> Get-DhcpServerv4FreeIPAddress -ComputerName dc1 -ScopeId 10.10.10.42
 10.10.10.150
 

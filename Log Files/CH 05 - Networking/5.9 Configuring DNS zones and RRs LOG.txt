@@ -47,7 +47,7 @@ _msdcs.Reskit.Org     Primary  False         True           False               
 255.in-addr.arpa      Primary  True          False          True                False
 Cookham.Net           Primary  False         True           False               False
 Reskit.Org            Primary  False         True           False               False
-TrustAnchors          Primary  False         True           False               Fals
+TrustAnchors          Primary  False         True           False               False
 
 
 # 5. Adding Resource Records to Cookham.Net zone
@@ -68,7 +68,7 @@ no output
 
 
 PS C:\Foo> # 7. Checking results of RRs in Cookham.Net zone
-PS C:\Foo> Get-DnsServerResourceRecord -ZoneName 'Cookham.Net' | ft -auto
+PS C:\Foo> Get-DnsServerResourceRecord -ZoneName 'Cookham.Net' 
 
 HostName RecordType Type Timestamp TimeToLive RecordData
 -------- ---------- ---- --------- ---------- ----------

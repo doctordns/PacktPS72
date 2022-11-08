@@ -77,12 +77,12 @@ TcpTestSucceeded : True
 
 
 PS C:\Foo> # 6. Examining the path to a remote server on the Internet
-PS C:\Foo> $NCHT = @{
+PS C:\Foo> $NetConnectionHT = @{
               ComputerName     = 'WWW.Packt.Com'
               TraceRoute       = $true
               InformationLevel = 'Detailed'
-            }
-PS C:\Foo> Test-NetConnection @NCHT    # Check our wonderful publisher
+           }
+PS C:\Foo> Test-NetConnection @NetConnectionHT  # Check our wonderful publisher
 
 ComputerName           : WWW.Packt.Com                                                                                  
 RemoteAddress          : 141.193.213.20                                                                                 

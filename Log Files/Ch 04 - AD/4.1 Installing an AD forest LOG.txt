@@ -56,7 +56,7 @@ no output
 
 
 PS C:\Foo> # 5. Testing DC Forest installation starting on DC1
-PS C:\Foo> $FOTHT = @{
+PS C:\Foo> $ForestHT = @{
              DomainName           = 'Reskit.Org'
              InstallDNS           = $true
              NoRebootOnCompletion = $true
@@ -64,7 +64,7 @@ PS C:\Foo> $FOTHT = @{
              ForestMode           = 'WinThreshold'
              DomainMOde           = 'WinThreshold'
            }
-PS C:\Foo> Test-ADDSForestInstallation @FOTHT -WarningAction SilentlyContinue
+PS C:\Foo> Test-ADDSForestInstallation @ForestHT -WarningAction SilentlyContinue
 
 RunspaceId     : 463237a4-f04b-41a6-b871-bd2da91e68fe                                                                   
 Message        : Operation completed successfully                                                                       
@@ -75,7 +75,7 @@ Status         : Success
 
 
 PS C:\Foo> # 6. Creating Forest Root DC on DC1
-PS C:\Foo> $ADHT = @{
+PS C:\Foo> $NewActiveDirectoryParameterHashTable = @{
              DomainName                    = 'Reskit.Org'
              SafeModeAdministratorPassword = $PSS
              InstallDNS                    = $true
@@ -85,13 +85,13 @@ PS C:\Foo> $ADHT = @{
              NoRebootOnCompletion          = $true
              WarningAction                 = 'SilentlyContinue'
            }
-PS C:\Foo> Install-ADDSForest @ADHT
+PS C:\Foo> Install-ADDSForest @NewActiveDirectoryParameterHashTable
 RunspaceId     : 463237a4-f04b-41a6-b871-bd2da91e68fe                                                                   
 Message        : You must restart this computer to complete the operation.                                              
                                                                                                                         
 Context        : DCPromo.General.4
 RebootRequired : True                                                                                                   
-Status         : Succes
+Status         : Success
 
 
 

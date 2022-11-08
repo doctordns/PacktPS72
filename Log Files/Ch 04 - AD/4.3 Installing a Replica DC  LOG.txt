@@ -81,7 +81,7 @@ DC2.Reskit.Org CN=DC2,OU=Domain Controllers,DC=Reskit,DC=Org
 
 
 
-# 7. Rebooting DC2 manuall
+# 7. Rebooting DC2 manually
 
 
 no output
@@ -89,8 +89,8 @@ no output
 
 
 PS C:\Foo> # 8. Checking DCs in Reskit.Org
-PS C:\Foo> $SB = 'OU=Domain Controllers,DC=Reskit,DC=Org'
-PS C:\Foo> Get-ADComputer -Filter * -SearchBase $SB  -Properties * |
+PS C:\Foo> $SearchBase = 'OU=Domain Controllers,DC=Reskit,DC=Org'
+PS C:\Foo> Get-ADComputer -Filter * -SearchBase $SearchBase  -Properties * |
              Format-Table -Property DNSHostName, Enabled
 
 DNSHostName    Enabled

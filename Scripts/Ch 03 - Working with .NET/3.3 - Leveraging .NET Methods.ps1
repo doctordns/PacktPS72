@@ -30,7 +30,7 @@ $Files = Get-ChildItem -Path $Path
 $Files | Format-Table -Property Name, Attributes
 
 # 7. Encrypting the files
-$Files| ForEach-Object Encrypt
+$Files | ForEach-Object Encrypt
 
 # 8. Viewing file attributes
 Get-ChildItem -Path $Path |

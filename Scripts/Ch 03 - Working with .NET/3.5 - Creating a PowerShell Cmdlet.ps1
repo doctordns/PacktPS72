@@ -4,6 +4,7 @@
 
 # 1. Installing the .NET SDK
 # Navigate to "https://dotnet.microsoft.com/download/" and go from there
+# Restart VS Code or the console AFTER you install the SDK.
 
 # 2. Creating the cmdlet folder
 New-Item -Path C:\Foo\Cmdlet -ItemType Directory -Force
@@ -21,7 +22,7 @@ dotnet new globaljson
 Get-Content -Path .\global.json
 
 # 6. Adding PowerShell package
-dotnet nuget add source --name nuget.org https://api.nuget.org/v3/index.json
+dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org
 dotnet add package PowerShellStandard.Library
 
 # 7. Create the cmdlet source file

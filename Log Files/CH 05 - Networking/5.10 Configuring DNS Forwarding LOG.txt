@@ -3,23 +3,25 @@
 # Run On DC1
 
 
-PS C:\Foo> # 1.Obtaining the IP addresses of DNS servers for packt.com
-PS C:\Foo> $NS = Resolve-DnsName -Name packt.Com -Type NS | 
-             Where-Object Name -eq 'packt.com'
-PS C:\Foo> $NS
+PS C:\Foo> # 1. Obtaining the IP addresses of DNS servers for Packt.Com
+PS C:\Foo> $NameServers = Resolve-DnsName -Name Packt.Com -Type NS | 
+             Where-Object Name -eq 'Packt.Com'
+PS C:\Foo> $NameServers
 
 Name       Type  TTL   Section  NameHost
 ----       ----  ---   -------  --------
-packt.Com  NS    1461  Answer   eva.ns.cloudflare.Com
-packt.Com  NS    1461  Answer   max.ns.cloudflare.Com
+Packt.Com  NS    1461  Answer   eva.ns.cloudflare.Com
+Packt.Com  NS    1461  Answer   max.ns.cloudflare.Com
 
 
 
-PS C:\Foo> # 2.Obtaining the IPV4 addresses for these hosts
-PS C:\Foo> $NSIPS = foreach ($Server in $NS) {
+
+
+PS C:\Foo> # 2. Obtaining the IPV4 addresses for these hosts
+PS C:\Foo> $NameServerIPs = foreach ($Server in $NS) {
              (Resolve-DnsName -Name $Server.NameHost -Type A).IPAddress
            }
-PS C:\Foo> $NSIPS
+PS C:\Foo> $NameServerIPs
 108.162.192.114
 172.64.32.114
 173.245.58.114

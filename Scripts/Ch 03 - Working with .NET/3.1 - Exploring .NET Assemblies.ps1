@@ -10,11 +10,11 @@ $Assemblies = [System.AppDomain]::CurrentDomain.GetAssemblies()
 $Assemblies | Select-Object -First 10
 
 # 3. Checking assemblies in Windows PowerShell
-$SB = {
+$ScriptBlock = {
   [System.AppDomain]::CurrentDomain.GetAssemblies() 
 } 
 $PS51 = New-PSSession -UseWindowsPowerShell
-$Assin51 = Invoke-Command -Session $PS51 -ScriptBlock $SB
+$Assin51 = Invoke-Command -Session $PS51 -ScriptBlock $ScriptBlock
 "Assemblies loaded in Windows PowerShell: {0:n0}" -f $Assin51.Count
  
 # 4. Viewing Microsoft.PowerShell assemblies
@@ -23,9 +23,9 @@ $Assin51 |
     Sort-Object -Property Location
 
 # 5. Exploring the Microsoft.PowerShell.Management module
-$Mod = 
+$AllTheModulesOnThisSystem = 
   Get-Module -Name Microsoft.PowerShell.Management -ListAvailable
-$Mod  | Format-List
+$AllTheModulesOnThisSystem  | Format-List
 
 # 6. Viewing module manifest
 $Manifest = Get-Content -Path $Mod.Path
@@ -43,7 +43,7 @@ $Assemblies2 = [System.AppDomain]::CurrentDomain.GetAssemblies()
 $Assemblies2 | Where-Object Location -match $DLL
 
 # 9. Getting details of a PowerShell command inside a module DLL
-$Commands  = $Assemblies |
+$Commands = $Assemblies |
                Where-Object Location -match Commands.Management\.dll
 $Commands.GetTypes() | 
   Where-Object Name -match "Addcontentcommand$" 

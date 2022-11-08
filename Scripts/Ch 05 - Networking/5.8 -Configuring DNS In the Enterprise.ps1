@@ -27,7 +27,7 @@ $SB1 = {
 Invoke-Command -ScriptBlock $SB1
 Invoke-Command -ScriptBlock $SB1 -ComputerName DC1
 
-# 4. Creating script block to configure DC2 to have TWO DNS servers
+# 4. Creating script block to configure DC2 to have two DNS servers
 $SB2 = {
   $NIC = 
     Get-NetIPInterface -InterfaceAlias "Ethernet" -AddressFamily IPv4

@@ -26,7 +26,7 @@ $S32Path = $Paths |
 "System32 path: [$S32Path]"
 
 # 6. Displaying path to the format XML for Server Manager module
-$FXML = "$S32path/ServerManager"
+$FXML = "$S32Path/ServerManager"
 $FF = Get-ChildItem -Path $FXML\*.format.ps1xml
 "Format XML files:"
 "     $($FF.Name)"

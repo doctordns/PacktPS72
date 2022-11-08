@@ -11,18 +11,18 @@ $PrimaryDC = Get-ADDomainController -Discover -Service PrimaryDC
 $ADUsers = Get-ADUser -Filter * -Properties * -Server $PrimaryDC
 # Iterate through them and create $Userinfo hash table:
 Foreach ($ADUser in $ADUsers) {
-    # Create a userinfo HT
-    $UserInfo = [Ordered] @{}
-    $UserInfo.SamAccountname = $ADUser.SamAccountName
-    $Userinfo.DisplayName    = $ADUser.DisplayName
-    $UserInfo.Office         = $ADUser.Office
-    $Userinfo.Enabled        = $ADUser.Enabled
-    $userinfo.LastLogonDate  = $ADUser.LastLogonDate
-    $UserInfo.ProfilePath    = $ADUser.ProfilePath
-    $Userinfo.ScriptPath     = $ADUser.ScriptPath
-    $UserInfo.BadPWDCount    = $ADUser.badPwdCount
-    New-Object -TypeName PSObject -Property $UserInfo
-    }
+  # Create a userinfo HT
+  $UserInfo = [Ordered] @{}
+  $UserInfo.SamAccountname = $ADUser.SamAccountName
+  $UserInfo.DisplayName    = $ADUser.DisplayName
+  $UserInfo.Office         = $ADUser.Office
+  $UserInfo.Enabled        = $ADUser.Enabled
+  $UserInfo.LastLogonDate  = $ADUser.LastLogonDate
+  $UserInfo.ProfilePath    = $ADUser.ProfilePath
+  $UserInfo.ScriptPath     = $ADUser.ScriptPath
+  $UserInfo.BadPWDCount    = $ADUser.badPwdCount
+  New-Object -TypeName PSObject -Property $UserInfo
+  }
 } # end of function
 
 # 2. Getting the users

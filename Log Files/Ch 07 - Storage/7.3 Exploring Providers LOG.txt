@@ -1,0 +1,317 @@
+# 7.3 - Exploring Providers And The File System Provider
+#
+# Run on SRV1
+
+
+PS C:\Foo> # 1. Getting PowerShell providers  
+PS C:\Foo> Get-PSProvider
+
+Name        Capabilities                       Drives
+----        ------------                       ------
+Registry    ShouldProcess                      {HKLM, HKCU}
+Alias       ShouldProcess                      {Alias}
+Environment ShouldProcess                      {Env}
+FileSystem  Filter, ShouldProcess, Credentials {C, Temp, S, W, X, Y, Z}
+Function    ShouldProcess                      {Function}
+Variable    ShouldProcess                      {Variable}
+Certificate ShouldProcess                      {Cert}
+WSMan       Credentials                        {WSMan}
+
+
+
+
+PS C:\Foo> # 2. Getting drives from the registry provider
+PS C:\Foo> Get-PSDrive | Where-Object Provider -match 'Registry'
+
+Name Used (GB) Free (GB) Provider Root               CurrentLocation
+---- --------- --------- -------- ----               ---------------
+HKCU                     Registry HKEY_CURRENT_USER
+HKLM                     Registry HKEY_LOCAL_MACHINE
+
+
+
+
+
+
+PS C:\Foo> # 3. Looking at a registry key
+PS C:\Foo> $Path = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
+PS C:\Foo> Get-Item -Path $Path
+
+    Hive: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT
+
+Name                           Property
+----                           --------
+CurrentVersion                 SystemRoot                : C:\WINDOWS
+                               BaseBuildRevisionNumber   : 1
+                               BuildBranch               : fe_release
+                               BuildGUID                 : ffffffff-ffff-ffff-ffff-ffffffffffff
+                               BuildLab                  : 20348.fe_release.210507-1500
+                               BuildLabEx                : 20348.1.amd64fre.fe_release.210507-1500
+                               CompositionEditionID      : ServerDatacenter
+                               CurrentBuild              : 20348
+                               CurrentBuildNumber        : 20348
+                               CurrentMajorVersionNumber : 10
+                               CurrentMinorVersionNumber : 0
+                               CurrentType               : Multiprocessor Free
+                               CurrentVersion            : 6.3
+                               DisplayVersion            : 21H2
+                               EditionID                 : ServerDatacenter
+                               EditionSubManufacturer    : 
+                               EditionSubstring          : 
+                               EditionSubVersion         : 
+                               InstallationType          : Server
+                               InstallDate               : 1655399252
+                               LCUVer                    : 10.0.20348.169
+                               ProductName               : Windows Server 2022 Datacenter
+                               ReleaseId                 : 2009
+                               SoftwareType              : System
+                               UBR                       : 169
+                               PathName                  : C:\WINDOWS
+                               PendingInstall            : 0
+                               ProductId                 : 00456-50300-14401-AA488
+                               DigitalProductId          : {164, 0, 0, 0, 3, 0, 0, 0, 48, 48, 52, 53, 5…}
+                               DigitalProductId4         : {248, 4, 0, 0, 4, 0, 1, 0, 48, 0, 51, 0, 54, 50…}
+                               RegisteredOwner           : Book Readers
+                               RegisteredOrganization    : Reskit.Org
+                               InstallTime               : 132998728520733322
+
+
+
+
+
+PS C:\Foo> # 4. Getting registered owner
+PS C:\Foo> (Get-ItemProperty -Path $Path -Name RegisteredOwner).RegisteredOwner
+Book Readers
+
+
+
+PS C:\Foo> # 5. Counting aliases in the Alias: drive
+PS C:\Foo> Get-Item Alias:* | Measure-Object
+
+Count             : 164
+Average           : 
+Sum               : 
+Maximum           : 
+Minimum           : 
+StandardDeviation : 
+Property          : 
+
+
+
+
+PS C:\Foo> # 6. Finding aliases for Remove-Item
+PS C:\Foo> Get-Childitem Alias:* |
+             Where-Object ResolvedCommand -match 'Remove-Item$'
+
+CommandType     Name                                               Version    Source
+-----------     ----                                               -------    ------
+Alias           ri -> Remove-Item
+Alias           rm -> Remove-Item
+Alias           rmdir -> Remove-Item
+Alias           del -> Remove-Item
+Alias           erase -> Remove-Item
+Alias           rd -> Remove-Item
+
+
+
+PS C:\Foo> # 7. Counting environment variables on SRV1
+PS C:\Foo> Get-Item ENV:* | Measure-Object
+
+Count             : 45
+Average           : 
+Sum               : 
+Maximum           : 
+Minimum           : 
+StandardDeviation : 
+Property          : 
+
+
+
+
+PS C:\Foo> # 8. Displaying Windows installation folder
+PS C:\Foo> "Windows installation folder is [$env:windir]"
+Windows installation folder is [C:\WINDOWS]
+
+
+
+
+PS C:\Foo> # 9. Checking on FileSystem provider drives on SRV1
+PS C:\Foo> Get-PSProvider -PSProvider FileSystem | 
+             Select-Object -ExpandProperty Drives |
+               Sort-Object -Property Name    
+
+Name Used (GB) Free (GB) Provider   Root                                              CurrentLocation
+---- --------- --------- --------   ----                                              ---------------
+C        16.68    111.22 FileSystem C:\                                                           Foo
+S         0.14     63.84 FileSystem S:\
+Temp     16.68    111.22 FileSystem C:\Users\administrator.RESKIT\AppData\Local\Temp\
+W         0.00      1.00 FileSystem W:\
+X         0.00     15.00 FileSystem X:\
+Y         0.00     14.98 FileSystem Y:\
+Z         1.16     31.78 FileSystem Z:\
+
+
+
+
+
+PS C:\Foo> # 10. Getting home folder for FileSystem provider
+PS C:\Foo> $HomeFolder = Get-PSProvider -PSProvider FileSystem | 
+             Select-Object -ExpandProperty Home
+PS C:\Foo> $HomeFolder
+C:\Foo
+
+
+
+
+PS C:\Foo> # 11. Checking Function drive
+PS C:\Foo> Get-Module | Remove-Module -WarningAction SilentlyContinue
+PS C:\Foo> $Functions = Get-ChildItem -Path Function:
+PS C:\Foo> "Functions available [$($Functions.Count)]"
+Functions available [36]
+
+
+
+
+# 12. Creating a new function
+  
+  
+  no output
+
+
+
+
+
+PS C:\Foo> # 13. Checking Function drive again
+PS C:\Foo> $Functions2 = Get-ChildItem -Path Function:
+PS C:\Foo> "Functions now available [$($Functions2.Count)]"
+Functions now available [37]
+
+
+
+
+PS C:\Foo> # 14 Viewing function definition
+PS C:\Foo> Get-Item Function:\Get-HelloWorld | Format-List *
+
+PSPath              : Microsoft.PowerShell.Core\Function::Get-HelloWorld
+PSDrive             : Function
+PSProvider          : Microsoft.PowerShell.Core\Function
+PSIsContainer       : False
+HelpUri             :
+ScriptBlock         : 'Hello World'
+CmdletBinding       : False
+DefaultParameterSet :
+Definition          : 'Hello World'
+Options             : None
+Description         :
+Verb                : Get
+Noun                : HelloWorld
+HelpFile            :
+OutputType          : {}
+Name                : Get-HelloWorld
+CommandType         : Function
+Source              :
+Version             :
+Visibility          : Public
+ModuleName          :
+Module              :
+RemotingCapability  : PowerShell
+Parameters          : {}
+ParameterSets       : {}
+
+
+
+
+
+
+PS C:\Foo> # 16. Getting trusted root certificates for the local machine
+PS C:\Foo> Get-ChildItem -Path Cert:\LocalMachine\Root |
+             Format-Table FriendlyName, Thumbprint
+
+FriendlyName                                          Thumbprint
+------------                                          ----------
+Microsoft Root Certificate Authority                  CDD4EEAE6000AC7F40C3802C171E30148030C072
+Thawte Timestamping CA                                BE36A4562FB2EE05DBB3D32323ADF445084ED656
+Microsoft Root Authority                              A43489159A520F0D93D032CCAF37E7FE20A8B419
+                                                      92B46C76E13054E104F230517E6E504D43AB10B5
+Microsoft Root Certificate Authority 2011             8F43288AD272F3103B6FB1428485EA3014C0BCFE
+Microsoft Authenticode(tm) Root                       7F88CD7223F3C813818C994614A89C99FA3B5247
+Microsoft Root Certificate Authority 2010             3B1EFD3A66EA28B16697394703A72CA340A05BD5
+Microsoft ECC TS Root Certificate Authority 2018      31F9FC8BA3805986B721EA7295C65B3A44534274
+Microsoft Timestamp Root                              245C97DF7514E7CF2DF8BE72AE957B9E04741E85
+VeriSign Time Stamping CA                             18F7C1FCC3090203FD5BAA2F861A754976C8DD25
+Microsoft ECC Product Root Certificate Authority 2018 06F1AA330B927B753A40E68CDF22E34BCBEF3352
+Microsoft Time Stamp Root Certificate Authority 2014  0119E81BE9A14CD8E22F40AC118C687ECBA3F4D8
+DigiCert Global Root G2                               DF3C24F9BFD666761B268073FE06D1CC8D4F82A4
+DST Root CA X3                                        DAC9024F54D8F6DF94935FB1732638CA6AD77C13
+GlobalSign Root CA - R3                               D69B561148F01C77C54578C10926DF5B856976AD
+DigiCert Baltimore Root                               D4DE20D05E66FC53FE1A50882C78DB2852CAE474
+Sectigo (AAA)                                         D1EB23A46D17D68FD92564C2F1F1601764D8E349
+ISRG Root X1                                          CABD2A79A1076A31F21D253635CB039D4329A5E8
+GlobalSign Root CA - R1                               B1BC968BD4F49D622AA89A81F2150152A41D829C
+Starfield Class 2 Certification Authority             AD7E1C28B064EF8F6003402014C3D0E3370EB58A
+DigiCert                                              A8985D3A65E5E5C4B2D7D66D40C6DD2FB19C5436
+Entrust.net                                           8CF427FD790C3AD166068DE81E57EFBB932272D4
+VeriSign Class 3 Public Primary CA                    742C3192E607E424EB4549542BE1BBC53E6174E2
+DigiCert                                              5FB7EE0633E259DBAD0C4C9AE6D38F1A61C7DC25
+VeriSign                                              4EB6D578499B1CCF5F581EAD56BE3D9B6744A5E5
+VeriSign Universal Root Certification Authority       3679CA35668772304D30A5FB873B0FA77BB70D54
+Go Daddy Class 2 Certification Authority              2796BAE63F1801E277261BA0D77770028F20EEE4
+QuoVadis Root CA 2 G3                                 093C61F38B8BDC7D55DF7538020500E125F5C836
+DigiCert                                              0563B8630D62D75ABBC8AB1E4BDFB5A899B24D43
+
+
+
+
+
+PS C:\Foo> # 17. Examining ports in use by WinRM
+PS C:\Foo> Get-ChildItem -Path WSMan:\localhost\Client\DefaultPorts
+
+   WSManConfig: Microsoft.WSMan.Management\WSMan::localhost\Client\DefaultPorts
+
+Type           Name   SourceOfValue  Value
+----           ----   -------------  -----
+System.String  HTTP                  5985
+System.String  HTTPS                 5986
+
+
+
+# 18. Setting Trusted Hosts
+
+
+no output
+
+
+
+# 19. Installing SHIPS and CimPSDrive modules
+   
+
+
+   no output
+
+
+
+PS C:\Foo> # 21. Importing the CimPSDrive module and creating a drive
+PS C:\Foo> Import-Module -Name CimPSDrive
+PS C:\Foo> New-PSDrive -Name CIM -PSProvider SHiPS -Root CIMPSDrive#CMRoot
+
+Name Used (GB) Free (GB) Provider Root              CurrentLocation
+---- --------- --------- -------- ----              ---------------
+CIM                      SHiPS    CIMPSDrive#CMRoot
+
+
+
+
+
+PS C:\Foo> # 22. Examining BIOS using the CimPSDrive module
+PS C:\Foo> Get-ChildItem CIM:\Localhost\CIMV2\Win32_Bios
+
+SMBIOSBIOSVersion : Hyper-V UEFI Release v4.1
+Manufacturer      : Microsoft Corporation
+Name              : Hyper-V UEFI Release v4.1
+SerialNumber      : 1292-4012-4928-5640-9420-3487-94
+Version           : VRTUAL - 1
+PSComputerName    : localhost
+
+
+
+

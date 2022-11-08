@@ -1,0 +1,170 @@
+# Recipe 7.2 - Managing Filesystems
+#
+# Run on SRV1
+# SRV1, SRV2 has 8 extra disks that are 'bare' and just added to the VMs
+# In recipe 7.1, you used the first 2, in this recipe you use the third.
+
+PS C:\Foo> # 1. Getting the second disk
+PS C:\Foo> $Disk = Get-Disk | Select-Object -Skip 1 -First 1
+PS C:\Foo> $Disk | Format-List
+
+UniqueId           : 60022480E8258902AEAD5E128062318A
+Number             : 1
+Path               : \\?\scsi#disk&ven_msft&prod_virtual_disk#5&2132ca1&0&000000#
+                     {53f56307-b6bf-11d0-94f2-00a0c91efb8b}
+Manufacturer       : Msft    
+Model              : Virtual Disk    
+SerialNumber       : 
+Size               : 64 GB
+AllocatedSize      : 17825792
+LogicalSectorSize  : 512
+PhysicalSectorSize : 4096
+NumberOfPartitions : 1
+PartitionStyle     : GPT
+IsReadOnly         : False
+IsSystem           : False
+IsBoot             : False
+
+
+
+
+
+PS C:\Foo> # 2. Creating a new volume in this disk
+PS C:\Foo> $NewVolumeHT1   = @{
+             DiskNumber    = $Disk.Disknumber
+             DriveLetter  = 'S'
+             FriendlyName = 'Files'
+           }
+PS C:\Foo> New-Volume @NewVolumeHT1
+
+DriveLetter FriendlyName FileSystemType DriveType HealthStatus OperationalStatus SizeRemaining     Size
+----------- ------------ -------------- --------- ------------ ----------------- -------------     ----
+S           Files        NTFS           Fixed     Healthy      OK                     63.84 GB 63.98 GB
+
+
+
+PS C:\Foo> # 3. Getting next available disk to use on SRV1
+PS C:\Foo> $Disk2 = Get-Disk |
+             Where-Object PartitionStyle -eq 'MBR' |
+               Select-Object -First 1
+PS C:\Foo> $Disk2 | Format-List
+
+UniqueId           : 60022480F74243AB1AD9CFB6E1B06E28
+Number             : 2
+Path               : \\?\scsi#disk&ven_msft&prod_virtual_disk#5&2132ca1&0&000001#
+                     {53f56307-b6bf-11d0-94f2-00a0c91efb8b}
+Manufacturer       : Msft
+Model              : Virtual Disk
+SerialNumber       : 
+Size               : 64 GB
+AllocatedSize      : 2097152
+LogicalSectorSize  : 512
+PhysicalSectorSize : 4096
+NumberOfPartitions : 0
+PartitionStyle     : MBR
+IsReadOnly         : False
+IsSystem           : False
+IsBoot             : False
+
+
+
+PS C:\Foo> # 4. Creating 4 new partitions on third (MBR) disk 
+PS C:\Foo> $UseMaxHT= @{UseMaximumSize = $true}
+PS C:\Foo> New-Partition -DiskNumber $Disk2.DiskNumber -DriveLetter W -Size 1gb
+
+   DiskPath: \\?\scsi#disk&ven_msft&prod_virtual_disk#5&2132ca1&0&000001#
+             {53f56307-b6bf-11d0-94f2-00a0c91efb8b}
+
+PartitionNumber  DriveLetter Offset  Size Type
+---------------  ----------- ------  ---- ----
+1                W           1048576 1 GB Logical
+
+PS C:\Foo> New-Partition -DiskNumber $Disk2.DiskNumber -DriveLetter X -Size 15gb
+
+   DiskPath: \\?\scsi#disk&ven_msft&prod_virtual_disk#5&2132ca1&0&000001#
+             {53f56307-b6bf-11d0-94f2-00a0c91efb8b}
+
+PartitionNumber  DriveLetter Offset      Size Type
+---------------  ----------- ------      ---- ----
+2                X           1074790400 15 GB Logical
+
+PS C:\Foo> New-Partition -DiskNumber $Disk2.DiskNumber -DriveLetter Y -Size 15gb
+
+   DiskPath: \\?\scsi#disk&ven_msft&prod_virtual_disk#5&2132ca1&0&000001#
+             {53f56307-b6bf-11d0-94f2-00a0c91efb8b}
+
+PartitionNumber  DriveLetter Offset       Size Type
+---------------  ----------- ------       ---- ----
+3                Y           17180917760 15 GB Logical
+
+PS C:\Foo> New-Partition -DiskNumber $Disk2.DiskNumber -DriveLetter Z @UseMaxHT
+
+   DiskPath: \\?\scsi#disk&ven_msft&prod_virtual_disk#5&2132ca1&0&000001#
+            {53f56307-b6bf-11d0-94f2-00a0c91efb8b}
+
+PartitionNumber  DriveLetter Offset        Size Type
+---------------  ----------- ------        ---- ----
+4                Z           33288093696  33 GB Logical
+
+PS C:\Foo> # 5. Formatting each volume on this disk
+PS C:\Foo> $FormatHT1 = @{
+             DriveLetter        = 'W'
+             FileSystem         = 'FAT' 
+             NewFileSystemLabel = 'w-fat'
+           }
+PS C:\Foo> Format-Volume @FormatHT1
+
+DriveLetter FriendlyName FileSystemType DriveType HealthStatus OperationalStatus SizeRemaining       Size
+----------- ------------ -------------- --------- ------------ ----------------- -------------       ----
+W           W-FAT        FAT            Fixed     Healthy      OK                   1023.69 MB 1023.72 MB
+
+PS C:\Foo> $FormatHT2 = @{
+             DriveLetter        = 'X'
+             FileSystem         = 'exFAT'
+             NewFileSystemLabel = 'x-exFAT'
+           }
+PS C:\Foo> Format-Volume @FormatHT2
+
+DriveLetter FriendlyName FileSystemType DriveType HealthStatus OperationalStatus SizeRemaining  Size
+----------- ------------ -------------- --------- ------------ ----------------- -------------  ----                    
+X           x-exFAT      exFAT          Fixed     Healthy      OK                        15 GB 15 GB
+
+PS C:\Foo> $FormatHT3 = @{
+             DriveLetter        = 'Y'
+             FileSystem         = 'FAT32'
+             NewFileSystemLabel = 'Y-FAT32'
+           }
+PS C:\Foo> Format-Volume  @FormatHT3
+
+DriveLetter FriendlyName FileSystemType DriveType HealthStatus OperationalStatus SizeRemaining     Size                 
+----------- ------------ -------------- --------- ------------ ----------------- -------------     ----                 
+Y           Y-FAT32      FAT32          Fixed     Healthy      OK                     14.98 GB 14.98 GB
+
+PS C:\Foo> $FormatHT4 = @{
+             DriveLetter        = 'Z'
+             FileSystem         = 'ReFS'
+             NewFileSystemLabel = 'Z-ReFS'
+           }
+PS C:\Foo> Format-Volume @FormatHT4
+
+DriveLetter FriendlyName FileSystemType DriveType HealthStatus OperationalStatus SizeRemaining     Size
+----------- ------------ -------------- --------- ------------ ----------------- -------------     ----                 
+Z           Z-ReFS       ReFS           Fixed     Healthy      OK                     31.81 GB 32.94 GB
+
+
+
+
+PS C:\Foo> # 7. Getting all volumes on SRV1
+PS C:\Foo> Get-Volume | Sort-Object DriveLetter
+
+DriveLetter FriendlyName FileSystemType DriveType HealthStatus OperationalStatus SizeRemaining       Size
+----------- ------------ -------------- --------- ------------ ----------------- -------------       ----
+                         FAT32          Fixed     Healthy      OK                     67.25 MB      96 MB
+C                        NTFS           Fixed     Healthy      OK                    111.23 GB   127.9 GB
+S           Files        NTFS           Fixed     Healthy      OK                     63.84 GB   63.98 GB
+W           W-FAT        FAT            Fixed     Healthy      OK                   1023.69 MB 1023.72 MB
+X           x-exFAT      exFAT          Fixed     Healthy      OK                        15 GB      15 GB
+Y           Y-FAT32      FAT32          Fixed     Healthy      OK                     14.98 GB   14.98 GB
+Z           Z-ReFS       ReFS           Fixed     Healthy      OK                     31.81 GB   32.94 GB
+
+

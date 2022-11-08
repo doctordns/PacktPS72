@@ -1,4 +1,4 @@
-# 6.4 - Installing a Child Domain
+# 4.4 - Installing a Child Domain
 
 # Run on UKDC1 - a domain joined server initially in the Reskit.Org domain
 # also, have both DC1.Reskit.Org and DC2.Reskit.Org online

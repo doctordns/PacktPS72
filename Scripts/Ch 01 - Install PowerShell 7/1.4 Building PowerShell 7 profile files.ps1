@@ -26,8 +26,8 @@ $CUCHProfile = $PROFILE.CurrentUserCurrentHost
 "Current User/Current Host profile path: [$CUCHPROFILE]"
 
 # 4. Creating a Current User/Current Host profile for PowerShell 7 console
-$URI = 'https://raw.githubusercontent.com/doctordns/PacktPS72/master/' +
-       'scripts/goodies/Microsoft.PowerShell_Profile.ps1'
+$URI = 'https://raw.githubusercontent.com/doctordns/PacktPS72/main/' +
+       'Scripts/Goodies/Microsoft.PowerShell_Profile.ps1'
 New-Item $CUCHProfile -Force -WarningAction SilentlyContinue |
    Out-Null
 (Invoke-WebRequest -Uri $URI).Content |

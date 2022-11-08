@@ -1,7 +1,7 @@
 # 1.7 Installing the Cascadia Code Font
 #
 # Run on SRV1 after you install PowerShell 7 and VS Code
-# RUn in VS code
+# Run in VS code
 
 # 1. Getting download locations
 $CascadiaFont    = 'CascadiaCode'    # font file name
@@ -19,7 +19,7 @@ Invoke-WebRequest -Uri $CascadiaPath -OutFile $CascadiaFile
 
 # 3. Expanding the font archive file
 $CascadiaFontFolder = 'C:\Foo\CascadiaCode'
-Expand-Archive -Path $CascadiaFile -DestinationPath $CascadiaFontFolder
+Expand-Archive -Path $CascadiaFile -DestinationPath $CascadiaFontFolder -verbose
 
 # 4. Installing the Cascadia Code font
 $FontFile = 'C:\Foo\CascadiaCode\ttf\CascadiaCode.ttf'

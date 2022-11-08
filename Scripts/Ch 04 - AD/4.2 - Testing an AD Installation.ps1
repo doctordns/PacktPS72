@@ -22,7 +22,7 @@ Get-ADUser -Filter * |
 
 # 6. Getting initial AD groups
 Get-ADGroup -Filter *  |
-  Sort-Object -Property Groupscope, Name |
+  Sort-Object -Property GroupScope, Name |
     Format-Table -Property Name, GroupScope
 
 # 7. Examining Enterprise Admins group membership

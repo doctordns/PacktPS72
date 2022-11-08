@@ -1,4 +1,4 @@
-# 6.7 - Managing AD Computers
+# 4.6 - Managing AD Computers
 
 # Run first on DC1 - with prior recipies competed
 # DC1, UKDC1, and SRV1 online
@@ -54,5 +54,5 @@ Restart-Computer -ComputerName SRV1 -Credential $CredSRV1 -Force
 
 # 9. Viewing the resulting computer accounts for Reskit.Org
 Get-ADComputer -Filter * -Properties DNSHostName | 
-  Format-Table 
+  Format-Table name, DNSHostName, Enabled
   

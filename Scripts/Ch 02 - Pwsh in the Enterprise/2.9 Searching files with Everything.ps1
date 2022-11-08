@@ -18,7 +18,7 @@ Invoke-WebRequest -Uri $EPath -OutFile $EFile
 # 3. Installing Everything
 $Iopt = "-install-desktop-shortcut -install-service"
 $Iloc = 'C:\Program Files\Everything'
- & $EFile --% /S -install-options  $Iipt /D=$Iopt
+& $EFile --% /S -install-options  $Iipt /D=$Iopt
 
 # 4. Opening the GUI for the first time
 & "C:\Program Files\Everything\Everything.exe"
