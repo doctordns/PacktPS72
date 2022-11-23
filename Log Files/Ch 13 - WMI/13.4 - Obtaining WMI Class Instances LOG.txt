@@ -1,0 +1,97 @@
+# 13.4 - Obtaining WMI Class Instances
+# 
+# run on SRV1
+
+
+
+PS C:\Foo> # 1. Using Get-CimInstance in the default namespace
+PS C:\Foo> Get-CimInstance -ClassName Win32_Share
+
+Name   Path       Description
+----   ----       -----------
+ADMIN$ C:\WINDOWS Remote Admin
+C$     C:\        Default share
+IPC$              Remote IPC
+
+
+
+PS C:\Foo> # 2. Getting WMI objects from a non-default namespace
+PS C:\Foo> $Instance1 = @{
+             Namespace = 'ROOT\directory\LDAP'
+             ClassName = 'ds_group'
+           }
+PS C:\Foo> Get-CimInstance @Instance1 |
+             Sort-Object -Property Name |
+               Select-Object -First 10 |
+                 Format-Table -Property DS_name, DS_distinguishedName
+
+DS_name                                 DS_distinguishedName
+-------                                 --------------------
+Administrators                          CN=Administrators,CN=Builtin,DC=Reskit,DC=Org
+Group Policy Creator Owners             CN=Group Policy Creator Owners,CN=Users,DC=Reskit,DC=Org
+Pre-Windows 2000 Compatible Access      CN=Pre-Windows 2000 Compatible Access,CN=Builtin,DC=Reskit,DC=Org
+Windows Authorization Access Group      CN=Windows Authorization Access Group,CN=Builtin,DC=Reskit,DC=Org
+Allowed RODC Password Replication Group CN=Allowed RODC Password Replication Group,CN=Users,DC=Reskit,DC=Org
+Denied RODC Password Replication Group  CN=Denied RODC Password Replication Group,CN=Users,DC=Reskit,DC=Org
+Enterprise Read-only Domain Controllers CN=Enterprise Read-only Domain Controllers,CN=Users,DC=Reskit,DC=Org
+Cloneable Domain Controllers            CN=Cloneable Domain Controllers,CN=Users,DC=Reskit,DC=Org
+Protected Users                         CN=Protected Users,CN=Users,DC=Reskit,DC=Org
+Key Admins                              CN=Key Admins,CN=Users,DC=Reskit,DC=Org
+
+
+
+
+
+
+PS C:\Foo> # 3. Using a WMI filter
+PS C:\Foo> $Filter = "ds_Name LIKE '%operator%' "
+PS C:\Foo> Get-CimInstance @Instance1  -Filter $Filter |
+             Format-Table -Property DS_Name
+
+DS_Name
+-------
+Network Configuration Operators
+Cryptographic Operators
+Access Control Assistance Operators
+Print Operators
+Account Operators
+Server Operators
+Backup Operators
+
+
+
+
+
+
+PS C:\Foo> # 4. Using a WMI query
+PS C:\Foo> $Query = @"
+             SELECT * from ds_group
+               WHERE ds_Name like '%operator%'
+           "@
+PS C:\Foo> Get-CimInstance -Query $Query -Namespace 'root\directory\LDAP' |
+             Format-Table DS_Name
+
+DS_Name
+-------
+Network Configuration Operators
+Cryptographic Operators
+Access Control Assistance Operators
+Print Operators
+Account Operators
+Server Operators
+Backup Operator
+
+
+
+PS C:\Foo> # 5. Getting a WMI object from a remote system (DC1)
+PS C:\Foo> Get-CimInstance -CimSession DC1 -ClassName Win32_ComputerSystem | 
+             Format-Table -AutoSize
+
+Name PrimaryOwnerName Domain     TotalPhysicalMemory Model           Manufacturer          PSComputerName
+---- ---------------- ------     ------------------- -----           ------------          --------------
+DC1  Book Readers     Reskit.Org 4331601920          Virtual Machine Microsoft Corporation DC1
+
+
+
+
+

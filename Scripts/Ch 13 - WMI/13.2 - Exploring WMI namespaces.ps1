@@ -1,4 +1,4 @@
-# 9.1 Exploring WMI namespaces
+# 13.2 Exploring WMI namespaces
 #
 # Run on SRV1
 
@@ -34,31 +34,33 @@ $Namespaces |
   Select-Object -First 25
 
 # 6. Creating a script block to count namespaces and classes
-$SB = {
+$ScriptBlock = {
  Function Get-WMINamespaceEnum {
    [CmdletBinding()]
    Param(
-     $NS
+     $NameSpace
     ) 
-   Write-Output $NS
+   Write-Output $NameSpace
    $EAHT = @{ErrorAction = 'SilentlyContinue'}
-   Get-CimInstance "__Namespace" -Namespace $NS @EAHT | 
-     ForEach-Object { Get-WMINamespaceEnum "$NS\$($_.Name)"   }
+   Get-CimInstance "__Namespace" -Namespace $NameSpace @EAHT | 
+     ForEach-Object { 
+       Get-WMINamespaceEnum "$NameSpace\$($_.Name)"   
+     }
    }  # End of function
    $Namespaces = Get-WMINamespaceEnum 'ROOT' | Sort-Object
    $WMIClasses = @()
-   Foreach ($Namespace in $Namespaces) {
-   $WMIClasses += Get-CimClass -Namespace $Namespace
+   Foreach ($WMINameSpace in $Namespaces) {
+   $WMIClasses += Get-CimClass -Namespace $WMINameSpace
   }
  "There are $($Namespaces.Count) WMI namespaces on $(hostname)"
  "There are $($WMIClasses.Count) classes on $(hostname)"
 }
 
 # 7. Running the script block locally on SRV1
-Invoke-Command -ComputerName SRV1 -ScriptBlock $SB
+Invoke-Command -ComputerName SRV1 -ScriptBlock $ScriptBlock
 
 # 8. Running the script block on SRV2
-Invoke-Command -ComputerName SRV2 -ScriptBlock $SB
+Invoke-Command -ComputerName SRV2 -ScriptBlock $ScriptBlock
 
 # 9. Running the script block on DC1
-Invoke-Command -ComputerName DC1 -ScriptBlock $SB
+Invoke-Command -ComputerName DC1 -ScriptBlock $ScriptBlock

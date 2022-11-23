@@ -22,7 +22,7 @@ Get-Process -Id $Process
 
 # 5. Examining DLLs loaded by the WMI service process
 Get-Process -Id $Process | 
-  Select-Object -ExpandProperty modules | 
+  Select-Object -ExpandProperty Modules | 
     Where-Object ModuleName -match 'wmi' |
       Format-Table -Property FileName, Description, FileVersion
 

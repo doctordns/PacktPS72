@@ -7,32 +7,32 @@
 PS C:\Foo> # 1. Viewing the WBEM folder
 PS C:\Foo> $WBEMFOLDER = "$Env:windir\system32\wbem"
 PS C:\Foo> Get-ChildItem -Path $WBEMFOLDER |
->>   Select-Object -First 20
+             Select-Object -First 20
 
     Directory: C:\Windows\System32\wbem
 
-Mode                 LastWriteTime         Length Name
-----                 -------------         ------ ----
-d----          23/09/2022    16:35                AutoRecover
-d----          08/05/2021    10:41                en
-d----          22/09/2022    16:24                en-US
-d----          08/05/2021    09:20                Logs
-d----          22/09/2022    13:49                MOF
-d----          26/10/2022    17:23                Performance
-d----          24/09/2022    16:09                Repository
-d----          08/05/2021    09:20                tmf
-d----          08/05/2021    09:20                xml
--a---          08/05/2021    09:14           2852 aeinv.mof
--a---          08/05/2021    10:41          17510 AgentWmi.mof
--a---          08/05/2021    09:15            693 AgentWmiUninstall.mof
--a---          08/05/2021    09:14            852 appbackgroundtask_uninstall.mof
--a---          08/05/2021    09:14          65536 appbackgroundtask.dll
--a---          08/05/2021    09:14           2902 appbackgroundtask.mof
--a---          08/05/2021    09:15           1112 AttestationWmiProvider_Uninstall.mof
--a---          08/05/2021    09:15           3376 AttestationWmiProvider.mof
--a---          08/05/2021    09:14           1724 AuditRsop.mof
--a---          08/05/2021    09:14           1092 authfwcfg.mof
--a---          08/05/2021    09:14          12120 bcd.mof
+Mode            LastWriteTime    Length Name
+----            -------------    ------ ----
+d----     23/09/2022    16:35           AutoRecover
+d----     08/05/2021    10:41           en
+d----     22/09/2022    16:24           en-US
+d----     08/05/2021    09:20           Logs
+d----     22/09/2022    13:49           MOF
+d----     26/10/2022    17:23           Performance
+d----     24/09/2022    16:09           Repository
+d----     08/05/2021    09:20           tmf
+d----     08/05/2021    09:20           xml
+-a---     08/05/2021    09:14      2852 aeinv.mof
+-a---     08/05/2021    10:41     17510 AgentWmi.mof
+-a---     08/05/2021    09:15       693 AgentWmiUninstall.mof
+-a---     08/05/2021    09:14       852 appbackgroundtask_uninstall.mof
+-a---     08/05/2021    09:14     65536 appbackgroundtask.dll
+-a---     08/05/2021    09:14      2902 appbackgroundtask.mof
+-a---     08/05/2021    09:15      1112 AttestationWmiProvider_Uninstall.mof
+-a---     08/05/2021    09:15      3376 AttestationWmiProvider.mof
+-a---     08/05/2021    09:14      1724 AuditRsop.mof
+-a---     08/05/2021    09:14      1092 authfwcfg.mof
+-a---     08/05/2021    09:14     12120 bcd.mof
 
 
 
@@ -55,7 +55,7 @@ Mode                 LastWriteTime         Length Name
 
 PS C:\Foo> # 3. Viewing the WMI service details
 PS C:\Foo> Get-Service -Name Winmgmt  |
->>   Format-List -Property *
+             Format-List -Property *
 
 UserName            : localSystem
 Description         : Provides a common interface and object model to access management 
@@ -87,7 +87,7 @@ Container           :
 
 PS C:\Foo> # 4. Getting process details
 PS C:\Foo> $Service = tasklist.exe /svc /fi "SERVICES eq winmgmt" |
->>              Select-Object -Last 1
+                        Select-Object -Last 1
 PS C:\Foo> $Process = [int] ($Service.Substring(30,4))
 PS C:\Foo> Get-Process -Id $Process
 
@@ -100,9 +100,9 @@ PS C:\Foo> Get-Process -Id $Process
 
 PS C:\Foo> # 5. Examining DLLs loaded by the WMI service process
 PS C:\Foo> Get-Process -Id $Process | 
->>   Select-Object -ExpandProperty modules | 
->>     Where-Object ModuleName -match 'wmi' |
->>       Format-Table -Property FileName, Description, FileVersion
+             Select-Object -ExpandProperty Modules | 
+               Where-Object ModuleName -match 'wmi' |
+                 Format-Table -Property FileName, Description, FileVersion
 
 FileName                              Description    FileVersion
 --------                              -----------    -----------
@@ -114,11 +114,11 @@ C:\WINDOWS\system32\wbem\wmiprvsd.dll WMI            10.0.20348.1 (WinBuild.1601
 
 PS C:\Foo> # 6. Discovering WMI Providers
 PS C:\Foo> Get-ChildItem -Path $WBEMFOLDER\*.dll | 
->>   Select-Object -ExpandProperty Versioninfo | 
->>     Where-Object FileDescription -match 'prov' |
->>       Format-Table -Property Internalname,
->>                              FileDescription,
->>                              ProductVersion
+             Select-Object -ExpandProperty Versioninfo | 
+               Where-Object FileDescription -match 'prov' |
+                 Format-Table -Property Internalname,
+                                        FileDescription,
+                                        ProductVersion
 
 InternalName                 FileDescription                                 ProductVersion
 ------------                 ---------------                                 --------------
@@ -210,14 +210,14 @@ PS C:\Foo> $Events | Group-Object -Property LevelDisplayName
 
 Count Name           Group
 ----- ----           -----
-  728 Error          {System.Diagnostics.Eventing.Reader.EventLogRecord, System.Diagnostics.Eventing.Reader.EventLogRecord, System.Diagnostics.Eventing.Reader.EventLogRecor… 
-  729 Information    {System.Diagnostics.Eventing.Reader.EventLogRecord, System.Diagnostics.Eventing.Reader.EventLogRecord, System.Diagnostics.Eventing.Reader.EventLogRecor… 
+  728 Error          {System.Diagnostics.Eventing.Reader.EventLogRecord, System.Diagnostics.Eventing.Reader.EventLogRecor… 
+  729 Information    {System.Diagnostics.Eventing.Reader.EventLogRecord, System.Diagnostics.Eventing.Reader.EventLogRecor… 
 
 
 PS C:\Foo> # 10. Examining WMI event log entries
 PS C:\Foo> $Events |
->>   Select-Object -First 5 |
->>     Format-Table -Wrap
+             Select-Object -First 5 |
+               Format-Table -Wrap
 
    ProviderName: Microsoft-Windows-WMI-Activity
 
@@ -247,13 +247,14 @@ TimeCreated           Id LevelDisplayName Message
 PS C:\Foo> # 11. Viewing executable programs in WBEM folder
 PS C:\Foo> $Files = Get-ChildItem -Path $WBEMFOLDER\*.exe
 PS C:\Foo> "{0,15}  {1,-40}" -f 'File Name','Description'
-      File Name  Description
 PS C:\Foo> Foreach ($File in $Files){
->>  $Name = $File.Name
->>  $Desc = ($File | 
->>           Select-Object -ExpandProperty VersionInfo).FileDescription
->> "{0,15}  {1,-40}" -f $Name,$Desc
->> }
+             $Name = $File.Name
+             $Desc = ($File | 
+                      Select-Object -ExpandProperty VersionInfo).FileDescription
+            "{0,15}  {1,-40}" -f $Name,$Desc
+            }
+
+      File Name  Description
     mofcomp.exe  The Managed Object Format (MOF) Compiler 
     scrcons.exe  WMI Standard Event Consumer - scripting 
    unsecapp.exe  Sink to receive asynchronous callbacks for WMI client application
@@ -271,7 +272,7 @@ PS C:\Foo>
 
 PS C:\Foo> # 12. Examining the CimCmdlets module
 PS C:\Foo> Get-Module -Name CimCmdlets |
->>   Select-Object -ExcludeProperty Exported*
+             Select-Object -ExcludeProperty Exported*
 
 LogPipelineExecutionDetails : False
 Name                        : CimCmdlets
@@ -364,3 +365,6 @@ PSComputerName            Property    string PSComputerName {get;}
 Status                    Property    string Status {get;}
 Type                      Property    uint Type {get;}
 PSStatus                  PropertySet PSStatus {Status, Type, Name}
+
+
+

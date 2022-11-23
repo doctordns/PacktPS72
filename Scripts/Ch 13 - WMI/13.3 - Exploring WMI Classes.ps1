@@ -1,4 +1,4 @@
-# 9.1 Exploring WMI namespaces
+# 13.3 Exploring WMI Classes
 #
 # Run on SRV1
 
@@ -19,7 +19,6 @@ Get-CimClass -ClassName Win32_Share |
 # 4. Getting classes in a non-default namespace
 Get-CimClass -Namespace root\directory\LDAP |
   Where-Object CimClassName -match '^ds_group'
-
 
 # 5. Viewing the instances of the ds_group class
 Get-CimInstance -Namespace root\directory\LDAP -Classname 'DS_Group' |
