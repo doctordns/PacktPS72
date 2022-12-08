@@ -3,7 +3,7 @@
 # Run on PSRV - domain joined host in reskit.org domain
 
 # 1. Setting up AD for this recipe
-$ScripBlock = {
+$ScriptBlock = {
   # 1.1 Creating Sales OU
   $OUHT = @{
     Name = 'Sales'

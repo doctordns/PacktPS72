@@ -1,4 +1,4 @@
-﻿# Recipe 8.8 - Using FSRM Reporting
+﻿# Recipe 8.8 - Implementing FSRM Reporting
 #
 # Run on FS1 after you run Recipe 8.7 to install FSRM
 
@@ -42,7 +42,7 @@ $NewTaskHT = @{
   Monthly = 1
 }
 $Task = New-FsrmScheduledTask @NewTaskHT
-$NewReportHcd T = @{
+$NewReportHT = @{
   Name             = 'Monthly Files by files group report'
   Namespace        = 'C:\'
   Schedule         = $Task 

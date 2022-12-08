@@ -33,8 +33,6 @@ $InstallHT = @{
 #    PowerShell 7 as administrator
 
 # 7. Creating a profile file for VS Code
-
-
 $SAMPLE =
   'https://raw.githubusercontent.com/doctordns/PacktPS72/main/' +
   'Scripts/Goodies/Microsoft.VSCode_profile.ps1'

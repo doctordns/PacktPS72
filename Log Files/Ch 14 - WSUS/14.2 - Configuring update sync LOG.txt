@@ -1,0 +1,277 @@
+# Recipe 14.1 - Configuring WUS update synchronization
+
+# Run on SRV1
+
+# 1.  Creating a remote session on WSUS1
+
+
+no output
+
+
+
+
+
+PS C:\Foo> # 2. Locating versions of WIndows Server supported by Windows Update
+PS C:\Foo> Invoke-Command -Session $Session -ScriptBlock {
+              Get-WsusProduct |
+                Where-Object -FilterScript {$_.product.title -match
+                                            '^Windows Server'} |
+                  Select-Object -ExpandProperty Product  |
+                    Format-Table Title, UpdateSource
+            }
+
+Title                                                                               UpdateSource
+-----                                                                               ------------
+Windows Server 2003, Datacenter Edition                                          MicrosoftUpdate
+Windows Server 2003                                                              MicrosoftUpdate
+Windows Server 2008 R2                                                           MicrosoftUpdate
+Windows Server 2008 Server Manager Dynamic Installer                             MicrosoftUpdate
+Windows Server 2008                                                              MicrosoftUpdate
+Windows Server 2012 Language Packs                                               MicrosoftUpdate
+Windows Server 2012 R2  and later drivers                                        MicrosoftUpdate
+Windows Server 2012 R2 Drivers                                                   MicrosoftUpdate
+Windows Server 2012 R2 Language Packs                                            MicrosoftUpdate
+Windows Server 2012 R2                                                           MicrosoftUpdate
+Windows Server 2012                                                              MicrosoftUpdate
+Windows Server 2016 and Later Servicing Drivers                                  MicrosoftUpdate
+Windows Server 2016 for RS4                                                      MicrosoftUpdate
+Windows Server 2016                                                              MicrosoftUpdate
+Windows Server 2016                                                              MicrosoftUpdate
+Windows Server 2019 and later, Servicing Drivers                                 MicrosoftUpdate
+Windows Server 2019 and later, Upgrade & Servicing Drivers                       MicrosoftUpdate
+Windows Server 2019 Datacenter: Azure Edition Hotpatch                           MicrosoftUpdate
+Windows Server 2019                                                              MicrosoftUpdate
+Windows Server 2019                                                              MicrosoftUpdate
+Windows Server Drivers                                                           MicrosoftUpdate
+Windows Server Manager – Windows Server Update Services (WSUS) Dynamic Installer MicrosoftUpdate
+Windows Server Solutions Best Practices Analyzer 1.0                             MicrosoftUpdate
+Windows Server Technical Preview Language Packs                                  MicrosoftUpdate
+Windows Server, version 1903 and later                                           MicrosoftUpdate
+Windows Server, version 1903 and later                                           MicrosoftUpdate
+
+
+
+
+PS C:\Foo> # 3. Discovering updates for for Windows 11
+PS C:\Foo> Invoke-Command -Session $Session -ScriptBlock {
+             Get-WsusProduct -TitleIncludes 'Windows 11' |
+               Select-Object -ExpandProperty Product |
+                 Format-Table -Property Title
+           }
+
+Title
+-----
+Windows 11 Client S, version 22H2 and later, Servicing Drivers
+Windows 11 Client S, version 22H2 and later, Upgrade & Servicing Drivers
+Windows 11 Client, version 22H2 and later, Servicing Drivers
+Windows 11 Client, version 22H2 and later, Upgrade & Servicing Drivers
+Windows 11 Dynamic Update
+Windows 11 GDR-DU
+Windows 11
+
+
+PS C:\Foo> # 4. Create and view a list of software product titles to include
+PS C:\Foo> Invoke-Command -Session $Session -ScriptBlock {
+             $Products =
+              (Get-WsusProduct |
+                Where-Object -FilterScript {$_.product.title -match
+                                            '^Windows Server'}).Product.Title
+             $Products += @('Microsoft SQL Server 2016','Windows 11')
+             $Products
+           }
+
+Windows Server 2003, Datacenter Edition
+Windows Server 2003
+Windows Server 2008 R2
+Windows Server 2008 Server Manager Dynamic Installer
+Windows Server 2008
+Windows Server 2012 Language Packs
+Windows Server 2012 R2  and later drivers
+Windows Server 2012 R2 Drivers
+Windows Server 2012 R2 Language Packs
+Windows Server 2012 R2
+Windows Server 2012
+Windows Server 2016 and Later Servicing Drivers
+Windows Server 2016 for RS4
+Windows Server 2016
+Windows Server 2016
+Windows Server 2019 and later, Servicing Drivers
+Windows Server 2019 and later, Upgrade & Servicing Drivers
+Windows Server 2019 Datacenter: Azure Edition Hotpatch
+Windows Server 2019
+Windows Server 2019
+Windows Server Drivers
+Windows Server Manager – Windows Server Update Services (WSUS) Dynamic Installer
+Windows Server Solutions Best Practices Analyzer 1.0
+Windows Server Technical Preview Language Packs
+Windows Server, version 1903 and later
+Windows Server, version 1903 and later
+Microsoft SQL Server 2016
+Windows 11
+
+
+
+# 5. Assigning the desired products to include in Windows Update
+
+
+no output
+
+
+PS C:\Foo> # 6. Getting WSUS classification
+PS C:\Foo> Invoke-Command -Session $Session -ScriptBlock {
+             Get-WsusClassification |
+               Select-Object -ExpandProperty Classification |
+                 Format-Table -Property Title, Description  -Wrap
+           }
+
+Title              Description
+-----              -----------
+Applications       Products or line of business applications.
+Critical Updates   A broadly released fix for a specific problem addressing a critical,       
+                   non-security related bug.
+Definition Updates A broadly-released and frequent software update containing additions to a  
+                   product's definition database. Definition databases are often used to
+                   detect objects with specific attributes, such as malicious code, phishing
+                   Web sites, or junk e-mail.
+Driver Sets        A package of software modules that is designed to support the hardware of
+                   a specific model of computing device.
+Drivers            A software component necessary to control or regulate another device.
+Feature Packs      New product functionality that is first distributed outside the context
+                   of a product release, and usually included in the next full product
+                   release.
+Security Updates   A broadly released fix for a product-specific security-related
+                   vulnerability. Security vulnerabilities are rated based on their severity
+                   which is indicated in the Microsoft® security bulletin as critical,
+                   important, moderate, or low.
+Service Packs      A tested, cumulative set of all hotfixes, security updates, critical
+                   updates and updates, as well as additional fixes for problems found
+                   internally since the release of the product. Service packs may also
+                   contain a limited number of customer-requested design changes or features.
+Tools              A utility or feature that aids in accomplishing a task or set of tasks.
+Update Rollups     A tested, cumulative set of hotfixes, security updates, critical updates,
+                   and updates packaged together for easy deployment. A rollup generally
+                   targets a specific area, such as security, or a component of a product,
+                   such as Internet Information Services "IIS".
+Updates            A broadly released fix for a specific problem addressing a noncritical,
+                   non-security-related bug.
+Upgrades           A new product release bringing a device to the next version, containing
+                   bug fixes, design changes and new features.
+
+
+
+
+# 7. Building a list of desired update classifications
+
+
+
+no output
+
+
+# 8. Setting the list of desired update classifications in WSUS:
+
+
+
+no output
+
+
+
+# 9. Getting Synchronization details
+
+
+
+
+
+no output
+
+
+
+
+# 10. Starting synchronizing available updates
+
+
+
+
+
+no output
+
+
+
+
+# 11. Starting synchronizing available updates
+
+
+
+
+
+
+PS C:\Foo> # 12. Synchronizing the updates which can take a long while to comolete
+PS C:\Foo> Invoke-Command -Session $Session -ScriptBlock {
+             $IntervalSeconds = 15
+             $NP = 'NotProcessing'
+             Do {
+               $WSUSSubscription.GetSynchronizationProgress()
+               Start-Sleep -Seconds $IntervalSeconds
+               } While ($WSUSSubscription.GetSynchronizationStatus() -eq $NP)
+           }
+
+PSComputerName : WSUS1
+RunspaceId     : 77ec8cff-d1f6-4c90-a11d-4cef89201968
+TotalItems     : 31327
+ProcessedItems : 730
+Phase          : Updates
+
+
+
+
+
+
+PS C:\Foo> # 13. Synchronize the updates which can take a long while to compelete.
+PS C:\Foo> Invoke-Command -Session $Session -ScriptBlock {
+             $IntervalSeconds = 15
+             $NP = 'NotProessing'
+             #   Wait for synchronizing to start
+             Do {
+             Write-Output $WSUSSubscription.GetSynchronizationProgress()
+             Start-Sleep -Seconds $IntervalSeconds
+             }
+             While ($WSUSSubscription.GetSynchronizationStatus() -eq $NP)
+             #    Wait for all phases of process to end
+             Do {
+             Write-Output $WSUSSubscription.GetSynchronizationProgress()
+             Start-Sleep -Seconds $IntervalSeconds
+             } Until ($WSUSSubscription.GetSynchronizationStatus() -eq $NP)
+           }
+
+PSComputerName : WSUS1
+RunspaceId     : 77ec8cff-d1f6-4c90-a11d-4cef89201968
+TotalItems     : 31327
+ProcessedItems : 3576
+Phase          : Updates
+
+
+
+PS C:\Foo> # 14. Checking the results of the synchronization
+PS C:\Foo> Invoke-Command -Session $Session -ScriptBlock {
+             $WSUSSubscription.GetLastSynchronizationInfo()
+            }
+
+PSComputerName  : WSUS1
+RunspaceId      : 77ec8cff-d1f6-4c90-a11d-4cef89201968
+Id              : 10aee80a-2746-49af-b78e-27fd12c6ec09
+StartTime       : 04/12/2022 12:12:28
+EndTime         : 04/12/2022 14:38:41
+StartedManually : True
+Result          : Succeeded
+Error           : NotApplicable
+ErrorText       : 
+UpdateErrors    : {}
+
+
+
+
+# 15. Configure automatic synchronization to run once per day:
+
+
+
+no output
+

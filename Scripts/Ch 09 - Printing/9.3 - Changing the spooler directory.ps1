@@ -21,7 +21,7 @@ $PrintServer = New-Object @NewObjHT
 $PrintServer
 
 # 5. Observing the default spool folder
-"The default spool folder is: [{0}]" -f $PS.DefaultSpoolDirectory
+"The default spool folder is: [{0}]" -f $PringServer.DefaultSpoolDirectory
 
 # 6. Creating a new spool folder
 $NewItemHT = @{

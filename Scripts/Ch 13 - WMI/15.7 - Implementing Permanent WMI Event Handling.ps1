@@ -1,6 +1,6 @@
 ﻿# 15.7 - Implementing Permanent WMI Event Handling
 
-# Run on SRV1
+# Run on DC1
 
 # 1. Creating a list of valid users for the Enterprise Admins group
 $OKUsersFile = 'C:\Foo\OKUsers.Txt'
@@ -14,28 +14,34 @@ $OKUsers |
 # 2. Defining helper functions to get/remove permanent events
 Function Get-WMIPE {
   '*** Event Filters Defined ***'
-  Get-CimInstance -Namespace root\subscription -ClassName __EventFilter  |
+  $NS = 'ROOT\subscription'
+  $CLass1 = '__EventFilter'
+  Get-CimInstance -Namespace $NS -ClassName $CLass1 |
     Where-Object Name -eq "EventFilter1" |
      Format-Table Name, Query
   '***Consumer Defined ***'
-  $NS = 'ROOT\subscription'
-  $CN = 'CommandLineEventConsumer'
-  Get-CimInstance -Namespace $ns -Classname  $CN |
-    Where-Object {$_.name -eq "EventConsumer1"}  |
+  $Class2 = 'CommandLineEventConsumer'
+  Get-CimInstance -Namespace $NS -Classname  $Class2 |
+    Where-Object {$_.Name -eq "EventConsumer1"}  |
      Format-Table Name, Commandlinetemplate
   '***Bindings Defined ***'
-  Get-CimInstance -Namespace root\subscription -ClassName __FilterToConsumerBinding |
+  $Class3 = '__FilterToConsumerBinding'
+  Get-CimInstance -Namespace root\subscription -ClassName $Class3 |
     Where-Object -FilterScript {$_.Filter.Name -eq "EventFilter1"} |
       Format-Table Filter, Consumer
 }
 Function Remove-WMIPE {
-  Get-CimInstance -Namespace root\subscription __EventFilter | 
+  $NS     = 'Root\Subscription'
+  $Class1 = '__EventFilter'
+  $Class2 = 'CommandLineEventConsumer'
+  $Class3 = '__FilterToConsumerBinding'
+  Get-CimInstance -Namespace $NS -Classname $class1  | 
     Where-Object Name -eq "EventFilter1" |
       Remove-CimInstance
-  Get-CimInstance -Namespace root\subscription CommandLineEventConsumer | 
+  Get-CimInstance -Namespace $NS -ClassName $Class2 | 
     Where-Object Name -eq 'EventConsumer1' |
       Remove-CimInstance
-  Get-CimInstance -Namespace root\subscription __FilterToConsumerBinding  |
+  Get-CimInstance -Namespace $NS -ClassName $Class3 |
     Where-Object -FilterScript {$_.Filter.Name -eq 'EventFilter1'}   |
       Remove-CimInstance
 }
@@ -62,7 +68,7 @@ $IHT = @{
 }        
 $InstanceFilter = New-CimInstance @IHT
 
-# 5. 5.	Creating the Monitor.ps1 script run when the WMI event occurs
+# 5. Creating the Monitor.ps1 script run when the WMI event occurs
 $MONITOR = @'
 $LogFile   = 'C:\Foo\Grouplog.Txt'
 $Group     = 'Enterprise Admins'

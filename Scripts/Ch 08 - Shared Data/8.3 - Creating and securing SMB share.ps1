@@ -22,7 +22,7 @@ $FldrEnumHT = @{
   FolderEnumerationMode = 'AccessBased'
   Force                 = $True
 }
-Set-SMBShare @FldrEnumHT @ForceHT
+Set-SMBShare @FldrEnumHT 
 
 # 5. Setting encryption on for ITShare share
 Set-SmbShare -Name ITShare -EncryptData $true -Force
@@ -42,34 +42,34 @@ $AdminHT2 = @{
   AccountName  = 'Reskit\ADMINISTRATOR'
   ConFirm      =  $false 
 } 
-Grant-SmbShareAccess @AHT2 
+Grant-SmbShareAccess @AdminHT2
 
 # 8. Adding system full access
-$AHT3 = @{
+$AdminHT3 = @{
     Name          = 'ITShare'
     AccessRight   = 'Full'
     AccountName   = 'NT Authority\SYSTEM'
     Confirm       = $False 
 }
-Grant-SmbShareAccess  @AHT3 | Out-Null
+Grant-SmbShareAccess  @AdminHT3 | Out-Null
 
 # 9. Setting Creator/Owner to Full Access
-$AHT4 = @{
+$AdminHT4 = @{
     Name         = 'ITShare'
     AccessRight  = 'Full'
     AccountName  = 'CREATOR OWNER'
     Confirm      = $False 
 }
-Grant-SmbShareAccess @AHT4  | Out-Null
+Grant-SmbShareAccess @AdminHT4  | Out-Null
 
 # 10. Granting Sales group read access, SalesAdmins has Full access
-$AHT5 = @{
+$AdminHT5 = @{
     Name        = 'ITShare'
     AccessRight = 'Read'
     AccountName = 'Sales'
     Confirm     = $false 
 }
-Grant-SmbShareAccess @AHT5 | Out-Null
+Grant-SmbShareAccess @AdminHT5 | Out-Null
 
 # 11. Reviewing share access
 Get-SmbShareAccess -Name ITShare | 

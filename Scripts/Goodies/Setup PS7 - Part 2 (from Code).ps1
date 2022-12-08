@@ -24,7 +24,7 @@ $CascadiaPath    = 'https://github.com'+ ($CascadiaRelease.Links.href |
                         Select-Object -First 1)
 $CascadiaFile   = "C:\Foo\$CascadiaFont.zip"
 Invoke-WebRequest -Uri $CascadiaPath -OutFile $CascadiaFile
-$CascadiaFontFolder = 'C:\Foo\CascadiaCode'
+$CascadiaFontFolder = 'C:\Foo\CascadiaCode\'
 Expand-Archive -Path $CascadiaFile -DestinationPath $CascadiaFontFolder
 $FontFile = '\Foo\CascadiaCode\ttf\CascadiaCode.ttf'
 $FontShellApp = New-Object -Com Shell.Application

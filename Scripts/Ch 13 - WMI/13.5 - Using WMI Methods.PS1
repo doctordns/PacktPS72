@@ -35,3 +35,11 @@ Get-CimInstance -Class Win32_Share -Filter "Name = 'TestShare1'"
 Get-CimInstance -Class Win32_Share -Filter "Name = 'TestShare1'" |
   Invoke-CimMethod -MethodName Delete
 
+
+
+
+
+
+
+
+  
