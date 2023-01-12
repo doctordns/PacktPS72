@@ -69,14 +69,14 @@ $IHT = @{
 $InstanceFilter = New-CimInstance @IHT
 
 # 5. Creating the Monitor.ps1 script run when the WMI event occurs
-$MONITOR = @'
+$Monitor = @'
 $LogFile   = 'C:\Foo\Grouplog.Txt'
 $Group     = 'Enterprise Admins'
 "On:  [$(Get-Date)]  Group [$Group] was changed" | 
   Out-File -Force $LogFile -Append -Encoding Ascii
 $ADGM = Get-ADGroupMember -Identity $Group
 # Display who's in the group
-"Group Membership"
+"Group Membership"9+//
 $ADGM | Format-Table Name, DistinguishedName |
   Out-File -Force $LogFile -Append  -Encoding Ascii
 $OKUsers = Get-Content -Path C:\Foo\OKUsers.txt
@@ -90,7 +90,7 @@ foreach ($User in $ADGM) {
 "**********************************`n`n" | 
 Out-File -Force $LogFile -Append -Encoding Ascii
 '@
-$MONITOR | Out-File -Path C:\Foo\Monitor.ps1
+$Monitor | Out-File -Path C:\Foo\Monitor.ps1
 
 # 6. Creating a WMI event consumer
 #    The consumer runs PowerShell 7 to execute C:\Foo\Monitor.ps1

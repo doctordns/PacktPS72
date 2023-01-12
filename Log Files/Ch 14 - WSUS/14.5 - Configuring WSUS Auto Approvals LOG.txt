@@ -1,0 +1,61 @@
+# Recipe 14.5 - Configuring WSUS Auto Approvals
+#
+#  Run on SRV1
+
+
+# 1. Creating a remoting session to WSUS1
+
+
+no output
+
+
+
+# 2. Creating the auto-approval rule
+
+
+no output
+
+
+
+# 3. Defining a deadline for the rule
+
+
+no output
+
+
+# 4. Adding update classifications to the rule:
+
+
+no output
+
+
+
+# 5. Assigning the rule to a computer target group
+
+
+
+no output
+
+
+
+# 6. Enabling the rule
+
+
+no output
+
+
+
+
+PS C:\Foo> # 7. Geting a list of approval rules
+PS C:\Foo> Invoke-Command -Session $Session -ScriptBlock{
+             $WSUSServer.GetInstallApprovalRules()   |
+               Format-Table -Property Name, Enabled, Action
+           }
+
+Name                            Enabled  Action
+----                            -------  ------
+Default Automatic Approval Rule   False Install
+Critical Updates                   True Install
+
+
+

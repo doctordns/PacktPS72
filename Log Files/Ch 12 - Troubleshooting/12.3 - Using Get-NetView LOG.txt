@@ -54,7 +54,7 @@ no output
 
 
 
-PS C:\Foo> # 6. Running Get-View4
+PS C:\Foo> # 6. Running Get-NetView
 PS C:\Foo> Get-NetView -OutputDirectory $FolderName
 Transcript started, output file is C:\NetViewOutput\msdbg.SRV1\Get-NetView.log
 (   988 ms) Get-Service "*" | Sort-Object Name | Format-Table -AutoSize
@@ -83,7 +83,7 @@ HNSDetail: hns service not found, skipping.
 
 
 PS C:\NetViewOutput> # 7. Viewing the output folder using Get-ChildItem
-PS C:\NetViewOutput> $OutputDetails = Get-ChildItem $OF
+PS C:\NetViewOutput> $OutputDetails = Get-ChildItem $FolderName
 PS C:\NetViewOutput> $OutputDetails
 
     Directory: C:\NetViewOutput
@@ -92,24 +92,6 @@ Mode                 LastWriteTime         Length Name
 ----                 -------------         ------ ----
 d----          03/11/2022    13:44                msdbg.SRV1
 -a---          03/11/2022    13:44       76218062 msdbg.SRV1-2022.11.03_01.43.12.zip
-
-
-
-
-
-
-PS C:\Foo> # 7. Viewing the output folder using Get-ChildItem
-PS C:\Foo> $OutputDetails = Get-ChildItem $OF
-PS C:\Foo> $OutputDetails
-
-    Directory: C:\NetViewOutput
-
-Mode                 LastWriteTime         Length Name
-----                 -------------         ------ ----
-d----          03/11/2022    13:44                msdbg.SRV1
--a---          03/11/2022    13:44       76218062 msdbg.SRV1-2022.11.03_01.43.12.zip
-
-
 
 
 

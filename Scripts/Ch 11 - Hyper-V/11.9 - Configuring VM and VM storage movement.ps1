@@ -9,7 +9,7 @@ Get-VM -Name PSDirect -Computer HV1
 # 2. Getting the VM configuration location 
 (Get-VM -Name PSDirect).ConfigurationLocation 
 
-# 3. Getting the virtual hard drive locations
+# 3. Getting the virtual hard disk locations
 Get-VMHardDiskDrive -VMName PSDirect | 
   Format-Table -Property VMName, ControllerType, Path
 

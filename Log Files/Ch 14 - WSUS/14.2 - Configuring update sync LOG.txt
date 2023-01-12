@@ -11,7 +11,7 @@ no output
 
 
 
-PS C:\Foo> # 2. Locating versions of WIndows Server supported by Windows Update
+PS C:\Foo> # 2. Locating versions of Windows Server supported by Windows Update
 PS C:\Foo> Invoke-Command -Session $Session -ScriptBlock {
               Get-WsusProduct |
                 Where-Object -FilterScript {$_.product.title -match
@@ -197,14 +197,14 @@ no output
 
 
 
-# 11. Starting synchronizing available updates
+# 11. Looping and waiting for syncronization to complete
 
 
 
 
 
 
-PS C:\Foo> # 12. Synchronizing the updates which can take a long while to comolete
+PS C:\Foo> # 12. Synchronizing the updates which can take a long while to complete
 PS C:\Foo> Invoke-Command -Session $Session -ScriptBlock {
              $IntervalSeconds = 15
              $NP = 'NotProcessing'
@@ -217,10 +217,15 @@ PS C:\Foo> Invoke-Command -Session $Session -ScriptBlock {
 PSComputerName : WSUS1
 RunspaceId     : 77ec8cff-d1f6-4c90-a11d-4cef89201968
 TotalItems     : 31327
-ProcessedItems : 730
+ProcessedItems : 420
 Phase          : Updates
 
-
+PSComputerName : WSUS1
+RunspaceId     : 77ec8cff-d1f6-4c90-a11d-4cef89201968
+TotalItems     : 31327
+ProcessedItems : 730
+Phase          : Updates
+PS C:\Foo>
 
 
 
@@ -247,6 +252,16 @@ RunspaceId     : 77ec8cff-d1f6-4c90-a11d-4cef89201968
 TotalItems     : 31327
 ProcessedItems : 3576
 Phase          : Updates
+
+PSComputerName : WSUS1
+RunspaceId     : 77ec8cff-d1f6-4c90-a11d-4cef89201968
+TotalItems     : 31327
+ProcessedItems : 24204
+Phase          : Updates
+PS C:\Foo> 
+
+
+
 
 
 

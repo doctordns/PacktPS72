@@ -1,0 +1,153 @@
+#  Recipe 14.6 - Managing Updates
+#
+#  Run on SRV1 after earlier recipes are completed.
+
+
+
+# 1. Creating a remoting session to WSUS1
+
+
+no output
+
+
+
+PS C:\Foo> # 2. Viewing the status of WSUS1
+PS C:\Foo> Invoke-Command -Session $Session -ScriptBlock {
+             $WSUSServer = Get-WsusServer
+             $WSUSServer.GetStatus()
+           }
+
+PSComputerName                                      : WSUS1
+RunspaceId                                          : aaeea23c-8aff-4460-abc8-5580828dfb01
+UpdateCount                                         : 26471
+DeclinedUpdateCount                                 : 539
+ApprovedUpdateCount                                 : 18
+NotApprovedUpdateCount                              : 25914
+UpdatesWithStaleUpdateApprovalsCount                : 0
+ExpiredUpdateCount                                  : 0
+CriticalOrSecurityUpdatesNotApprovedForInstallCount : 15474
+WsusInfrastructureUpdatesNotApprovedForInstallCount : 0
+UpdatesWithClientErrorsCount                        : 0
+UpdatesWithServerErrorsCount                        : 0
+UpdatesNeedingFilesCount                            : 0
+UpdatesNeededByComputersCount                       : 46
+UpdatesUpToDateCount                                : 25886
+CustomComputerTargetGroupCount                      : 1
+ComputerTargetCount                                 : 13
+ComputerTargetsNeedingUpdatesCount                  : 12
+ComputerTargetsWithUpdateErrorsCount                : 0
+ComputersUpToDateCount                              : 0
+UnrecognizedClientRequestedTargetGroupNames         : {}
+ShouldDeleteUnneededRevisions                       : False
+
+
+PS C:\Foo> # 3. Viewing computer targets
+PS C:\Foo> Invoke-Command -Session $Session -ScriptBlock {
+             $WSUSServer.GetComputerTargets() | 
+               Sort-Object -Property FullDomainName |
+                 Format-Table -Property FullDomainName, IPAddress, Last*
+           }
+
+FullDomainName   IPAddress                   LastSyncTime        LastSyncResult LastReportedStatusTime LastReportedInventoryTime
+--------------   ---------                   ------------        -------------- ---------------------- -------------------------
+ch1.reskit.org   10.10.10.221                11/12/2022 13:58:36      Succeeded 11/12/2022 14:06:54    01/01/0001 00:00:00
+dc1.reskit.org   10.10.10.10                 11/12/2022 15:56:15      Succeeded 11/12/2022 16:04:22    01/01/0001 00:00:00
+dc2.reskit.org   10.10.10.11                 11/12/2022 14:28:41      Succeeded 11/12/2022 14:36:46    01/01/0001 00:00:00
+fs1.reskit.org   10.10.10.101                11/12/2022 13:58:50      Succeeded 11/12/2022 14:06:59    01/01/0001 00:00:00
+fs2.reskit.org   10.10.10.102                11/12/2022 13:58:26      Succeeded 11/12/2022 14:06:36    01/01/0001 00:00:00
+hv1.reskit.org   10.10.10.201                11/12/2022 13:58:49      Succeeded 11/12/2022 14:06:59    01/01/0001 00:00:00
+hv2.reskit.org   10.10.10.202                11/12/2022 13:58:51      Succeeded 11/12/2022 14:07:00    01/01/0001 00:00:00
+psrv.reskit.org  10.10.10.60                 11/12/2022 14:59:07      Succeeded 11/12/2022 15:07:19    01/01/0001 00:00:00
+smtp.reskit.org  10.10.10.49                 11/12/2022 10:54:59      Succeeded 11/12/2022 10:57:01    01/01/0001 00:00:00
+srv1.reskit.org  10.10.10.50                 11/12/2022 16:23:24      Succeeded 11/12/2022 13:06:36    01/01/0001 00:00:00
+srv2.reskit.org  10.10.10.52                 11/12/2022 11:52:24      Succeeded 11/12/2022 12:00:32    01/01/0001 00:00:00
+ss1.reskit.org   10.10.10.111                11/12/2022 13:58:51      Succeeded 11/12/2022 14:06:59    01/01/0001 00:00:00
+wsus1.reskit.org fe80::8672:8cc3:1e91:da0f%3 11/12/2022 06:00:52      Succeeded 11/12/2022 06:09:01    01/01/0001 00:00:00
+
+
+
+# 4.  Searching forupdates with titles containing Windows Server 2019
+
+
+NO output
+
+
+
+PS C:\Foo> # 5. Viewing the matching updates (first 10)
+PS C:\Foo> Invoke-Command -Session $Session -ScriptBlock {
+             $SecurityUpdates |
+               Sort-Object -Property Title |
+                 Select-Object -First 10 |
+                   Format-Table -Property Title, Description
+           }
+
+Title                                                                                                                                                      Description
+-----                                                                                                                                                      -----------
+2021-11 Cumulative security Hotpatch for Azure Stack HCI, version 21H2 and Windows Server 2022 Datacenter: Azure Edition for x64-based Systems (KB5007386) Install this update to resol… 
+2021-12 Cumulative security Hotpatch for Azure Stack HCI, version 21H2 and Windows Server 2022 Datacenter: Azure Edition for x64-based Systems (KB5008286) Install this update to resol… 
+2022-02 Cumulative security Hotpatch for Azure Stack HCI, version 21H2 and Windows Server 2022 Datacenter: Azure Edition for x64-based Systems (KB5010456) Install this update to resol… 
+2022-03 Cumulative security Hotpatch for Azure Stack HCI, version 21H2 and Windows Server 2022 Datacenter: Azure Edition for x64-based Systems (KB5011580) Install this update to resol… 
+2022-06 Cumulative security Hotpatch for Azure Stack HCI, version 21H2 and Windows Server 2022 Datacenter: Azure Edition for x64-based Systems (KB5014677) Install this update to resol… 
+2022-09 Cumulative security Hotpatch for Azure Stack HCI, version 21H2 and Windows Server 2022 Datacenter: Azure Edition for x64-based Systems (KB5017392) Install this update to resol… 
+2022-11 Cumulative security Hotpatch for Azure Stack HCI, version 21H2 and Windows Server 2022 Datacenter: Azure Edition for x64-based Systems (KB5019080) Install this update to resol… 
+
+
+
+
+# 6. Selecting one of the updates to approve based on the KB article ID
+
+
+
+
+no output
+
+
+# 7. Defining the computer target group 
+
+
+
+
+
+no output
+
+
+
+
+PS C:\Foo> # 8. Approving the update for installation in the target group
+PS C:\Foo> Invoke-Command -Session $Session -ScriptBlock {
+             $SelectedUpdate.Approve('Install',$SRVTargetGroup)
+           }
+
+PSComputerName        : WSUS1
+RunspaceId            : aaeea23c-8aff-4460-abc8-5580828dfb01
+UpdateServer          : Microsoft.UpdateServices.Internal.BaseApi.UpdateServer
+Id                    : 678c6d2f-f575-4ade-95b1-9521942a8df6
+CreationDate          : 11/12/2022 19:26:26
+Action                : Install
+GoLiveTime            : 11/12/2022 19:26:26
+Deadline              : 31/12/9999 23:59:59
+IsOptional            : False
+State                 : Pending
+AdministratorName     : RESKIT\Administrator
+UpdateId              : Microsoft.UpdateServices.Administration.UpdateRevisionId
+ComputerTargetGroupId : 3a409534-50c7-4159-af22-caea674d5ff1
+IsAssigned            : True
+
+
+
+
+
+
+# 9. Selecting one of the updates to decline based on a KB article ID
+
+
+
+
+no output
+
+
+# 10. Declining the update
+
+
+
+no output
