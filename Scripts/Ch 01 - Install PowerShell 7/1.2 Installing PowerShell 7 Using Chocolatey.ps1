@@ -22,5 +22,5 @@ choco feature enable -n allowGlobalConfirmation
 # 5. Find PowerShell (PWSH) on Chocolatey
 choco find pwsh
 
-# 6. Install PowerShell-7 using coco.exe
+# 6. Install PowerShell-7 using choco.exe
 choco install powershell-core --force
