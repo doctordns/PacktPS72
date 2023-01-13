@@ -110,14 +110,14 @@ $XML | Out-File -FilePath C:\Foo\Layout.Xml
 Import-StartLayout -LayoutPath C:\Foo\Layout.Xml -MountPath C:\
 
 # 13. Creating a profile file for PWSH 7 Consoles
-$ProfileFolder = 
+$ProfileFolder =
   Join-Path ($Env:homeDrive+ $env:HOMEPATH) 'Documents\PowerShell'
 $ProfileFile2   = 'Microsoft.PowerShell_Profile.ps1'
-$ConsoleProfile = 
+$ConsoleProfile =
   Join-Path -Path $ProfileFolder -ChildPath $ProfileFile2
 New-Item $ConsoleProfile -Force -WarningAction SilentlyContinue |
    Out-Null
-$URI2 = 
+$URI2 =
   'https://raw.githubusercontent.com/doctordns/PacktPS72/main/' +
   "Scripts/Goodies//$ProfileFile2"
 (Invoke-WebRequest -Uri $URI2).Content |

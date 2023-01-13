@@ -27,7 +27,7 @@ $ModPath |
 # 6. Checking the modules
 $TotalCommands = 0
 Foreach ($Path in $ModPath){
-  Try { 
+  Try {
     $Modules = Get-ChildItem -Path $Path -Directory -ErrorAction Stop
     "Checking Module Path:  [$Path]"
   }

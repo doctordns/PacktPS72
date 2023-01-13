@@ -5,21 +5,15 @@
 
 # 1. Getting download locations
 $CascadiaFont    = 'CascadiaCode'    # font file name (sans exetension)
-$CascadiaRelURL  = 
+$CascadiaRelURL  =
         'https://github.com/microsoft/cascadia-code/releases'
 $CascadiaRelease = Invoke-WebRequest -Uri $CascadiaRelURL
 
 $ReleaseTAG = $CascadiaRelease.Links.href |
                 Where-Object { $_ -match 'Releases/tag'} |
-                  Select-Object -First 1 
+                  Select-Object -First 1
 $ReleasePg =   'https://github.com/' + $ReleaseTAG
-$LatestRelease = Invoke-WebRequest -Uri $ReleasePg
-
-
-                        
-https://github.com/microsoft/cascadia-code/releases/download/v2111.01/CascadiaCode-2111.01.zip
-
-
+# $LatestRelease = Invoke-WebRequest -Uri $ReleasePg
 $CascadiaFile   = 'C:\Foo\CascadiaFontDL.zip' # where it goes
 
 # 2. Downloading the Cascadia Code font file archive
