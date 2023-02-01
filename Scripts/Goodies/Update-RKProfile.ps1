@@ -24,27 +24,27 @@ Else {
 Write-Host "Creating Default profiles"
 $URI = 'https://raw.githubusercontent.com/doctordns/Wiley20/master/' +
        'Goodies/Microsoft.PowerShell_Profile.ps1'
-$ProfileFile = 
+$ProfileFile =
   "$env:UserProfile\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1"
 New-Item $ProfileFile -Force -WarningAction SilentlyContinue |
    Out-Null
-(Invoke-WebRequest -Uri $URI).Content | 
+(Invoke-WebRequest -Uri $URI).Content |
   Out-File -FilePath  $ProfileFile
 
 $ProfilePath = Split-Path -Path $ProfileFile
 $ISEProfile = Join-Path -Path $ProfilePath -ChildPath 'Microsoft.PowerShellISE_profile.ps1'
 New-Item $ISEProfile -Force -WarningAction SilentlyContinue |
    Out-Null
-(Invoke-WebRequest -Uri $URI).Content | 
+(Invoke-WebRequest -Uri $URI).Content |
   Out-File -FilePath  $ISEProfile
 
 # 4. Create VS Code Profile
 Write-Host "Creating VS Code Default profile"
-$VSCodeProfileFile = 
+$VSCodeProfileFile =
 "$env:UserProfile\Documents\PowerShell\Microsoft.VSCode_profile.ps1"
 
 New-Item $VSCodeProfileFile -Force -WarningAction SilentlyContinue | Out-Null
-$VSCodePS7Sample = 
+$VSCodePS7Sample =
   'https://raw.githubusercontent.com/doctordns/PACKT-PS7/master/' +
   'scripts/goodies/Microsoft.VSCode_profile.ps1'
 Start-BitsTransfer -Source $VSCodePS7Sample -Destination $VSCodeProfileFile
@@ -53,7 +53,7 @@ Write-Host 'Creating PWSH 7 Console Profile'
 $ProfilePath = Split-Path -Path $VSCodeProfileFile
 $ConsoleProfile = Join-Path -Path $ProfilePath -ChildPath 'Microsoft.PowerShell_profile.ps1'
 New-Item $ConsoleProfile -Force -WarningAction SilentlyContinue | Out-Null
-$ConsolePS7Sample = 
+$ConsolePS7Sample =
   'https://raw.githubusercontent.com/doctordns/PACKT-PS7/master/' +
   'scripts/goodies/Microsoft.PowerShell_Profile.ps1'
 Start-BitsTransfer -Source $ConsolePS7Sample -Destination $ConsoleProfile

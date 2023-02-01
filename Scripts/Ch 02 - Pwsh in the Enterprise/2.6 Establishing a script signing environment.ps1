@@ -5,14 +5,14 @@
 # 1. Creating a script-signing self-signed certificate
 $CHT = @{
   Subject           = 'Reskit Code Signing'
-  Type              = 'CodeSigning' 
+  Type              = 'CodeSigning'
   CertStoreLocation = 'Cert:\CurrentUser\My'
 }
 New-SelfSignedCertificate @CHT | Out-Null
 
 # 2. Displaying the newly created certificate
 $Cert = Get-ChildItem -Path Cert:\CurrentUser\my -CodeSigningCert
-$Cert | 
+$Cert |
   Where-Object {$_.SubjectName.Name -match $CHT.Subject}
 
 # 3. Creating and viewing a simple script
@@ -42,20 +42,20 @@ Get-AuthenticodeSignature -FilePath C:\Foo\Signed.ps1 |
   Format-List
 
 # 8. Running the signed script
-C:\Foo\Signed.ps1  
+C:\Foo\Signed.ps1
 
 # 9. Setting the execution policy to all signed for this process
 Set-ExecutionPolicy -ExecutionPolicy AllSigned -Scope Process
 
 # 10. Running the signed script
-C:\Foo\Signed.ps1  
+C:\Foo\Signed.ps1
 
 # 11. Copying Certificate to Current User Trusted Root store
 $DestStoreName  = 'Root'
 $DestStoreScope = 'CurrentUser'
 $Type   = 'System.Security.Cryptography.X509Certificates.X509Store'
 $MHT = @{
-  TypeName = $Type  
+  TypeName = $Type
   ArgumentList  = ($DestStoreName, $DestStoreScope)
 }
 $DestStore = New-Object  @MHT
@@ -65,18 +65,18 @@ $DestStore.Add($Cert)
 $DestStore.Close()
 
 # 12. Checking the signature
-Get-AuthenticodeSignature -FilePath C:\Foo\Signed.ps1 | 
+Get-AuthenticodeSignature -FilePath C:\Foo\Signed.ps1 |
   Format-List
-  
+
 # 13. Running the signed script
-C:\Foo\Signed.ps1 
- 
+C:\Foo\Signed.ps1
+
 # 14. Copying cert to Trusted Publisher store
 $DestStoreName  = 'TrustedPublisher'
 $DestStoreScope = 'CurrentUser'
 $Type   = 'System.Security.Cryptography.X509Certificates.X509Store'
 $MHT = @{
-  TypeName = $Type  
+  TypeName = $Type
   ArgumentList  = ($DestStoreName, $DestStoreScope)
 }
 $DestStore = New-Object  @MHT
@@ -86,7 +86,7 @@ $DestStore.Add($Cert)
 $DestStore.Close()
 
 # 15. Running the signed script
-C:\Foo\Signed.ps1  
+C:\Foo\Signed.ps1 
 
 # 16. Resetting the Execution Policy for this process
 Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope Process
@@ -97,7 +97,7 @@ Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope Process
 # For testing = to remove the cert and the file
 
 Get-ChildItem -Path Cert:\ -Recurse | 
-  Where-Object subject -match 'Reskit Code Signing' | 
+  Where-Object subject -match 'Reskit Code Signing' |
     Remove-item -Force
 Remove-Item C:\Foo\signed.ps1
 

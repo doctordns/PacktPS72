@@ -7,9 +7,9 @@
 $ID = [System.Security.Principal.WindowsIdentity]::GetCurrent()
 $P = New-Object System.Security.Principal.WindowsPrincipal($ID)
 $Role = $P.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
-if ($Role) { 
+if ($Role) {
   Write-Host "Running in elevated console"
-}  else  { 
+}  else  {
   Write-Host "Not running in elevated console"
   exit
 }
@@ -18,7 +18,7 @@ if ($Role) {
 Write-Host "Creating VS Code Default profile"
 $VSCodeProfileFile = $Profile.CurrentUserCurrentHost
 New-Item $VSCodeProfileFile -Force -WarningAction SilentlyContinue | Out-Null
-$VSCodePS7Sample = 
+$VSCodePS7Sample =
   'https://raw.githubusercontent.com/doctordns/PACKT-PS7/master/' +
   'scripts/goodies/Microsoft.VSCode_profile.ps1'
 Start-BitsTransfer -Source $VSCodePS7Sample -Destination $VSCodeProfileFile
@@ -27,7 +27,7 @@ Write-Host 'Creating PWSH 7 Console Profile'
 $ProfilePath = Split-Path -Path $VSCodeProfileFile
 $ConsoleProfile = Join-Path -Path $ProfilePath -ChildPath 'Microsoft.PowerShell_profile.ps1'
 New-Item $ConsoleProfile -Force -WarningAction SilentlyContinue | Out-Null
-$ConsolePS7Sample = 
+$ConsolePS7Sample =
   'https://raw.githubusercontent.com/doctordns/PACKT-PS7/master/' +
   'scripts/goodies/Microsoft.PowerShell_Profile.ps1'
 Start-BitsTransfer -Source $ConsolePS7Sample -Destination $ConsoleProfile
@@ -67,7 +67,7 @@ $JHT |
 # 4. Create VSCode Profile for PowerShell 7
 Write-Host 'Creating PowerShell 7 VS Code Profile'
 $CUCHProfile   = $profile.CurrentUserCurrentHost
-$ProfileFolder = Split-Path -Path $CUCHProfile 
+$ProfileFolder = Split-Path -Path $CUCHProfile
 $ProfileFile   = 'Microsoft.VSCode_profile.ps1'
 $VSProfile     = Join-Path -Path $ProfileFolder -ChildPath $ProfileFile
 $URI = 'https://raw.githubusercontent.com/doctordns/PACKT-PS7/master/' +

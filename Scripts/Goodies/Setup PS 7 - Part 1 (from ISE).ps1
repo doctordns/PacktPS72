@@ -13,7 +13,7 @@ Write-Host 'Updating PowerShellGet and Nuget'
 Install-PackageProvider Nuget -MinimumVersion 2.8.5.201 -Force |
   Out-Null
 Get-Module | Remove-Module -Force
-Install-Module -Name PowerShellGet -Force -AllowClobber 
+Install-Module -Name PowerShellGet -Force -AllowClobber
 
 # 3. Ensure the C:\Foo Folder exists
 Write-Host 'Creating C:\Foo'
@@ -27,14 +27,14 @@ New-Item -Path C:\Foo @LFHT | Out-Null
 Write-Host "Downloading Pwsh 7.2 installation script"
 Set-Location C:\Foo
 $URI = 'https://aka.ms/install-powershell.ps1'
-Invoke-RestMethod -Uri $URI | 
+Invoke-RestMethod -Uri $URI |
   Out-File -FilePath C:\Foo\Install-PowerShell.ps1
 
 # 5. Install PowerShell 7
 Write-Host "Installing Pwsh 7.2"
 $EXTHT = @{
   UseMSI                 = $true
-  Quiet                  = $true 
+  Quiet                  = $true
   AddExplorerContextMenu = $true
   EnablePSRemoting       = $true
 }
@@ -56,11 +56,11 @@ $URI = 'https://raw.githubusercontent.com/doctordns/Wiley20/master/' +
 $ProfileFile = $Profile.CurrentUserCurrentHost
 New-Item $ProfileFile -Force -WarningAction SilentlyContinue |
    Out-Null
-(Invoke-WebRequest -Uri $URI).Content | 
+(Invoke-WebRequest -Uri $URI).Content |
   Out-File -FilePath  $ProfileFile
 $ProfilePath = Split-Path -Path $ProfileFile
 $ConsoleProfile = Join-Path -Path $ProfilePath -ChildPath 'Microsoft.PowerShell_profile.ps1'
-(Invoke-WebRequest -Uri $URI).Content | 
+(Invoke-WebRequest -Uri $URI).Content |
   Out-File -FilePath  $ConsoleProfile
 
 # 8. Download the VS Code installation script from PS Gallery
@@ -80,7 +80,7 @@ $InstallHT = @{
   BuildEdition         = 'Stable-System'
   AdditionalExtensions = $Extensions
   LaunchWhenDone       = $true
-}             
+}
 .\Install-VSCode.ps1 @InstallHT -ea 0 | Out-Null
 
 # 10. Define registry path for autologon, then set admin logon
@@ -88,11 +88,11 @@ Write-Host 'Setting Autologon'
 $RegPath  = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon'
 $User     = 'Administrator'
 $Password = 'Pa$$w0rd'
-$Dom      = 'Reskit'  
-Set-ItemProperty -Path $RegPath -Name DefaultUserName   -Value $User     -EA 0  
+$Dom      = 'Reskit'
+Set-ItemProperty -Path $RegPath -Name DefaultUserName   -Value $User     -EA 0
 Set-ItemProperty -Path $RegPath -Name DefaultPassword   -Value $Password -EA 0
-Set-ItemProperty -Path $RegPath -Name DefaultDomainName -Value $Dom      -EA 0 
-Set-ItemProperty -Path $RegPath -Name AutoAdminLogon    -Value 1         -EA 0  
+Set-ItemProperty -Path $RegPath -Name DefaultDomainName -Value $Dom      -EA 0
+Set-ItemProperty -Path $RegPath -Name AutoAdminLogon    -Value 1         -EA 0
 
 # 11. Set the PowerConfig to not turn off the virtual monitor
 Write-Host 'Setting Monitor poweroff to zero'

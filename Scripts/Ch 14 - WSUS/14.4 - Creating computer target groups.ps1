@@ -9,7 +9,7 @@ $SessionHT = @{
     Name              = 'WSUS'
   }
 $Session = New-PSSession @SessionHT
-  
+
 # 2.  Creating a WSUS computer target group for servers
 Invoke-Command -Session $Session -ScriptBlock {
   $WSUSServer = Get-WsusServer  -Name WSUS1 -port 8530
@@ -45,7 +45,7 @@ Invoke-Command -Session $Session -ScriptBlock {
 Invoke-Command -Session $Session -ScriptBlock {
   Get-WsusComputer |
     Where-Object ComputerTargetGroupIDs -Contains $SRVGroup.id |
-      Sort-Object -Property FullDomainName | 
+      Sort-Object -Property FullDomainName |
           Format-Table -Property FullDomainName, ClientVersion,
                                  LastSyncTime
 }

@@ -30,7 +30,7 @@ Set-Location -Path ~
 Write-Host 'Setting home to C:\Foo'
 
 # 6. Add a new function Get-HelpDetailed
-Function Get-HelpDetailed { 
+Function Get-HelpDetailed {
     Get-Help $args[0] -Detailed
 } # END Get-HelpDetailed Function
 

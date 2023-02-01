@@ -33,15 +33,15 @@ $CountOfModulesBeforeRSAT = $ModulesBefore.Count
 
 # 6. Getting a count of features actually available on SRV1
 Import-Module -Name ServerManager -WarningAction SilentlyContinue
-$Features = Get-WindowsFeature 
-$FeaturesInstalled = $Features | 
-                       Where-Object Installed 
+$Features = Get-WindowsFeature
+$FeaturesInstalled = $Features |
+                       Where-Object Installed
 $Rsatfeatures = $Features |
                   Where-Object Name -Match 'RSAT'
-$RsatFeaturesInstalled = $Rsatfeatures | 
+$RsatFeaturesInstalled = $Rsatfeatures |
                   Where-Object Installed 
 
-# 7. Displaying counts of features 
+# 7. Displaying counts of features
 "On Host [$(hostname)]"
 "Total features available      [{0}]" -f $Features.Count
 "Total features installed      [{0}]" -f $FeaturesInstalled.Count

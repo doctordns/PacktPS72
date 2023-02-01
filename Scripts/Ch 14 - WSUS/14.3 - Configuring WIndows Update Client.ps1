@@ -1,4 +1,4 @@
-# Recipe 6.3 -  Configuring the Windows Update client Via GPO
+# Recipe 14.3 -  Configuring the Windows Update client Via GPO
 #
 # Run on srv1
 
@@ -8,17 +8,17 @@ Install-WindowsFeature -Name GPMC -IncludeManagementTools | Out-Null
 # 2. Creating a new policy and linking it to the domain
 $PolicyName = 'Reskit WSUS Policy'
 New-GPO -Name $PolicyName
-New-GPLink -Name $PolicyName -Target 'dc=reskit,dc=org' 
+New-GPLink -Name $PolicyName -Target 'dc=reskit,dc=org'
 
 # 3. Configuring SRV1 to Use WSUS for updates
 $WSUSKEY = 'HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate\AU'
 $RVHT1 = @{
-  Name       = $PolicyName 
+  Name       = $PolicyName
   Key        = $WSUSKEY
   ValueName  = 'UseWUServer'
   Type       = 'DWORD'
   Value      = 1
-} 
+}
 Set-GPRegistryValue @RVHT1 | Out-Null
 
 # 4. Setting AU options
@@ -49,18 +49,18 @@ ValueName = 'WUServer'
 Type      = 'String'
 Value     = $WSUSURL
 }
-Set-GPRegistryValue @RVHT3  | Out-Null                   
+Set-GPRegistryValue @RVHT3  | Out-Null
 
-# 6. Setting the WU Status server URL                    
+# 6. Setting the WU Status server URL
 $KEY4 = 'HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate'
 $RVHT4 = @{
 Name       = $PolicyName
 Key        = $KEY4
 ValueName  = 'WUStatusServer'
-Type       = 'String' 
+Type       = 'String'
 Value      = $WSUSURL
 }
-Set-GPRegistryValue @RVHT4 | Out-Null      
+Set-GPRegistryValue @RVHT4 | Out-Null
 
 
 # 7. Viewing a report on the GPO

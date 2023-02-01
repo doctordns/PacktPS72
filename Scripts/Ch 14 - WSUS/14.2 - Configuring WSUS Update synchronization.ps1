@@ -1,4 +1,4 @@
-# Recipe 14.1 - Configuring WUS update synchronization
+# Recipe 14.2 - Configuring WUS update synchronization
 
 # Run on SRV1
 

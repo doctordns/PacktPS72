@@ -30,7 +30,7 @@ Set-Location -Path ~
 Write-Host 'Setting home to C:\Foo'
 
 # 6. Add a new function Get-HelpDetailed and set an alias
-Function Get-HelpDetailed { 
+Function Get-HelpDetailed {
     Get-Help $args[0] -Detailed
 } # End Get-HelpDetailed Function
 
@@ -44,26 +44,25 @@ $Prk = ConvertTo-SecureString 'Pa$$w0rd' -AsPlainText -Force
 $Credrk = New-Object System.Management.Automation.PSCredential $Urk, $Prk
 Write-Host "`$Credrk created for $($Credrk.Username)"
 
-### VS COde specific
-
+### VS Code specific
 # Fix colour scheme if VS Code
 $Path       = $Env:APPDATA
 $CP         = '\Code\User\Settings.json'
 $JsonConfig = Join-Path  $Path -ChildPath $CP
 $ConfigJSON = Get-Content $JsonConfig
-$Theme = $ConfigJson | 
+$Theme = $ConfigJson |
            ConvertFrom-Json | Select-Object -ExpandProperty 'workbench.colorTheme'
-If ($Theme -eq 'Solarized Light' -or 
+If ($Theme -eq 'Solarized Light' -or
     $Theme -eq 'Visual Studio Light' ) {
   Write-Host "Updating VS Code Colour Scheme"
   Set-PSReadLineOption -Colors @{
     Emphasis  = "`e[33m"
     Number    = "`e[34m"
     Parameter = "`e[35m"
-    Variable  = "`e[33m"  
+    Variable  = "`e[33m"
     Member    = "`e[34m"
     Command   = 'red'
-    Operator  = "`e[35m"  
+    Operator  = "`e[35m"
   }
 }
 

@@ -1,4 +1,4 @@
-#  Recipe 144.6 - Managing Updates
+#  Recipe 14.6 - Managing Updates
 #
 #  Run on SRV1 after earlier recipes are completed.
 
@@ -20,7 +20,7 @@ Invoke-Command -Session $Session -ScriptBlock {
 
 # 3. Viewing computer targets
 Invoke-Command -Session $Session -ScriptBlock {
-  $WSUSServer.GetComputerTargets() | 
+  $WSUSServer.GetComputerTargets() |
     Sort-Object -Property FullDomainName |
       Format-Table -Property FullDomainName, IPAddress, Last*
 }
@@ -34,7 +34,7 @@ Invoke-Command -Session $Session -ScriptBlock {
 
 # 5 Viewing the matching updates (first 10)
 Invoke-Command -Session $Session -ScriptBlock {
-  $SecurityUpdates | 
+  $SecurityUpdates |
     Sort-Object -Property Title |
       Select-Object -First 10 |
         Format-Table -Property Title, Description
@@ -46,13 +46,12 @@ Invoke-Command -Session $Session -ScriptBlock {
     Where-Object KnowledgebaseArticles -eq 5019080
 }
 
-
-# 7. Defining the computer target group 
+# 7. Defining the computer target group
 Invoke-Command -Session $Session -ScriptBlock {
   $SRVTargetGroup = $WSUSServer.GetComputerTargetGroups() |
     Where-Object -Property Name -eq 'Domain Servers'
 }
-  
+
 # 8. Approving the update for installation in the target group
 Invoke-Command -Session $Session -ScriptBlock {
   $SelectedUpdate.Approve('Install',$SRVTargetGroup)

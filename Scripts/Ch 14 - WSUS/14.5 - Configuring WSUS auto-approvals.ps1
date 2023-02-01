@@ -13,25 +13,25 @@ $Session = New-PSSession @SessionHT
 # 2. Creating the auto-approval rule
 Invoke-Command -Session $Session -ScriptBlock {
   $WSUSServer = Get-WsusServer
-  $ApprovalRule = 
+  $ApprovalRule =
     $WSUSServer.CreateInstallApprovalRule('Critical Updates')
 }
 
 # 3. Defining a deadline for the rule
 Invoke-Command -Session $Session -ScriptBlock {
-  $Type = 'Microsoft.UpdateServices.Administration.' + 
+  $Type = 'Microsoft.UpdateServices.Administration.' +
           'AutomaticUpdateApprovalDeadline'
   $RuleDeadLine = New-Object -Typename $Type
   $RuleDeadLine.DayOffset = 3
   $RuleDeadLine.MinutesAfterMidnight = 180
   $ApprovalRule.Deadline = $RuleDeadLine
-}  
+}
 
 # 4. Adding update classifications to the rule:
 Invoke-Command -Session $Session -ScriptBlock {
   $UpdateClassifications = $ApprovalRule.GetUpdateClassifications()
   $CriticalUpdates = $WSUSServer.GetUpdateClassifications() |
-    Where-Object -Property Title -eq 'Critical Updates' 
+    Where-Object -Property Title -eq 'Critical Updates'
   $UpdateClassifications.Add($CriticalUpdates) | Out-Null
   $Defs = $WSUSServer.GetUpdateClassifications() |
             Where-Object -Property Title -eq 'Definition Updates'
