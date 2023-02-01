@@ -14,17 +14,17 @@ $Session = New-PSSession @SessionHT
 # 2. Installing WSUS on WSUS1
 $ScriptBlock1 = {
   $InstallHT = @{
-    Name                   = 'UpdateServices' 
+    Name                   = 'UpdateServices'
     IncludeManagementTools = $true
   }
-  Install-WindowsFeature @InstallHT | 
+  Install-WindowsFeature @InstallHT |
     Format-Table -AutoSize -Wrap
 }
 Invoke-Command -Session $Session -ScriptBlock $ScriptBlock1
 
 # 3. Determining features installed on WSUS1
 Invoke-Command -Session $Session -ScriptBlock {
-  Get-WindowsFeature | 
+  Get-WindowsFeature |
     Where-Object Installed |
       Format-Table
 }
@@ -41,7 +41,7 @@ Invoke-Command -Session $Session -ScriptBlock $ScriptBlock2
 $ScriptBlock3 = {
   $WSUSDir = 'C:\WSUS'
   $Child = 'Update Services\Tools\wsusutil.exe'
-  $CMD = Join-Path -Path "$env:ProgramFiles\" -ChildPath $Child 
+  $CMD = Join-Path -Path "$env:ProgramFiles\" -ChildPath $Child
   & $CMD Postinstall CONTENT_DIR="$WSUSDir"
 }
 Invoke-Command -ComputerName WSUS1 -ScriptBlock $ScriptBlock3
@@ -53,7 +53,7 @@ Invoke-Command -ComputerName WSUS1 -ScriptBlock {
 
 # 7. View the cmdlets in the UpdateServices module
 Invoke-Command -ComputerName WSUS1 -ScriptBlock {
-  Get-Command -Module UpdateServices | 
+  Get-Command -Module UpdateServices |
     Format-Table -AutoSize
 }
 
@@ -62,7 +62,7 @@ Invoke-Command -Session $Session -ScriptBlock {
   $WSUSServer = Get-WsusServer
   $WSUSServer.GetType().Fullname
   $WSUSServer | Select-Object -Property *
-}  
+}
 
 # 9. Viewing details of the WSUS Server object
 Invoke-Command -Session $Session -ScriptBlock {
@@ -80,7 +80,7 @@ Invoke-Command -Session $Session -ScriptBlock {
 Invoke-Command -Session $Session -ScriptBlock {
   $WSUSProducts = Get-WsusProduct -UpdateServer $WSUSServer
   "{0} WSUS Products discovered" -f $WSUSProducts.Count
-  $WSUSProducts | 
+  $WSUSProducts |
     Select-Object -ExpandProperty Product |
      Format-Table -Property Title,
                              Description
@@ -89,8 +89,8 @@ Invoke-Command -Session $Session -ScriptBlock {
 # 12. Displaying subscription information
 Invoke-Command -Session $Session -ScriptBlock {
   $WSUSSubscription = $WSUSServer.GetSubscription()
-  $WSUSSubscription | 
-    Select-Object -Property * | 
+  $WSUSSubscription |
+    Select-Object -Property * |
       Format-List
 }
 
@@ -100,7 +100,7 @@ Invoke-Command -Session $Session -ScriptBlock {
   Do {
     Write-Output $WSUSSubscription.GetSynchronizationProgress()
     Start-Sleep -Seconds 30
-  }  
+  }
   While ($WSUSSubscription.GetSynchronizationStatus() -ne
                                           'NotProcessing')
 }
@@ -114,7 +114,7 @@ Invoke-Command -Session $Session -ScriptBlock {
 Invoke-Command -Session $Session -ScriptBlock {
   $WSUSProducts = Get-WsusProduct -UpdateServer $WSUSServer
   "{0} Product found on WSUS1" -f $WSUSProducts.Count
-  $WSUSProducts | 
+  $WSUSProducts |
     Select-Object -ExpandProperty Product -First 25 |
       Format-Table -Property Title,
                               Description

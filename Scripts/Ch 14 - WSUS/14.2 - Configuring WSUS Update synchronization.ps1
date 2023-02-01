@@ -8,7 +8,7 @@ $Session = New-PSSession -ComputerName WSUS1
 # 2. Locating versions of Windows Server supported by Windows Update
 Invoke-Command -Session $Session -ScriptBlock {
   Get-WsusProduc
-    Where-Object -FilterScript {$_.product.title -match 
+    Where-Object -FilterScript {$_.product.title -match
                                 '^Windows Server'} |
       Select-Object -ExpandProperty Product  |
         Format-Table Title, UpdateSource
@@ -25,9 +25,9 @@ Invoke-Command -Session $Session -ScriptBlock {
 
 # 4. Create and view a list of software product titles to include
 
-  $Products = 
-   (Get-WsusProduct |  
-     Where-Object -FilterScript {$_.product.title -match 
+  $Products =
+   (Get-WsusProduct |
+     Where-Object -FilterScript {$_.product.title -match
                                  '^Windows Server'}).Product.Title
   $Products += @('Microsoft SQL Server 2016','Windows 11')
   $Products
@@ -59,7 +59,7 @@ Invoke-Command -Session $Session -ScriptBlock {
 
 # 8. Setting the list of desired update classifications in WSUS:
 Invoke-Command -Session $Session -ScriptBlock {
-  Get-WsusClassification | 
+  Get-WsusClassification |
     Where-Object {$_.Classification.Title -in $UpdateList} |
       Set-WsusClassification
 }
@@ -82,7 +82,7 @@ Invoke-Command -Session $Session -ScriptBlock {
   Do {
     $WSUSSubscription.GetSynchronizationProgress()
     Start-Sleep -Seconds $IntervalSeconds
-    } While ($WSUSSubscription.GetSynchronizationStatus() -eq $NP) 
+    } While ($WSUSSubscription.GetSynchronizationStatus() -eq $NP)
 }
 
 # 12. Synchronizing the updates which can take a long while to complete.
@@ -113,4 +113,4 @@ Invoke-Command -Session $Session -ScriptBlock {
   $WSUSSubscription.SynchronizeAutomatically = $true
   $WSUSSubscription.NumberOfSynchronizationsPerDay = 1
   $WSUSSubscription.Save()
-}  
+}
