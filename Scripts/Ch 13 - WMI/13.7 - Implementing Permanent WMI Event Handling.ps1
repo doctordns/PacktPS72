@@ -1,4 +1,4 @@
-﻿# 15.7 - Implementing Permanent WMI Event Handling
+﻿# 13.7 - Implementing Permanent WMI Event Handling
 
 # Run on DC1
 

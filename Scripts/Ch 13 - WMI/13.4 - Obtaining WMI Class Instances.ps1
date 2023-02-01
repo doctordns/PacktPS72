@@ -1,6 +1,6 @@
 # 13.4 - Obtaining WMI Class Instances
 # 
-# run on SRV1
+# Run on SRV1
 
 # 1. Using Get-CimInstance in the default namespace
 Get-CimInstance -ClassName Win32_Share
