@@ -86,7 +86,7 @@ $DestStore.Add($Cert)
 $DestStore.Close()
 
 # 15. Running the signed script
-C:\Foo\Signed.ps1 
+C:\Foo\Signed.ps1
 
 # 16. Resetting the Execution Policy for this process
 Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope Process
@@ -96,7 +96,7 @@ Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope Process
 
 # For testing = to remove the cert and the file
 
-Get-ChildItem -Path Cert:\ -Recurse | 
+Get-ChildItem -Path Cert:\ -Recurse |
   Where-Object subject -match 'Reskit Code Signing' |
     Remove-item -Force
 Remove-Item C:\Foo\signed.ps1

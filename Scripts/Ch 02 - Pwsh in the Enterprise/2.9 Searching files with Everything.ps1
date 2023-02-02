@@ -18,7 +18,7 @@ Invoke-WebRequest -Uri $EPath -OutFile $EFile
 # 3. Installing Everything
 $Iopt = "-install-desktop-shortcut -install-service"
 $Iloc = 'C:\Program Files\Everything'
-& $EFile --% /S -install-options  $Iipt /D=$Iopt
+& $EFile --% /S -install-options $Iopt /D=$Iloc
 
 # 4. Opening the GUI for the first time
 & "C:\Program Files\Everything\Everything.exe"
@@ -34,16 +34,16 @@ Get-Command -Module PSEverything
 
 # 8. Getting a count of files in folders below C:\Foo
 Set-Location -Path C:\Foo   # just in case
-Search-Everything | 
-  Get-Item  | 
-    Group-Object DirectoryName | 
+Search-Everything |
+  Get-Item  |
+    Group-Object DirectoryName |
       Where-Object name -ne '' |
         Format-Table -Property Name, Count
 
 # 9. Finding PowerShell scripts using wild cards
 Search-Everything *.ps1 |
   Measure-Object
-  
+
 # 10. Finding all PowerShell scripts using regular expression
 Search-Everything -RegularExpression '\.ps1$' -Global |
   Measure-Object

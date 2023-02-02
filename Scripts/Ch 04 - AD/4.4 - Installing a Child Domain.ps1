@@ -19,7 +19,7 @@ Install-WindowsFeature -Name $Features -IncludeManagementTools
 
 # 5. Creating a credential and installation hash table
 Import-Module -Name ADDSDeployment -WarningAction SilentlyContinue
-$URK    = "Administrator@Reskit.Org" 
+$URK    = "Administrator@Reskit.Org"
 $PW     = 'Pa$$w0rd'
 $PSS    = ConvertTo-SecureString -String $PW -AsPlainText -Force
 $CredRK = [PSCredential]::New($URK,$PSS)
@@ -38,7 +38,7 @@ $INSTALLHT    = @{
 # 6. Installing child domain
 Install-ADDSDomain @INSTALLHT
 
-### after roboot - login as UK\Administrator  
+### after roboot - login as UK\Administrator
 
 # 7. Looking at the AD forest
 Get-ADForest -Server UKDC1.UK.Reskit.Org

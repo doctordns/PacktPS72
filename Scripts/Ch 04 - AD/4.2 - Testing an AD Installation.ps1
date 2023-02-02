@@ -13,7 +13,7 @@ Get-ADForest
 Get-ADDomain -Current LocalComputer
 
 # 4. Checking Netlogon, ADWS, and DNS services
-Get-Service NetLogon, ADWS, DNS 
+Get-Service NetLogon, ADWS, DNS
 
 # 5. Getting initial AD uUsers
 Get-ADUser -Filter * |
@@ -26,10 +26,10 @@ Get-ADGroup -Filter *  |
     Format-Table -Property Name, GroupScope
 
 # 7. Examining Enterprise Admins group membership
-Get-ADGroupMember -Identity 'Enterprise Admins'  
+Get-ADGroupMember -Identity 'Enterprise Admins'
 
 # 8. Checking DNS zones on DC1
-Get-DnsServerZone -ComputerName DC1  
+Get-DnsServerZone -ComputerName DC1
 
-# 9. Testing domain name DNS resolution 
-Resolve-DnsName -Name Reskit.Org 
+# 9. Testing domain name DNS resolution
+Resolve-DnsName -Name Reskit.Org

@@ -11,14 +11,14 @@ $Type = $File.GetType().FullName
 ".NET Class name: $Type"
 
 # 3. Getting member types of FileInfo object
-$File | 
-  Get-Member | 
+$File |
+  Get-Member |
     Group-Object -Property MemberType |
       Sort-Object -Property Count -Descending
 
 # 4. Discovering properties of a Windows service
-Get-Service | 
-  Get-Member -MemberType Property     
+Get-Service |
+  Get-Member -MemberType Property
 
 # 5. Discovering the underlying type of an integer
 $I = 42
@@ -32,7 +32,7 @@ $BaseType = $IntType.BaseType.Name
 $Pwsh = Get-Process -Name pwsh |
   Select-Object -First 1
 $Pwsh |
-  Get-Member | 
+  Get-Member |
     Group-Object -Property MemberType |
       Sort-Object -Property Count -Descending
 

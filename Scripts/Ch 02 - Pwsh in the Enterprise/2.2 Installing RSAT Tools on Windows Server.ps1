@@ -39,7 +39,7 @@ $FeaturesInstalled = $Features |
 $Rsatfeatures = $Features |
                   Where-Object Name -Match 'RSAT'
 $RsatFeaturesInstalled = $Rsatfeatures |
-                  Where-Object Installed 
+                  Where-Object Installed
 
 # 7. Displaying counts of features
 "On Host [$(hostname)]"

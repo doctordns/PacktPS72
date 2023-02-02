@@ -1,4 +1,4 @@
-﻿# 4.1 - Installing an Active Directory Forest Root Domain  
+﻿# 4.1 - Installing an Active Directory Forest Root Domain
 
 # Run on DC1
 # DC1 is initially a stand-alone work group server you convert
@@ -9,7 +9,7 @@
 Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
 
 # 2. Importing the ADDeployment module
-Import-Module -Name ADDSDeployment 
+Import-Module -Name ADDSDeployment
 
 # 3. Examining the commands in the ADDSDeployment module
 Get-Command -Module ADDSDeployment
@@ -25,7 +25,7 @@ $SecurePW = ConvertTo-SecureString @$PasswordHT
 # 5. Testing DC Forest installation starting on DC1
 $ForestHT = @{
   DomainName           = 'Reskit.Org'
-  InstallDNS           = $true 
+  InstallDNS           = $true
   NoRebootOnCompletion = $true
   SafeModeAdministratorPassword = $SecurePW
   ForestMode           = 'WinThreshold'

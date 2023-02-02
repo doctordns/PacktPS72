@@ -13,7 +13,7 @@ namespace Reskit {
          System.Console.WriteLine("Hello World!");
      }
    }
-  }   
+  }
 "@
 
 # 3. Adding the type into the current PowerShell session
@@ -38,7 +38,7 @@ namespace Reskit {
       Console.WriteLine("Hello " + name + "!");
     }
   }
-}  
+}
 "@
 
 # 7. Adding the type into the current PowerShell session

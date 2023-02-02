@@ -3,7 +3,7 @@
 # Run on SRV1
 
 
-# 1. Finding the PSShortCut module 
+# 1. Finding the PSShortCut module
 Find-Module -Name '*Shortcut'
 
 # 2. Installing PSShortcut module
@@ -13,7 +13,7 @@ Install-Module -Name PSShortcut -Force
 Get-Module -Name PSShortCut -ListAvailable |
   Format-List
 
-# 4. Discovering commands in PSShortcut module  
+# 4. Discovering commands in PSShortcut module
 Get-Command -Module PSShortcut
 
 # 5. Discovering all shortcuts on SRV1

@@ -32,7 +32,7 @@ foreach ($ADComputer in $ADComputers) {
   $Name = $ADComputer.Name
   # Real computers and last logon date
   if ($adComputer.name -NotMatch "^NLI") {
-    $LLD = $ADComputer.LastLogonDate       
+    $LLD = $ADComputer.LastLogonDate
   }
   Elseif ($ADComputer.Name -eq "NLIComputer1_1week")  {
     $LLD = $OneWeekAgo.AddMinutes(-30)
@@ -76,7 +76,7 @@ $RkReport += "Name                    LastLogonDate`n"
 $RkReport += "----                    -------------`n"
 $RKReport +=
 foreach($Computer in $Computers) {
-  If (($Computer.LastLogonDate -lt $SixMonthsAgo) -and 
+  If (($Computer.LastLogonDate -lt $SixMonthsAgo) -and
       ($null -ne $Computer.LastLogonDate)) {
 ("`n{0,-23}  {1}  `n" -f $Computer.Name, $Computer.LastLogonDate)
   }
@@ -89,7 +89,7 @@ $RkReport += "----                    -------------"
 $RKReport +=
 foreach($Computer in $Computers) {
   If (($Computer.LastLogonDate -ge $SixMonthsAgo) -and
-     ($Computer.LastLogonDate -lt $OneMonthAgo) -and     
+     ($Computer.LastLogonDate -lt $OneMonthAgo) -and
        ($null -ne $Computer.LastLogonDate)) {
    "`n{0,-22}  {1}  " -f $Computer.Name, $Computer.LastLogonDate
   }
@@ -104,7 +104,7 @@ $RkReport += "----                    -------------"
 $RKReport +=
 foreach($Computer in $Computers) {
   If (($Computer.LastLogonDate -ge $OneMonthAgo) -and
-     ($Computer.LastLogonDate -lt $OneWeekAgo) -and     
+     ($Computer.LastLogonDate -lt $OneWeekAgo) -and
        ($null -ne $Computer.LastLogonDate)) {
    "`n{0,-22}  {1}  " -f $Computer.Name, $Computer.LastLogonDate
   }

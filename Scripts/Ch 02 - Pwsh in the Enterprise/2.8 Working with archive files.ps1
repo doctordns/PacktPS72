@@ -20,7 +20,7 @@ New-Item @NIHT | Out-Null
 
 # 4. Creating files in the archive folder
 $Contents = "Have a Nice day with PowerShell and WIndows Server" * 1000
-1..100 | 
+1..100 |
   ForEach-Object {
     $FName = "C:\Foo\Archive\Archive_$_.txt"
     New-Item -Path $FName -ItemType File  | Out-Null

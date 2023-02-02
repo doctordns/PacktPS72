@@ -44,7 +44,7 @@ namespace Reskit
     }
     private string? name;
     // Override the ProcessRecord method to process the
-    // supplied name and write a geeting to the user by 
+    // supplied name and write a geeting to the user by
     // calling the WriteObject method.
     protected override void ProcessRecord()
     {
@@ -55,11 +55,11 @@ namespace Reskit
 "@
 $Cmdlet | Out-File .\SendGreetingCommand.cs
 
-# 8. Removing the unused class file 
+# 8. Removing the unused class file
 Remove-Item -Path .\Class1.cs
 
 # 9. Building the cmdlet
-dotnet build 
+dotnet build
 
 # 10. Importing the DLL holding the cmdlet
 $DLLPath = '.\bin\Debug\net6.0\SendGreeting.dll'
@@ -69,4 +69,4 @@ Import-Module -Name $DLLPath
 Get-Module SendGreeting
 
 # 12. Using the cmdlet
-Send-Greeting -Name 'Jerry Garcia' 
+Send-Greeting -Name 'Jerry Garcia'

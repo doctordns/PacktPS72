@@ -11,7 +11,7 @@ $Notepad = Get-Process -Name Notepad
 $Notepad | Get-Member -MemberType Method
 
 # 3. Using the Kill() method
-$Notepad | 
+$Notepad |
   ForEach-Object {$_.Kill()}
 
 # 4. Confirming Notepad process is destroyed
