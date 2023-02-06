@@ -8,5 +8,6 @@
 		}
 	],
 	"settings": {
+		"powershell.cwd": "d:\\Dropbox\\Packt - Psh 7.2 + Srv 2022\\PacktPS72"
 	}
 }
